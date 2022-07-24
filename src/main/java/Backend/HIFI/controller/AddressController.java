@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AddressController {
     @GetMapping
     public String address(){
-        return "address";
+        return "thymeleaf/address";
     }
 }
