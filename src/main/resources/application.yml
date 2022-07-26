@@ -18,12 +18,6 @@ spring:
     cache: false
     prefix: classpath:/templates/
     suffix: .html
-    view-names: thymeleaf/*
-
-  mvc:
-    view:
-      prefix: /WEB-INF/
-      suffix: .jsp
 
 logging.level:
     org.hibernate.SQL: debug
