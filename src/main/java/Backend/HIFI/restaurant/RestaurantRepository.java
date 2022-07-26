@@ -1,6 +1,5 @@
-package Backend.HIFI.repository;
+package Backend.HIFI.restaurant;
 
-import Backend.HIFI.domain.Restaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

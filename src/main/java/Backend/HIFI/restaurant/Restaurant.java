@@ -1,4 +1,4 @@
-package Backend.HIFI.domain;
+package Backend.HIFI.restaurant;
 
 import lombok.Getter;
 import lombok.Setter;
