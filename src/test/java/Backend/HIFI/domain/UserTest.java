@@ -1,14 +1,25 @@
 package Backend.HIFI.domain;
 
-import org.assertj.core.api.Assertions;
+import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-class UserTest {
-    public static void main(String[] args) {
+@SpringBootTest
+@Transactional
+public class UserTest {
+
+    private FollowRepository followRepository;
+    private FollowService followService;
+
+
+    @Test
+    public void followTest(){
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("HIFI");
 
         EntityManager em = emf.createEntityManager();
@@ -17,14 +28,17 @@ class UserTest {
 
         tx.begin();
         try {
-            User user = User.signUp("jsm6616","police");
-            em.persist(user);
+            User sm = User.signUp("jsm6616","police");
+            em.persist(sm);
 
-            User user1 = User.signUp("phanre", "police");
-            em.persist(user1);
+            User ms = User.signUp("phanre", "don't know");
+            em.persist(ms);
 
-            user.addFollowing(user1);
-            user1.addFollower(user);
+            User gm = User.signUp("gangmin", "bwe");
+            em.persist(gm);
+
+            followService.save(sm.getId(), gm.getId());
+            em.persist(new Follow(sm, gm));
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();

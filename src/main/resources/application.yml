@@ -11,6 +11,7 @@ spring:
     properties:
       hibernate:
 #        show_sql: true
+        dialect: com.x.data.core.hibernate.dialect.ExtendedH2Dialect
         format_sql: true
 #        id.new_generator_mappings: true
 
