@@ -1,12 +1,9 @@
-package Backend.HIFI.domain;
+package Backend.HIFI.user.follow;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import Backend.HIFI.user.User;
+import Backend.HIFI.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.Entity;
 
 @Service
 public class FollowService {

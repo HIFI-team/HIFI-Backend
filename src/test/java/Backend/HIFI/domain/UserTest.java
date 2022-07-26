@@ -1,5 +1,9 @@
 package Backend.HIFI.domain;
 
+import Backend.HIFI.user.follow.Follow;
+import Backend.HIFI.user.follow.FollowRepository;
+import Backend.HIFI.user.follow.FollowService;
+import Backend.HIFI.user.User;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;

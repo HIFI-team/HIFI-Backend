@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/HIFI
+    url: jdbc:h2:tcp://localhost/~/test
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -11,7 +11,7 @@ spring:
     properties:
       hibernate:
 #        show_sql: true
-        dialect: com.x.data.core.hibernate.dialect.ExtendedH2Dialect
+        # dialect: com.x.data.core.hibernate.dialect.ExtendedH2Dialect
         format_sql: true
 #        id.new_generator_mappings: true
 

@@ -1,4 +1,4 @@
-package Backend.HIFI.controller;
+package Backend.HIFI.address;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,9 +1,8 @@
-package Backend.HIFI.domain;
+package Backend.HIFI.user.follow;
 
+import Backend.HIFI.user.User;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
