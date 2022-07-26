@@ -22,4 +22,5 @@ public class Restaurant {
     private float grade;
 
     private Long uid;
+
 }
