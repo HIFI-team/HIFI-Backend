@@ -1,9 +1,6 @@
-package Backend.HIFI.domain;
+package Backend.HIFI.user;
 
-import lombok.Builder;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
@@ -17,16 +14,15 @@ public class Follow {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "FOLLOWER")
+    @JoinColumn(name = "FOLLOWER", nullable = false)
     private User follower;
 
     @ManyToOne
-    @JoinColumn(name = "FOLLOWING")
+    @JoinColumn(name = "FOLLOWING", nullable = false)
     private User following;
 
-    @Builder
-    public Follow(User fromUser, User toUser) {
-        this.follower = fromUser;
-        this.following = toUser;
+    public Follow(User follower, User following) {
+        this.follower = follower;
+        this.following = following;
     }
 }

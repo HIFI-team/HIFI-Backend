@@ -1,16 +1,10 @@
-package Backend.HIFI.domain;
+package Backend.HIFI.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "USER")
@@ -48,6 +42,8 @@ public class User {
 //        following.setFollowing(user);
 //        return following;
 //    }
+
+
     private User(String email, String password) {
         this.email = email;
         this.password = password;
