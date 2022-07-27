@@ -1,5 +1,7 @@
-package Backend.HIFI.user;
+package Backend.HIFI.user.follow;
 
+import Backend.HIFI.user.User;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;

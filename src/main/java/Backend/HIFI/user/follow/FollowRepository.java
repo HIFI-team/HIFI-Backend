@@ -1,5 +1,6 @@
-package Backend.HIFI.user;
+package Backend.HIFI.user.follow;
 
+import Backend.HIFI.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 
+import Backend.HIFI.user.follow.FollowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

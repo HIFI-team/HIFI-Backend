@@ -1,4 +1,4 @@
-package Backend.HIFI.controller;
+package Backend.HIFI.home;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -10,6 +10,6 @@ public class HomeController {
     @RequestMapping("/")
     public String home(){
         log.info("home controller");
-        return "thymeleaf/home";
+        return "home";
     }
 }

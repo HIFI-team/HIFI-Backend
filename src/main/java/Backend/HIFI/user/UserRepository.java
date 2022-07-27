@@ -1,22 +1,16 @@
 package Backend.HIFI.user;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
 
 @Repository
-@Transactional
-@RequiredArgsConstructor
-public class UserRepository{
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-    private final EntityManager em;
+    User findUserByEmail(String email);
+    User findUserById(int id);
 
-    public void save(User user) {
-        em.persist(user);
-    }
 
-    public User findUser(int id) { return em.find(User.class, id);}
-
+//    @Modifying
+//    @Query(value = "INSERT INTO FOLLOWING(FOLLOWER, FOLLOWING) VALUES(:user1, :user2)", nativeQuery = true)
+//    int follow(int user1, int user2);
 }

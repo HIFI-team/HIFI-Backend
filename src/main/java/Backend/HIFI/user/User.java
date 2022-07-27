@@ -36,7 +36,7 @@ public class User {
     @Column(name = "USER_PUBLIC", nullable = false)
     private Boolean userPublic;
 
-//    public Follow follow(User user) {
+    //    public Follow follow(User user) {
 //        Follow following = new Follow();
 //        following.setFollower(this);
 //        following.setFollowing(user);
