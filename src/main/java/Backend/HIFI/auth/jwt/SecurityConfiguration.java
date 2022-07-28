@@ -17,7 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-/** Java Security Configuration 관련 @Configuration 컴포넌트
+/** 인증 및 Security 관련 설정 클래스입니다
  * @author gengminy (220728) */
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,25 +30,18 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors() //(1)
-                .and()
-                .csrf() //(2)
-                .disable()
-                .exceptionHandling() //(3)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and()
-                .sessionManagement() //(4)
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests() // (5)
-                .antMatchers("/signup", "/signin")
-                .permitAll()
-                .antMatchers("/**")
-                .authenticated()
-                .and()
+                .cors().and()
+                .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .formLogin().disable().headers().frameOptions().disable();
+                .authorizeRequests() // (5)
+                .antMatchers("/user/**").authenticated()
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/**").permitAll().and()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .formLogin().disable() //권한이 없을 경우 로그인 창으로 가는 옵션
+                .headers().frameOptions().disable();
 
                 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
                 return http.build();

@@ -18,8 +18,10 @@ import javax.persistence.Persistence;
 @Transactional
 public class UserTest {
 
-    @Autowired UserRepository userRepository;
-    @Autowired UserService userService;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    UserService userService;
     @Autowired
     FollowRepository followRepository;
 
