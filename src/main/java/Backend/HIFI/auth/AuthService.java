@@ -10,5 +10,5 @@ public interface AuthService {
     String getAccessToken(Token.Request token);
     String getDecodedToken(String token);
 
-    String joinUser(UserJoinDto userJoinDto);
+    void joinUser(UserJoinDto userJoinDto);
 }

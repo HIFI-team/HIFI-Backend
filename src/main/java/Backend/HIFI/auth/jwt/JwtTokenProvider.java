@@ -2,6 +2,7 @@ package Backend.HIFI.auth.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 
 import java.util.Date;
@@ -11,7 +12,8 @@ import java.util.Date;
 @Slf4j
 public class JwtTokenProvider {
     /** 토큰 비밀 키 */
-    private static final String JWT_SECRET = "secretKey";
+    @Value("${JWT_SECRET_KEY}")
+    private static String JWT_SECRET;
 
     /** 토큰 유효 시간 (ms) */
     private static final int JWT_EXPIRATION_MS = 604800000;

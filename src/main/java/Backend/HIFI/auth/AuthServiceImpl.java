@@ -33,12 +33,11 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public String joinUser(UserJoinDto userJoinDto) {
+    public void joinUser(UserJoinDto userJoinDto) {
         final String encodedPassword = passwordEncoder.encode(userJoinDto.getPassword());
 
         final User user = new User(userJoinDto.getEmail(), encodedPassword, userJoinDto.getName());
         System.out.println("user = " + user);
         userService.saveUser(user);
-        return "redirect:/";
     }
 }

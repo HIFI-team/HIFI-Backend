@@ -46,13 +46,14 @@ public class AuthController {
     @PostMapping("/join")
     @ResponseBody
     public String postJoinJson(@RequestBody UserJoinDto userJoinDto) {
-        return authService.joinUser(userJoinDto);
+        authService.joinUser(userJoinDto);
+        return "redirect:/";
     }
 
     /** 회원가입 양식을 post, Form data */
     @PostMapping(value = "/join", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    @ResponseBody
     public String postJoinForm(@Valid UserJoinDto userJoinDto) throws HttpClientErrorException.BadRequest {
-        return authService.joinUser(userJoinDto);
+        authService.joinUser(userJoinDto);
+        return "redirect:/";
     }
 }
