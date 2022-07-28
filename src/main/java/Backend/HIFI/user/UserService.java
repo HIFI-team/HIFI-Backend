@@ -17,4 +17,17 @@ public class UserService {
     public void userFollow(User follower, User following) {
         followRepository.save(follower, following);
     }
+
+    public Long saveUser(User user) {
+        validateDuplicateUser(user);
+        userRepository.save(user);
+        return user.getId();
+    }
+
+    private void validateDuplicateUser(User user) {
+        User findUser = userRepository.findUserById(user.getId());
+        if (findUser == user) {
+            throw new IllegalStateException("이미 존재하는 회원입니다");
+        }
+    }
 }

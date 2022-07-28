@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 class HifiApplicationTests {
 
 	@Autowired
-	UserRepository userRepository;
+    UserRepository userRepository;
 
 	@Test
 	void contextLoads() {
