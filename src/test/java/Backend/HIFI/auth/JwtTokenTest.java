@@ -16,6 +16,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class JwtTokenTest {
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     @Test
     @DisplayName("JWT 토큰 테스트")
     public void generateTokenTest() {
@@ -24,12 +27,12 @@ public class JwtTokenTest {
 
         //Token 이 valid 한지 확인
         String token
-                = JwtTokenProvider.generateToken(new UserAuthentication(principal, credential));
-        assertThat(JwtTokenProvider.validateToken(token)).isTrue();
+                = jwtTokenProvider.generateToken(new UserAuthentication(principal, credential));
+        assertThat(jwtTokenProvider.validateToken(token)).isTrue();
 
 
         //Decoded Token 의 이메일이 일치하는지 확인
-        String parsedEmail = JwtTokenProvider.getUserEmailFromJWT(token);
+        String parsedEmail = jwtTokenProvider.getUserEmailFromJWT(token);
         assertThat(parsedEmail).isEqualTo(principal);
     }
 }
