@@ -53,7 +53,6 @@ public class AuthController {
 
     /** 회원가입 양식을 작성후 보냅니다, Json Body */
     @PostMapping("/join")
-    @ResponseBody
     public String postJoinJson(@RequestBody UserJoinDto userJoinDto) {
         authService.join(userJoinDto);
         return "redirect:/";
@@ -71,5 +70,19 @@ public class AuthController {
     public String postLogout(HttpServletResponse response) {
         authService.logout(response);
         return "redirect:/";
+    }
+
+    /** 유저의 권한 변경 */
+    @PatchMapping("/role/:userId")
+    public String patchUserRole(@RequestParam("userId") Long userId, HttpServletResponse response) {
+        authService.changeRole(userId);
+        return "redirect:/";
+    }
+
+    /** 유저의 권한 변경 */
+    @GetMapping("/admin")
+    @ResponseBody
+    public String getAdminView() {
+        return "admin role!";
     }
 }

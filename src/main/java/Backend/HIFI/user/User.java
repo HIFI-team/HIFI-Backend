@@ -1,23 +1,21 @@
 package Backend.HIFI.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import Backend.HIFI.common.BaseTimeEntity;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
 @Table(name = "`User`")
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements UserDetails {
+public class User extends BaseTimeEntity implements UserDetails {
 
     @Id @GeneratedValue
     @Column(name="user_id")
@@ -37,6 +35,10 @@ public class User implements UserDetails {
 
     @Column(name="user_description")
     private String description;
+
+    @Column(name = "role", nullable = false)
+    private UserRole role;
+
     @Column(name="user_annonymous",nullable = false)
     private Boolean annonymous;
 

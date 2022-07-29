@@ -31,7 +31,8 @@ public class UserService {
     }
 
     private void validateDuplicateUser(User user) {
-        User findUser = userRepository.findUserById(user.getId());
+        User findUser = userRepository.findUserById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다"));
         if (findUser == user) {
             throw new IllegalStateException("이미 존재하는 회원입니다");
         }

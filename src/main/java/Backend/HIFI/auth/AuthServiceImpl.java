@@ -6,6 +6,7 @@ import Backend.HIFI.auth.jwt.Token;
 import Backend.HIFI.auth.jwt.UserAuthentication;
 import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserRepository;
+import Backend.HIFI.user.UserRole;
 import Backend.HIFI.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 @Slf4j
 @Service
@@ -41,9 +43,10 @@ public class AuthServiceImpl implements AuthService{
     public Long join(UserJoinDto userJoinDto) {
         return userRepository.save(User.builder()
                 .email(userJoinDto.getEmail())
-                .password(passwordEncoder.encode(userJoinDto.getPassword()))
+                .password(passwordEncoder.encode(userJoinDto.getPassword())) //비밀번호 hash 저장
                 .name(userJoinDto.getName())
-                .annonymous(false)
+                .annonymous(false) //기본 공개여부는 true
+                .role(UserRole.USER) //기본 권한은 USER
                 .build()).getId();
     }
     @Override
@@ -82,5 +85,16 @@ public class AuthServiceImpl implements AuthService{
         cookie.setSecure(true);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+    }
+
+    @Transactional
+    @Override
+    public void changeRole(Long userId) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId"));
+
+        user.setRole(UserRole.ADMIN);
+
+        userRepository.save(user);
     }
 }

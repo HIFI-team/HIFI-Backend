@@ -23,4 +23,6 @@ public interface AuthService {
     String login(String email, String rawPassword, HttpServletResponse response);
 
     void logout(HttpServletResponse response);
+
+    void changeRole(Long userId);
 }
