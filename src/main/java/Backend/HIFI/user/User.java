@@ -1,12 +1,14 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.common.BaseTimeEntity;
+import Backend.HIFI.common.entity.BaseTimeEntity;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "`User`")
@@ -17,7 +19,7 @@ import java.util.Collection;
 @NoArgsConstructor
 public class User extends BaseTimeEntity implements UserDetails {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Long id;
 
@@ -36,7 +38,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name="user_description")
     private String description;
 
-    @Column(name = "role", nullable = false)
+    @Column(name = "user_role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Column(name="user_annonymous",nullable = false)
@@ -57,9 +60,10 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.annonymous = true;
     }
 
+    //권한 부여
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

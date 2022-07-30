@@ -1,4 +1,4 @@
-package Backend.HIFI.common;
+package Backend.HIFI.common.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

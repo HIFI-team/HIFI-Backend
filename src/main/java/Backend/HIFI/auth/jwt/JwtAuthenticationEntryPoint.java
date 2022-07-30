@@ -1,6 +1,7 @@
 package Backend.HIFI.auth.jwt;
 
 import Backend.HIFI.common.ErrorCode;
+import Backend.HIFI.common.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -20,12 +21,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletResponse response,
             AuthenticationException e
     ) throws IOException {
-
-        log.error("Responding with unauthorized error. Message - {}", e.getMessage());
-//
-//        ErrorCode unAuthorizationCode = (ErrorCode) request.getAttribute("unauthorization.code");
-//
-//        request.setAttribute("response.failure.code", unAuthorizationCode.getCode());
-//        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, unAuthorizationCode.getMessage());
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

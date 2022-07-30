@@ -14,6 +14,7 @@ public class Token {
     public static final class Request {
         private String email;
         private String password;
+        private String role;
     }
 
     @Data

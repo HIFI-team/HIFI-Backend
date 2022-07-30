@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService{
                 .password(passwordEncoder.encode(userJoinDto.getPassword())) //비밀번호 hash 저장
                 .name(userJoinDto.getName())
                 .annonymous(false) //기본 공개여부는 true
-                .role(UserRole.USER) //기본 권한은 USER
+                .role(UserRole.ROLE_USER) //기본 권한은 USER
                 .build()).getId();
     }
     @Override
@@ -65,26 +65,11 @@ public class AuthServiceImpl implements AuthService{
 
         System.out.println("accessToken = " + accessToken);
 
-        //클라이언트 쿠키에 토큰 저장
-        response.setHeader("X-AUTH-TOKEN", accessToken);
-        Cookie cookie = new Cookie("X-AUTH-TOKEN", accessToken);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        response.addCookie(cookie);
-
         return accessToken;
     }
 
     @Override
     public void logout(HttpServletResponse response) {
-        //클라이언트 쿠키 강제 만료
-        Cookie cookie = new Cookie("X-AUTH-TOKEN", null);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
     }
 
     @Transactional
@@ -93,7 +78,7 @@ public class AuthServiceImpl implements AuthService{
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId"));
 
-        user.setRole(UserRole.ADMIN);
+        user.setRole(UserRole.ROLE_ADMIN);
 
         userRepository.save(user);
     }
