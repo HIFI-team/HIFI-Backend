@@ -1,19 +1,31 @@
 package Backend.HIFI.auth.jwt;
 
+import Backend.HIFI.user.User;
+import Backend.HIFI.user.UserRole;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpServerErrorException;
 
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 /** JWT 토큰 생성에 관여하는 클래스입니다
  * @author gengminy (220728) */
 @Slf4j
+@Component
 public class JwtTokenProvider {
     /** 토큰 비밀 키 */
     @Value("${JWT_SECRET_KEY}")
-    private static String JWT_SECRET;
+    private String JWT_SECRET;
 
     /** 토큰 유효 시간 (ms) */
     private static final int JWT_EXPIRATION_MS = 604800000;
@@ -21,10 +33,12 @@ public class JwtTokenProvider {
     /** Jwt 토큰 생성
      * @param authentication 인증 요청하는 유저 정보
      */
-    public static String generateToken(Authentication authentication) {
+    public String generateToken(Authentication authentication)
+            throws HttpServerErrorException.InternalServerError {
+        final String encodedKey = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
 
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION_MS);
+        final Date now = new Date();
+        final Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION_MS);
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -33,7 +47,8 @@ public class JwtTokenProvider {
                 .setIssuedAt(new Date()) // 생성일자 지정(현재)
                 .setExpiration(expiryDate) // 만료일자
                 .claim("email", authentication.getPrincipal())
-                .signWith(SignatureAlgorithm.HS256, JWT_SECRET) // signature에 들어갈 secret 값 세팅
+                .claim("role", authentication.getAuthorities())
+                .signWith(SignatureAlgorithm.HS512, encodedKey) // signature에 들어갈 secret 값 세팅
                 .compact();
     }
 
@@ -42,13 +57,30 @@ public class JwtTokenProvider {
      * @param token AccessToken (JWT)
      * @return email address (String)
      */
-    public static String getUserEmailFromJWT(String token) {
+    public String getUserEmailFromJWT(String token) {
+        final String encodedKey = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
         Claims claims = Jwts.parser()
-                .setSigningKey(JWT_SECRET)
+                .setSigningKey(encodedKey)
                 .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
+    }
+
+    public Authentication getAuthenticationFromJWT(String token) {
+      final String encodedKey = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
+        Claims claims = Jwts.parser()
+                .setSigningKey(encodedKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get("role").toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+
+        return new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
     }
 
     /**
@@ -61,9 +93,10 @@ public class JwtTokenProvider {
      * @throws UnsupportedJwtException 지원 불가
      * @throws IllegalArgumentException 매개변수 전달 오류
      */
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
+        final String encodedKey = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
         try {
-            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(encodedKey).parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {
             log.error("Invalid JWT signature");
@@ -74,7 +107,7 @@ public class JwtTokenProvider {
         } catch (UnsupportedJwtException ex) {
             log.error("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
+//            log.error("JWT claims string is empty.");
         }
         return false;
     }

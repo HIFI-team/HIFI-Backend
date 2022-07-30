@@ -24,8 +24,15 @@ public class UserService {
         return user.getId();
     }
 
+    public User findByEmail(String email) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        return user;
+    }
+
     private void validateDuplicateUser(User user) {
-        User findUser = userRepository.findUserById(user.getId());
+        User findUser = userRepository.findUserById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다"));
         if (findUser == user) {
             throw new IllegalStateException("이미 존재하는 회원입니다");
         }

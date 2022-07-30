@@ -1,18 +1,25 @@
 package Backend.HIFI.user;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import Backend.HIFI.common.entity.BaseTimeEntity;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "`User`")
+@Setter
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends BaseTimeEntity implements UserDetails {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Long id;
 
@@ -31,8 +38,9 @@ public class User {
     @Column(name="user_description")
     private String description;
 
-    @Column(name="user_createdAt", nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "user_role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @Column(name="user_annonymous",nullable = false)
     private Boolean annonymous;
@@ -49,8 +57,37 @@ public class User {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.createdAt = LocalDateTime.now();
         this.annonymous = true;
     }
 
+    //권한 부여
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

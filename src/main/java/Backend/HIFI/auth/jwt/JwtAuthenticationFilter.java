@@ -1,7 +1,11 @@
 package Backend.HIFI.auth.jwt;
 
+import Backend.HIFI.user.UserRole;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -15,17 +19,24 @@ import java.io.IOException;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request); //request에서 jwt 토큰을 꺼낸다.
-            if (StringUtils.isNotEmpty(jwt) && JwtTokenProvider.validateToken(jwt)) {
-                String userEmail = JwtTokenProvider.getUserEmailFromJWT(jwt); //jwt에서 사용자 id를 꺼낸다.
+            System.out.println("jwt = " + jwt);
+            if (StringUtils.isNotEmpty(jwt) && jwtTokenProvider.validateToken(jwt)) {
+                String userEmail = jwtTokenProvider.getUserEmailFromJWT(jwt); //jwt에서 사용자 id를 꺼낸다.
 
                 UserAuthentication authentication = new UserAuthentication(userEmail, null, null); //id를 인증한다.
+//                UserAuthentication authentication = (UserAuthentication) jwtTokenProvider.getAuthenticationFromJWT(jwt);
+//
+//                System.out.println("authentication = " + authentication);
+
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); //기본적으로 제공한 details 세팅
 
                 SecurityContextHolder.getContext().setAuthentication(authentication); //세션에서 계속 사용하기 위해 securityContext에 Authentication 등록
@@ -34,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     request.setAttribute("unauthorization", "401 인증키 없음.");
                 }
 
-                if (JwtTokenProvider.validateToken(jwt)) {
+                if (jwtTokenProvider.validateToken(jwt)) {
                     request.setAttribute("unauthorization", "401-001 인증키 만료.");
                 }
             }
@@ -50,6 +61,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.isNotEmpty(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring("Bearer ".length());
         }
-        return null;
+        return bearerToken;
     }
 }

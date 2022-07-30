@@ -1,7 +1,6 @@
 package Backend.HIFI.auth.jwt;
 
-import Backend.HIFI.auth.jwt.JwtAuthenticationEntryPoint;
-import Backend.HIFI.auth.jwt.JwtAuthenticationFilter;
+import Backend.HIFI.user.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,16 +31,19 @@ public class SecurityConfiguration {
         http
                 .cors().and()
                 .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests() // (5)
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and() //예외처리 핸들러
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //세션 사용 x
+                .formLogin().disable() //폼 로그인 사용 x
+                .httpBasic().disable()
+                .authorizeRequests() // url 별 권한 설정
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").authenticated()
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/**").permitAll().and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .formLogin().disable() //권한이 없을 경우 로그인 창으로 가는 옵션
-                .headers().frameOptions().disable();
+                .anyRequest().permitAll().and()
+                .headers().frameOptions().disable()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true); //세션 날리기
 
                 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
                 return http.build();
@@ -52,12 +54,16 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        //모든 ip에 응답 허용
         configuration.addAllowedOrigin("*");
-        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
+        //내 서버의 응답 json 을 javascript에서 처리할수 있게 하는것(axios 등)
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
