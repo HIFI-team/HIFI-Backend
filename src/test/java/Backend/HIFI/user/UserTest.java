@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 import Backend.HIFI.user.follow.FollowRepository;
+import Backend.HIFI.user.follow.FollowService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,32 +25,23 @@ public class UserTest {
     UserService userService;
     @Autowired
     FollowRepository followRepository;
+    @Autowired
+    FollowService followService;
 
     @Test
     public void followTest() throws Exception {
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("HIFI");
+        User user1 = new User("phanre@naver.com", "test1234", "minseok");
+        userService.saveUser(user1);
 
-        EntityManager em = emf.createEntityManager();
+        User user2 = new User("jsm6616@police.com","don't know", "daramg");
+        userService.saveUser(user2);
 
-        EntityTransaction tx = em.getTransaction();
-
-        tx.begin();
-
-        User sm = User.signUp("jsm6616","police");
-        em.persist(sm);
-
-        User ms = User.signUp("phanre", "don't know");
-        em.persist(ms);
-
-        User gm = User.signUp("gangmin2", "bwe");
-        em.persist(gm);
-
-        tx.commit();
-
-        userService.userFollow(sm, gm);
-        emf.close();
+        followService.following(user1, user2);
 
 
+        for (User user : user1.getFollowingList()) {
+            System.out.println(user.getEmail());
+        }
     }
 }

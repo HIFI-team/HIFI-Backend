@@ -2,6 +2,7 @@ package Backend.HIFI.user;
 
 
 import Backend.HIFI.user.follow.FollowRepository;
+import Backend.HIFI.user.follow.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,13 +14,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-
-    public void userFollow(User follower, User following) {
-        followRepository.save(follower, following);
-    }
+    private final FollowService followService;
 
     public Long saveUser(User user) {
-        validateDuplicateUser(user);
+
+        // 따로 email 중복 회원 검증 필요
+//        validateDuplicateUser(user);
+
         userRepository.save(user);
         return user.getId();
     }

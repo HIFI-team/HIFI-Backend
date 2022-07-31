@@ -7,8 +7,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "`User`")
@@ -45,12 +47,11 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name="user_annonymous",nullable = false)
     private Boolean annonymous;
 
-    //    public Follow follow(User user) {
-//        Follow following = new Follow();
-//        following.setFollower(this);
-//        following.setFollowing(user);
-//        return following;
-//    }
+    @OneToMany
+    private List<User> followerList = new ArrayList<>();
+
+    @OneToMany
+    private List<User> followingList = new ArrayList<>();
 
 
     public User(String email, String password, String name) {
@@ -58,6 +59,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.password = password;
         this.name = name;
         this.annonymous = true;
+        this.role = UserRole.valueOf("ROLE_USER");
     }
 
     //권한 부여
