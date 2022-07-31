@@ -1,58 +1,95 @@
 package Backend.HIFI.user;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import Backend.HIFI.common.entity.BaseTimeEntity;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "`User`")
+@Setter
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends BaseTimeEntity implements UserDetails {
 
-    @Id @GeneratedValue
-    @Column(name = "USER_ID")
-    private int id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id")
+    private Long id;
 
-    @Column(name = "USER_NAME")
+    @Column(name="user_name")
     private String name;
 
-    @Column(name = "USER_EMAIL", nullable = false)
+    @Column(name="user_email", nullable = false)
     private String email;
 
-    @Column(name = "USER_PASSWORD", nullable = false)
+    @Column(name="user_password", nullable = false)
     private String password;
 
-    @Column(name = "USER_IMAGE")
+    @Column(name="user_image")
     private String image;
-    @Column(name = "USER_DESCRIPTION")
+
+    @Column(name="user_description")
     private String description;
 
-    @Column(name = "USER_CREATEAT", nullable = false)
-    private LocalDateTime createAt;
+    @Column(name = "user_role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
-    @Column(name = "USER_PUBLIC", nullable = false)
-    private Boolean userPublic;
+    @Column(name="user_annonymous",nullable = false)
+    private Boolean annonymous;
 
-    //    public Follow follow(User user) {
-//        Follow following = new Follow();
-//        following.setFollower(this);
-//        following.setFollowing(user);
-//        return following;
-//    }
-    private User(String email, String password) {
+    @OneToMany
+    private List<User> followerList = new ArrayList<>();
+
+    @OneToMany
+    private List<User> followingList = new ArrayList<>();
+
+
+    public User(String email, String password, String name) {
         this.email = email;
         this.password = password;
-        this.createAt = LocalDateTime.now();
-        this.userPublic = true;
+        this.name = name;
+        this.annonymous = true;
+        this.role = UserRole.valueOf("ROLE_USER");
     }
 
-    // 임시
-    public static User signUp(String email, String password) {
-        return new User(email, password);
+    //권한 부여
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
+    @Override
+    public String getUsername() {
+        return email;
+    }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

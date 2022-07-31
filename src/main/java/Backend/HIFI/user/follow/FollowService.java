@@ -1,37 +1,24 @@
 package Backend.HIFI.user.follow;
 
 import Backend.HIFI.user.User;
-import Backend.HIFI.user.UserRepository;
+import Backend.HIFI.user.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class FollowService {
-    public FollowService(UserRepository userRepository, FollowRepository followRepository) {
-        this.userRepository = userRepository;
-        this.followRepository = followRepository;
-    }
 
-    UserRepository userRepository;
-    FollowRepository followRepository;
+    private final FollowRepository followRepository;
 
-    @Transactional
-    public Follow save(int fromId, int toId) {
-        User fromUser = userRepository.findUserById(fromId);
-        User toUser = userRepository.findUserById(toId);
+    public void following(User follower, User following) {
 
-        return followRepository.save(Follow.builder()
-                .fromUser(fromUser)
-                .toUser(toUser)
-                .build());
-    }
+        // 팔로우 하고 있는지 아닌지 검증 필요
+        follower.getFollowingList().add(following);
+        following.getFollowerList().add(follower);
+        followRepository.save(new Follow(follower, following));
 
-    @Transactional
-    public void follow(int fromUserId, int toUserId) {
-        try {
-            followRepository.mFollow(fromUserId, toUserId);
-        } catch (Exception e) {
-            System.out.println("TEST");
-        }
     }
 }

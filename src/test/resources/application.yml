@@ -19,9 +19,9 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-#        show_sql: true
+        #        show_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-#        format_sql: true
+        #        format_sql: true
         database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   thymeleaf:
@@ -30,5 +30,5 @@ spring:
     suffix: .html
 
 logging.level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace

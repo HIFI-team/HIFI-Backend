@@ -3,14 +3,13 @@ package Backend.HIFI.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.OneToMany;
+import java.util.Optional;
+
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findUserByEmail(String email);
-    User findUserById(int id);
+    Optional<User> findUserByEmail(String email);
+    Optional<User> findUserById(Long id);
 
-
-//    @Modifying
-//    @Query(value = "INSERT INTO FOLLOWING(FOLLOWER, FOLLOWING) VALUES(:user1, :user2)", nativeQuery = true)
-//    int follow(int user1, int user2);
 }

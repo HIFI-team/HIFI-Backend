@@ -1,7 +1,6 @@
 package Backend.HIFI.user.follow;
 
 import Backend.HIFI.user.User;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,19 +12,18 @@ import javax.persistence.*;
 public class Follow {
 
     @Id @GeneratedValue
-    private int id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "FOLLOWER")
+    @JoinColumn(name = "FOLLOWER", nullable = false)
     private User follower;
 
     @ManyToOne
-    @JoinColumn(name = "FOLLOWING")
+    @JoinColumn(name = "FOLLOWING", nullable = false)
     private User following;
 
-    @Builder
-    public Follow(User fromUser, User toUser) {
-        this.follower = fromUser;
-        this.following = toUser;
+    public Follow(User follower, User following) {
+        this.follower = follower;
+        this.following = following;
     }
 }
