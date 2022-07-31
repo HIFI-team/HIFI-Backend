@@ -12,3 +12,16 @@ var marker = new kakao.maps.Marker({
 
 // 마커가 지도 위에 표시되도록 설정합니다
 marker.setMap(map);
+
+var iwContent = '<div style="padding:2px;">Hello World!</div>' // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+
+// 인포윈도우를 생성합니다
+var infowindow = new kakao.maps.InfoWindow({
+    position: markerPosition,
+    content : iwContent
+});
+
+kakao.maps.event.addListener(marker, 'click', function () {
+    // 마커 위에 인포윈도우를 표시합니다
+    infowindow.open(map, marker);
+});
