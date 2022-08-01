@@ -1,21 +1,29 @@
 package Backend.HIFI.auth;
 
-import Backend.HIFI.auth.dto.UserJoinDto;
+import Backend.HIFI.auth.dto.TokenRequestDto;
+import Backend.HIFI.auth.dto.TokenResponseDto;
+import Backend.HIFI.auth.dto.UserRequestDto;
+import Backend.HIFI.auth.dto.UserResponseDto;
 import Backend.HIFI.auth.jwt.JwtTokenProvider;
-import Backend.HIFI.auth.jwt.Token;
-import Backend.HIFI.auth.jwt.UserAuthentication;
+import Backend.HIFI.auth.security.UserAuthentication;
 import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserRepository;
 import Backend.HIFI.user.UserRole;
-import Backend.HIFI.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -24,48 +32,40 @@ public class AuthServiceImpl implements AuthService{
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Override
-    public String getAccessToken(Token.Request token) {
-        UserAuthentication userAuthentication = new UserAuthentication(
-                token.getEmail(),
-                token.getPassword()
-        );
-        return jwtTokenProvider.generateToken(userAuthentication);
-    }
-
-    @Override
-    public String getDecodedToken(String token) {
-        return jwtTokenProvider.getUserEmailFromJWT(token);
-    }
-
-    @Override
-    public Long join(UserJoinDto userJoinDto) {
-        return userRepository.save(User.builder()
-                .email(userJoinDto.getEmail())
-                .password(passwordEncoder.encode(userJoinDto.getPassword())) //비밀번호 hash 저장
-                .name(userJoinDto.getName())
-                .annonymous(false) //기본 공개여부는 true
-                .role(UserRole.ROLE_USER) //기본 권한은 USER
-                .build()).getId();
-    }
-    @Override
-    public String login(String email, String rawPassword, HttpServletResponse response) {
-        final User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다"));
-
-        //패스워드 일치하는지 검사
-        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호 입니다");
+    @Transactional
+    public UserResponseDto join(UserRequestDto userRequestDto) {
+        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
+            throw new RuntimeException("이미 가입된 유저입니다");
         }
 
-        //엑세스토큰 생성
-        String accessToken = jwtTokenProvider.generateToken(
-                new UserAuthentication(email, user.getPassword()));
+        User user = userRequestDto.toUser(passwordEncoder);
+        return UserResponseDto.of(userRepository.save(user));
+    }
+    @Override
+    @Transactional
+    public TokenResponseDto login(UserRequestDto userRequestDto) {
+        UsernamePasswordAuthenticationToken authenticationToken
+                = userRequestDto.toAuthentication();
+        // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
+        //    authenticate 메서드가 실행이 될 때
+        //    CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
+        Authentication authentication
+                = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        System.out.println("accessToken = " + accessToken);
+        TokenResponseDto tokenResponseDto = jwtTokenProvider.generateToken(authentication);
 
-        return accessToken;
+        //Refresh Token 저장
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key(authentication.getName())
+                .value(tokenResponseDto.getRefreshToken())
+                .build();
+        refreshTokenRepository.save(refreshToken);
+
+        return tokenResponseDto;
     }
 
     @Override
@@ -74,12 +74,50 @@ public class AuthServiceImpl implements AuthService{
 
     @Transactional
     @Override
-    public void changeRole(Long userId) {
-        User user = userRepository.findUserById(userId)
+    public User changeRole(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId"));
 
         user.setRole(UserRole.ROLE_ADMIN);
 
-        userRepository.save(user);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities());
+        updatedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString())); //add your role here [e.g., new SimpleGrantedAuthority("ROLE_NEW_ROLE")]
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), updatedAuthorities);
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        System.out.println("SecurityContextHolder.getContext() = " + SecurityContextHolder.getContext());
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public TokenResponseDto reissue(TokenRequestDto tokenRequestDto) {
+        if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("유효하지 않은 Refresh Token");
+        }
+
+        // Access Token 에서 User id 가져오기
+        Authentication authentication
+                = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+
+        //User id를 기반으로 Refresh Token 가져오기
+        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("로그아웃된 사용자"));
+
+        //Refresh Token 일치하는지 여부
+        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("토큰 유저 정보 불일치");
+        }
+
+        //새로운 토큰 생성
+        TokenResponseDto tokenResponseDto = jwtTokenProvider.generateToken(authentication);
+
+        RefreshToken newRefreshToken = refreshToken.updateValue(tokenResponseDto.getRefreshToken());
+        refreshTokenRepository.save(newRefreshToken);
+
+        //토큰 발급
+        return tokenResponseDto;
     }
 }
