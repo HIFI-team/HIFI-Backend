@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>Hifi</title>
@@ -20,10 +20,17 @@
     <button onclick="panTo(3)">상수역</button>
 </p>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f30a369520d453bd14ddd7805991b6db"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f30a369520d453bd14ddd7805991b6db&libraries=services"></script>
+<script type="text/javascript" th:src="@{/js/kakaoMap/mapCurrentLocation.js}"></script>
 <script type="text/javascript" th:src="@{/js/kakaoMap/mapLoad.js}"></script>
-<script type="text/javascript" th:src="@{/js/kakaoMap/mapZoom.js}"></script>
-<script type="text/javascript" th:src="@{/js/kakaoMap/mapMove.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var stores = [[${stores}]];
+    console.log(stores)
+    /*]]>*/
+</script>
+<script type="text/javascript" th:src="@{/js/kakaoMap/mapMarker.js}"></script>
+<script type="text/javascript" th:src="@{/js/kakaoMap/mapFunc.js}"></script>
 
 </body>
 </html>
