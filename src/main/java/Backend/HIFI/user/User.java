@@ -21,7 +21,8 @@ import java.util.List;
 @NoArgsConstructor
 public class User extends BaseTimeEntity implements UserDetails {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Long id;
 
@@ -42,15 +43,19 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @Builder.Default
+    private UserRole role = UserRole.ROLE_USER;
 
     @Column(name="user_annonymous",nullable = false)
-    private Boolean annonymous;
+    @Builder.Default
+    private Boolean annonymous = false;
 
     @OneToMany
+    @Builder.Default
     private List<User> followerList = new ArrayList<>();
 
     @OneToMany
+    @Builder.Default
     private List<User> followingList = new ArrayList<>();
 
 
@@ -65,7 +70,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     //권한 부여
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        Collection authorities = new ArrayList<>();
+        authorities.add(role);
+        return authorities;
     }
 
     @Override

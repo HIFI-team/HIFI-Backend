@@ -1,13 +1,15 @@
 package Backend.HIFI.auth;
 
-import Backend.HIFI.auth.dto.UserJoinDto;
-import Backend.HIFI.auth.jwt.JwtTokenProvider;
-import Backend.HIFI.auth.jwt.Token;
+import Backend.HIFI.auth.dto.TokenRequestDto;
+import Backend.HIFI.auth.dto.TokenResponseDto;
+import Backend.HIFI.auth.dto.UserRequestDto;
+import Backend.HIFI.auth.dto.UserResponseDto;
+import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -15,7 +17,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-@Controller
+@RestController
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final PasswordEncoder passwordEncoder;
@@ -28,21 +31,12 @@ public class AuthController {
         return "login";
     }
 
-    /** [view] 로그인 양식을 띄웁니다 json */
+
+    /** 로그인 요청 */
     @PostMapping(value = "/login")
     @ResponseBody
-    public String postLoginJson(@RequestBody Token.Request request, HttpServletResponse response) {
-        System.out.println("request = " + request);
-        System.out.println("response = " + response);
-
-        return request.toString();
-    }
-
-    /** [view] 로그인 양식을 띄웁니다 form data */
-    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    @ResponseBody
-    public String postLoginForm(Token.Request request, HttpServletResponse response) {
-        return authService.login(request.getEmail(), request.getPassword(), response);
+    public ResponseEntity<TokenResponseDto> postLoginForm(@RequestBody UserRequestDto userRequestDto) {
+        return ResponseEntity.ok(authService.login(userRequestDto));
     }
 
     /** [view] 회원가입 양식을 띄웁니다 */
@@ -51,18 +45,10 @@ public class AuthController {
         return "join";
     }
 
-    /** 회원가입 양식을 작성후 보냅니다, Json Body */
-    @PostMapping("/join")
-    public String postJoinJson(@RequestBody UserJoinDto userJoinDto) {
-        authService.join(userJoinDto);
-        return "redirect:/";
-    }
-
-    /** 회원가입 양식을 post, Form data */
-    @PostMapping(value = "/join", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String postJoinForm(@Valid UserJoinDto userJoinDto) throws HttpClientErrorException.BadRequest {
-        authService.join(userJoinDto);
-        return "redirect:/";
+    /** 회원가입을 요청 */
+    @PostMapping(value = "/join")
+    public ResponseEntity<UserResponseDto> postJoin(@RequestBody UserRequestDto userRequestDto) {
+        return ResponseEntity.ok(authService.join(userRequestDto));
     }
 
     /** 유저를 로그아운 시킵니다, 엑세스 토큰 쿠키 삭제 */
@@ -72,17 +58,17 @@ public class AuthController {
         return "redirect:/";
     }
 
-    /** 유저의 권한 변경 */
-    @PatchMapping("/role/:userId")
-    public String patchUserRole(@RequestParam("userId") Long userId, HttpServletResponse response) {
-        authService.changeRole(userId);
-        return "redirect:/";
+    /** 테스트용 유저의 권한 변경 */
+    @PostMapping("/role")
+    @ResponseBody
+    public User patchUserRole(@RequestParam("userId") String userId) {
+        System.out.println("userId = " + userId);
+        return authService.changeRole(Long.parseLong(userId));
     }
 
-    /** 유저의 권한 변경 */
-    @GetMapping("/admin")
-    @ResponseBody
-    public String getAdminView() {
-        return "admin role!";
+    /** 리프레시 토큰 재발급 */
+    @GetMapping("/reissue")
+    public ResponseEntity<TokenResponseDto> reissue (@RequestBody TokenRequestDto tokenRequestDto){
+        return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }
 }

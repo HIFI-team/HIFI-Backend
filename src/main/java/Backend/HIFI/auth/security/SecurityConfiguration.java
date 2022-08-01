@@ -1,6 +1,7 @@
-package Backend.HIFI.auth.jwt;
+package Backend.HIFI.auth.security;
 
-import Backend.HIFI.user.UserRole;
+import Backend.HIFI.auth.jwt.JwtAuthenticationFilter;
+import Backend.HIFI.auth.security.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-
 /** 인증 및 Security 관련 설정 클래스입니다
  * @author gengminy (220728) */
 @EnableWebSecurity
@@ -24,6 +23,7 @@ import java.util.Arrays;
 public class SecurityConfiguration {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
 
     @Bean
@@ -31,14 +31,23 @@ public class SecurityConfiguration {
         http
                 .cors().and()
                 .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and() //예외처리 핸들러
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() //세션 사용 x
+                //예외처리 핸들러
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .and()
+                //세션을 사용하지 않음
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .formLogin().disable() //폼 로그인 사용 x
                 .httpBasic().disable()
-                .authorizeRequests() // url 별 권한 설정
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                //권한이 필요한 요청에 대한 설정
+                .authorizeRequests()
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/user/**").authenticated()
-                .anyRequest().permitAll().and()
+                .anyRequest().permitAll()
+                .and()
                 .headers().frameOptions().disable()
                 .and()
                 .logout()

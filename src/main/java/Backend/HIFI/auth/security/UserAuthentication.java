@@ -1,4 +1,4 @@
-package Backend.HIFI.auth.jwt;
+package Backend.HIFI.auth.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
