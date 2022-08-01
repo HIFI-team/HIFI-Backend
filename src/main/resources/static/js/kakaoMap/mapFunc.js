@@ -1,6 +1,6 @@
-// 지도 중심점을 움직임
+// 지도 중심점 이동
 function panTo(c){
-    var moveLatLon=new Object()
+    var moveLatLon={}
     if(c===1){
         moveLatLon = new kakao.maps.LatLng(37.5515814, 126.9249751);
     }else if(c===2){

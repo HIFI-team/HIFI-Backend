@@ -1,27 +1,33 @@
-// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-var map = new kakao.maps.Map(mapContainer, mapOption);
+var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+// 주소-좌표 변환 객체 생성
+var geocoder = new kakao.maps.services.Geocoder();
 
-// 마커가 표시될 위치입니다
-var markerPosition  = new kakao.maps.LatLng(37.5515814, 126.9249751);
-
-// 마커를 생성합니다
-var marker = new kakao.maps.Marker({
-    position: markerPosition,
-    clickable: true
+stores.forEach((el, index) => {
+    geocoder.addressSearch(el.address_name, function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            displayMarker(coords,el)
+        }
+    });
 });
 
-// 마커가 지도 위에 표시되도록 설정합니다
-marker.setMap(map);
-
-var iwContent = '<div style="padding:2px;">Hello World!</div>' // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-
-// 인포윈도우를 생성합니다
-var infowindow = new kakao.maps.InfoWindow({
-    position: markerPosition,
-    content : iwContent
-});
-
-kakao.maps.event.addListener(marker, 'click', function () {
-    // 마커 위에 인포윈도우를 표시합니다
-    infowindow.open(map, marker);
-});
+function displayMarker(coords,store) {
+    // 마커를 생성하고 지도에 표시합니다.
+    var marker = new kakao.maps.Marker({
+        map: map,
+        position: coords
+    });
+    kakao.maps.event.addListener(marker, 'mouseover', function() {
+        // 마커를 마우스오버 이벤트가 발생하면 장소명이 인포윈도우에 표출됩니다.
+        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + store.place_name + '</div>');
+        infowindow.open(map, marker);
+    });
+    kakao.maps.event.addListener(marker, 'mouseout', function() {
+        // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+        infowindow.close();
+    });
+    kakao.maps.event.addListener(marker, 'click', function() {
+        const roadFind="https://map.kakao.com/link/to/"+store.place_uid;
+        window.open(roadFind)
+    });
+}

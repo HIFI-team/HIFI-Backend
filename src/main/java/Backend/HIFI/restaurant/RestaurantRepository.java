@@ -19,11 +19,13 @@ public class RestaurantRepository {
         return em.find(Restaurant.class,id);
     }
 
-    public List<Restaurant> findByName(String name){
-        return em.createQuery("select r from Restaurant r where  r.name=:name",Restaurant.class)
-                .setParameter("name",name)
+    public List<Restaurant> findAll(){
+        return em.createQuery("select r from Restaurant r",Restaurant.class)
                 .getResultList();
     }
-
-
+//    public List<Restaurant> findByName(String name){
+//        return em.createQuery("select r from Restaurant r where  r.place_name=:place_name",Restaurant.class)
+//                .setParameter("place_name",place_name)
+//                .getResultList();
+//    }
 }
