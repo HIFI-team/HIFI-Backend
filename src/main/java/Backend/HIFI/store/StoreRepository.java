@@ -1,4 +1,4 @@
-package Backend.HIFI.restaurant;
+package Backend.HIFI.store;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -8,19 +8,19 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class RestaurantRepository {
+public class StoreRepository {
     private final EntityManager em;
 
-    public void save(Restaurant restaurant){
-        em.persist(restaurant);
+    public void save(Store store){
+        em.persist(store);
     }
 
-    public Restaurant findOne(Long id){
-        return em.find(Restaurant.class,id);
+    public Store findOne(Long id){
+        return em.find(Store.class,id);
     }
 
-    public List<Restaurant> findAll(){
-        return em.createQuery("select r from Restaurant r",Restaurant.class)
+    public List<Store> findAll(){
+        return em.createQuery("select s from Store s", Store.class)
                 .getResultList();
     }
 //    public List<Restaurant> findByName(String name){

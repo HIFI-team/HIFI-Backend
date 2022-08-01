@@ -1,4 +1,4 @@
-package Backend.HIFI.restaurant;
+package Backend.HIFI.store;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table
 @Getter @Setter
-public class Restaurant {
+public class Store {
     @Id
     @Column(name="restaurant_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Restaurant {
     private String place_uid;
 
     @Enumerated(EnumType.STRING)
-    private RestaurantCategoryCode category_group_code;
+    private StoreCategoryCode category_group_code;
 
     private String images;
     private String description;
@@ -36,13 +36,13 @@ public class Restaurant {
     private float grade;
 
     //==생성매소드==//
-    public static Restaurant createRestaurant(String address_name, RestaurantCategoryCode category_group_code, String place_name, String place_uid) {
-        Restaurant restaurant=new Restaurant();
-        restaurant.setAddress_name(address_name);
-        restaurant.setPlace_name(place_name);
-        restaurant.setPlace_uid(place_uid);
-        restaurant.setCategory_group_code(category_group_code);
-        return restaurant;
+    public static Store createRestaurant(String address_name, StoreCategoryCode category_group_code, String place_name, String place_uid) {
+        Store store =new Store();
+        store.setAddress_name(address_name);
+        store.setPlace_name(place_name);
+        store.setPlace_uid(place_uid);
+        store.setCategory_group_code(category_group_code);
+        return store;
     }
 
 }
