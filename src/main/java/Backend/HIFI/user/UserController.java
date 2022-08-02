@@ -1,5 +1,6 @@
 package Backend.HIFI.user;
 
+import Backend.HIFI.auth.dto.UserProfileDto;
 import Backend.HIFI.user.follow.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +18,21 @@ public class UserController {
     @ResponseBody
     public String profilePage(@PathVariable("email") String email) {
         try {
+            // 본인일 프로필 볼 때도 고려해야 함
             User user = userService.findByEmail(email);
-            String description = user.getDescription();
-            String image = user.getImage();
+            UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
+            return "abcd";
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
-        return "profile";
     }
 
     @GetMapping("/follow")
     @ResponseBody
-    public String followPage() { return "follow"; }
+    public String followPage() {
+
+        return "follow";
+    }
 
 //    @GetMapping("/su")
 //    public ResponseEntity<User> searchUserPage() {

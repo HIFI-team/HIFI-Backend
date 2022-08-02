@@ -47,8 +47,12 @@ public class UserTest {
 
         followService.following(user1, user2);
 
-        System.out.println(user1.getEmail() + " : " + user1.getDescription());
-        User.changeDescription(user1, "minseok");
-        System.out.println(user1.getEmail() + " : " + user1.getDescription());
+    }
+
+    @Test
+    public void DBTest() throws Exception {
+        for (User user : userService.findByEmail("ms").getFollowingList()) {
+            System.out.println(user.getEmail());
+        }
     }
 }
