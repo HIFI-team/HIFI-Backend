@@ -2,6 +2,7 @@ package Backend.HIFI.user;
 
 import Backend.HIFI.user.follow.FollowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,7 +17,9 @@ public class UserController {
     @ResponseBody
     public String profilePage(@PathVariable("email") String email) {
         try {
-            userService.findByEmail(email);
+            User user = userService.findByEmail(email);
+            String description = user.getDescription();
+            String image = user.getImage();
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
@@ -28,7 +31,9 @@ public class UserController {
     public String followPage() { return "follow"; }
 
 //    @GetMapping("/su")
-//    public String searchUserPage() { return "su"; }
+//    public ResponseEntity<User> searchUserPage() {
+
+//    }
 
 //    @GetMapping("/ss")
 //    public String searchStorePage() { return "ss"; }

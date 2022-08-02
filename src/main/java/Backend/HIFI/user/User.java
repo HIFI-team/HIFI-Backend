@@ -46,9 +46,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Builder.Default
     private UserRole role = UserRole.ROLE_USER;
 
-    @Column(name="user_annonymous",nullable = false)
+    @Column(name="user_anonymous",nullable = false)
     @Builder.Default
-    private Boolean annonymous = false;
+    private Boolean anonymous = false;
 
     @OneToMany
     @Builder.Default
@@ -63,7 +63,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.annonymous = true;
+        this.anonymous = true;
         this.role = UserRole.valueOf("ROLE_USER");
     }
 
@@ -98,5 +98,13 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public static void changeDescription(User user, String description) {
+        user.description = description;
+    }
+
+    public static void changeImage(User user, String image) {
+        user.image = image;
     }
 }
