@@ -16,15 +16,6 @@ public class UserService {
     private final FollowRepository followRepository;
     private final FollowService followService;
 
-    public Long saveUser(User user) {
-
-        // 따로 email 중복 회원 검증 필요
-//        validateDuplicateUser(user);
-
-        userRepository.save(user);
-        return user.getId();
-    }
-
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
