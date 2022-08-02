@@ -6,6 +6,7 @@ import Backend.HIFI.auth.dto.UserRequestDto;
 import Backend.HIFI.auth.dto.UserResponseDto;
 import Backend.HIFI.auth.jwt.JwtTokenProvider;
 import Backend.HIFI.auth.security.UserAuthentication;
+import Backend.HIFI.common.exception.BadRequestException;
 import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserRepository;
 import Backend.HIFI.user.UserRole;
@@ -32,7 +33,6 @@ public class AuthServiceImpl implements AuthService{
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Override
@@ -59,12 +59,6 @@ public class AuthServiceImpl implements AuthService{
         TokenResponseDto tokenResponseDto = jwtTokenProvider.generateToken(authentication);
 
         //Refresh Token 저장
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
-                .value(tokenResponseDto.getRefreshToken())
-                .build();
-        refreshTokenRepository.save(refreshToken);
-
         return tokenResponseDto;
     }
 
@@ -103,19 +97,17 @@ public class AuthServiceImpl implements AuthService{
                 = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         //User id를 기반으로 Refresh Token 가져오기
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("로그아웃된 사용자"));
+        User user = userRepository.findById(Long.parseLong(authentication.getName()))
+                .orElseThrow(() -> new BadRequestException("존재하지 않는 유저"));
 
-        //Refresh Token 일치하는지 여부
-        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("토큰 유저 정보 불일치");
-        }
+        //redis memory에 리프레시 토큰이 존재하는지 체크
+        jwtTokenProvider.validateRefreshToken(user.getId().toString(), tokenRequestDto.getRefreshToken());
 
-        //새로운 토큰 생성
-        TokenResponseDto tokenResponseDto = jwtTokenProvider.generateToken(authentication);
-
-        RefreshToken newRefreshToken = refreshToken.updateValue(tokenResponseDto.getRefreshToken());
-        refreshTokenRepository.save(newRefreshToken);
+        //새로운 엑세스 토큰 생성
+        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
+                .accessToken(jwtTokenProvider.generateAccessToken(authentication))
+                .refreshToken(tokenRequestDto.getRefreshToken())
+                .build();
 
         //토큰 발급
         return tokenResponseDto;
