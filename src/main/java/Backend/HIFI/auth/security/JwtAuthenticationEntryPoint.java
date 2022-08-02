@@ -1,7 +1,5 @@
 package Backend.HIFI.auth.security;
 
-import Backend.HIFI.common.ErrorCode;
-import Backend.HIFI.common.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
