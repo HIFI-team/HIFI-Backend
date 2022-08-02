@@ -67,7 +67,7 @@ public class AuthController {
     }
 
     /** 리프레시 토큰 재발급 */
-    @GetMapping("/reissue")
+    @PostMapping("/reissue")
     public ResponseEntity<TokenResponseDto> reissue (@RequestBody TokenRequestDto tokenRequestDto){
         return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }

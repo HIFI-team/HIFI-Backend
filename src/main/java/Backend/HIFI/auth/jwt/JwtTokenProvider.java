@@ -1,7 +1,10 @@
 package Backend.HIFI.auth.jwt;
 
 import Backend.HIFI.auth.dto.TokenResponseDto;
+import Backend.HIFI.common.exception.BadRequestException;
+import Backend.HIFI.common.redis.RedisService;
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
@@ -23,21 +27,20 @@ import java.util.stream.Collectors;
  * @author gengminy (220728) */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtTokenProvider {
+
+    private final RedisService redisService;
     /** 토큰 비밀 키 */
     @Value("${JWT_SECRET_KEY}")
     private String JWT_SECRET;
 
     /** 토큰 유효 시간 (ms) */
-    private static final long JWT_EXPIRATION_MS = 1000 * 60 * 30; //30분
-    private static final long REFRESH_TOKEN_EXPIRATION_MS = 1000 * 60 * 60 * 24 * 7; //7일
+    private static final long JWT_EXPIRATION_MS = 1000L * 60 * 30; //30분
+    private static final long REFRESH_TOKEN_EXPIRATION_MS = 1000L * 60 * 60 * 24 * 7; //7일
     private static final String AUTHORITIES_KEY = "role"; //권한 정보 컬럼명
 
-    /** Jwt 토큰 생성
-     * @param authentication 인증 요청하는 유저 정보
-     */
-    public TokenResponseDto generateToken(Authentication authentication)
-            throws HttpServerErrorException.InternalServerError {
+    public String generateAccessToken(Authentication authentication) {
         //권한 가져오기
         final String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -57,6 +60,13 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS512, encodedKey) // signature에 들어갈 secret 값 세팅
                 .compact();
 
+        return accessToken;
+    }
+
+    public String generateRefreshToken(Authentication authentication) {
+        final String encodedKey = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
+        final Date now = new Date();
+
         final Date refreshTokenExpiresIn = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION_MS);
         final String refreshToken = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -65,10 +75,29 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS512, encodedKey)
                 .compact();
 
+        //redis에 해당 userId 의 리프레시 토큰 등록
+        redisService.setValues(
+                authentication.getName(),
+                refreshToken,
+                Duration.ofMillis(REFRESH_TOKEN_EXPIRATION_MS)
+        );
+
+        return refreshToken;
+    }
+
+    /** Jwt 토큰 생성
+     * @param authentication 인증 요청하는 유저 정보
+     */
+    public TokenResponseDto generateToken(Authentication authentication)
+            throws HttpServerErrorException.InternalServerError {
+        //권한 가져오기
+        final String accessToken = generateAccessToken(authentication);
+        final String refreshToken = generateRefreshToken(authentication);
+
         return TokenResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+//                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .build();
     }
 
@@ -116,6 +145,15 @@ public class JwtTokenProvider {
             log.error("JWT 토큰이 비어있습니다");
         }
         return false;
+    }
+
+    /** Redis Memory 의 RefreshToken 과
+     * User 의 RefreshToken 이 일치하는지 확인 */
+    public void validateRefreshToken(String userId, String refreshToken) {
+        String redisRt = redisService.getValues(userId);
+        if (!refreshToken.equals(redisRt)) {
+            throw new BadRequestException("만료된 리프레시 토큰입니다");
+        }
     }
 
 
