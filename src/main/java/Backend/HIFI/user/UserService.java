@@ -3,6 +3,7 @@ package Backend.HIFI.user;
 
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
+import Backend.HIFI.user.search.Search;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,18 +17,15 @@ public class UserService {
     private final FollowRepository followRepository;
     private final FollowService followService;
 
-    public Long saveUser(User user) {
-
-        // 따로 email 중복 회원 검증 필요
-//        validateDuplicateUser(user);
-
-        userRepository.save(user);
-        return user.getId();
-    }
-
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        return user;
+    }
+
+    public User findById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
         return user;
     }
 
@@ -38,4 +36,12 @@ public class UserService {
             throw new IllegalStateException("이미 존재하는 회원입니다");
         }
     }
+
+    public void userSearch(User user, String searchName) {
+        Search search = new Search();
+        search.setName(searchName);
+        search.setUser(user);
+        user.getSearchList().add(search);
+    }
+
 }

@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 import Backend.HIFI.common.entity.BaseTimeEntity;
+import Backend.HIFI.user.search.Search;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -46,9 +47,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Builder.Default
     private UserRole role = UserRole.ROLE_USER;
 
-    @Column(name="user_annonymous",nullable = false)
+    @Column(name="user_anonymous",nullable = false)
     @Builder.Default
-    private Boolean annonymous = false;
+    private Boolean anonymous = false;
 
     @OneToMany
     @Builder.Default
@@ -58,12 +59,16 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Builder.Default
     private List<User> followingList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Search> searchList = new ArrayList<>();
+
 
     public User(String email, String password, String name) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.annonymous = true;
+        this.anonymous = true;
         this.role = UserRole.valueOf("ROLE_USER");
     }
 
@@ -98,5 +103,13 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public static void changeDescription(User user, String description) {
+        user.description = description;
+    }
+
+    public static void changeImage(User user, String image) {
+        user.image = image;
     }
 }
