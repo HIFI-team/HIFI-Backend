@@ -40,13 +40,44 @@ public class UserTest {
         userRepository.saveAndFlush(user1);
 
         User user2 = User.builder()
-                .email("test")
+                .email("sm")
                 .password("test")
                 .build();
         userRepository.saveAndFlush(user2);
 
-        followService.following(user1, user2);
+        User user3 = User.builder()
+                .email("gm")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user3);
 
+        followService.following(user1, user2);
+        followService.following(user3, user2);
+
+    }
+
+    @Test
+    public void SearchTest() throws Exception {
+        User user1 = User.builder()
+                .email("ms")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user1);
+
+        User user2 = User.builder()
+                .email("sm")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user2);
+
+        User user3 = User.builder()
+                .email("gm")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user3);
+
+        userService.userSearch(user1, "test");
+        userService.userSearch(user2, "test");
     }
 
     @Test

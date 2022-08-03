@@ -18,7 +18,6 @@ public class FollowService {
         // 팔로우 하고 있는지 아닌지 검증 필요
         follower.getFollowingList().add(following);
         following.getFollowerList().add(follower);
-//        followRepository.save(new Follow(follower, following));
         followRepository.save(
                 Follow.builder()
                         .follower(follower)
