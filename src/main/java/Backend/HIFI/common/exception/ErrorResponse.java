@@ -12,17 +12,17 @@ public class ErrorResponse {
     private final LocalDateTime timestamp = LocalDateTime.now();
     private final int status;
     private final String error;
-    private final String code;
+//    private final String code;
     private final String message;
 
-    public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode) {
+    public static ResponseEntity<ErrorResponse> toResponseEntity(BaseException e) {
         return ResponseEntity
-                .status(errorCode.getHttpStatus())
+                .status(e.getHttpStatusCode())
                 .body(ErrorResponse.builder()
-                        .status(errorCode.getHttpStatus().value())
-                        .error(errorCode.getHttpStatus().name())
-                        .code(errorCode.name())
-                        .message(errorCode.getDetail())
+                        .status(e.getHttpStatusCode().value())
+                        .error(e.getHttpStatusCode().name())
+//                        .code(errorCode.name())
+                        .message(e.getMessage())
                         .build()
                 );
     }

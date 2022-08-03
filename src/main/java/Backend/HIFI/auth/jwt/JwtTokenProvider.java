@@ -102,11 +102,10 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String accessToken) {
-      final String encodedKey = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-//            throw new RuntimeException("권한 정보가 없는 토큰입니다");
+            throw new RuntimeException("권한 정보가 없는 토큰입니다");
         }
 
         //권한 정보 가져오기
@@ -138,7 +137,7 @@ public class JwtTokenProvider {
         } catch (SignatureException | MalformedJwtException ex) {
             log.error("잘못된 JWT 서명입니다");
         } catch (ExpiredJwtException ex) {
-            log.error("만료된 JWT 토큰입ㄴ디ㅏ");
+            log.error("만료된 JWT 토큰입니다");
         } catch (UnsupportedJwtException ex) {
             log.error("지원하지 않는 JWT 토큰입니다");
         } catch (IllegalArgumentException ex) {
