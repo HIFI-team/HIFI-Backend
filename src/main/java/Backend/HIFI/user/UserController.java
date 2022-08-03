@@ -1,8 +1,10 @@
 package Backend.HIFI.user;
 
 import Backend.HIFI.auth.dto.UserProfileDto;
+import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -15,10 +17,11 @@ public class UserController {
 
     private final UserService userService;
     private final FollowService followService;
+    private final FollowRepository followRepository;
 
 
     // 아직 어떻게 처리해야 하는지 잘 몰라서 임의로 만들고 후에 다듬을 예정
-    @GetMapping("/profile/{email}")
+    @PostMapping("/profile/{email}")
     @ResponseBody
     public String profilePage(@PathVariable("email") String email) {
         try {
@@ -33,16 +36,15 @@ public class UserController {
         }
     }
 
-    @GetMapping("/follow/{followerEmail}_{followingEmail}")
+    @PostMapping("/follow/{followerEmail}_{followingEmail}")
     @ResponseBody
-    public String setFollowService
+    public String followUser
             (@PathVariable("followerEmail") String followerEmail,
             @PathVariable("followingEmail") String followingEmail) {
 
         try {
             User follower = userService.findByEmail(followerEmail);
             User following = userService.findByEmail(followingEmail);
-
             followService.following(follower, following);
 
             return followerEmail + " 회원이 " + followingEmail + " 회원을 팔로우했습니다.";
@@ -50,11 +52,32 @@ public class UserController {
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
+    }
 
+    @DeleteMapping("/follow/{followerEmail}_{followingEmail}")
+    @ResponseBody
+    public String unfollowUser
+            (@PathVariable("followerEmail") String followerEmail,
+             @PathVariable("followingEmail") String followingEmail) {
+        try {
+            User follower = userService.findByEmail(followerEmail);
+            User following = userService.findByEmail(followingEmail);
+
+            Long followId = followService.getFollowIdByFollowerAndFollowing(follower, following);
+
+            followRepository.deleteById(followId);
+
+            followService.unfollowing(follower, following);
+
+            return followerEmail + " 회원이 " + followingEmail + " 회원을 언팔로우했습니다.";
+
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
     }
 
 
-    @GetMapping("/followList/{email}")
+    @PostMapping("/followList/{email}")
     @ResponseBody
     public String followPage(@PathVariable("email") String email) {
         User user = userService.findByEmail(email);
@@ -76,13 +99,16 @@ public class UserController {
         return "search";
     }
 
-    @GetMapping("/search/{email}_{name}")
+    // TODO
+    //  은근 고려할게 많아서 나중에 해야할 듯
+    @PostMapping("/search/{email}_{name}")
     @ResponseBody
     public String setUserSearch(
             @PathVariable("email") String email,
             @PathVariable("name") String name) {
         User user = userService.findByEmail(email);
         userService.userSearch(user, name);
+
 
         return email + " 유저가 " + name + "을 검색했습니다.\n검색 리스트 : " + user.getSearchList().toString();
     }

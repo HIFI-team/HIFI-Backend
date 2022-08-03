@@ -23,6 +23,12 @@ public class UserService {
         return user;
     }
 
+    public User findById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
+        return user;
+    }
+
     private void validateDuplicateUser(User user) {
         User findUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다"));
