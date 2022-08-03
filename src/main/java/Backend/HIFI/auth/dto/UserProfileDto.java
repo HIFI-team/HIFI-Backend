@@ -18,8 +18,6 @@ public class UserProfileDto {
     private String description;
     private String image;
     private Boolean anonymous;
-    private List<User> followerList;
-    private List<User> followingList;
 
     public UserProfileDto toUserProfileDto(User user) {
         // 비공개 유저 처리 해야함
@@ -29,8 +27,6 @@ public class UserProfileDto {
                 .description(user.getDescription())
                 .image(user.getImage())
                 .anonymous(user.getAnonymous())
-                .followerList(user.getFollowerList())
-                .followingList(user.getFollowingList())
                 .build();
     }
 }

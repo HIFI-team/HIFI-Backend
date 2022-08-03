@@ -28,7 +28,6 @@ public class Follow {
     @Builder
     public Follow(User follower, User following) {
         this.follower = follower;
-
         this.following = following;
     }
 }

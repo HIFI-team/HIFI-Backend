@@ -52,6 +52,7 @@ public class UserTest {
         userRepository.saveAndFlush(user3);
 
         followService.following(user1, user2);
+        followService.following(user1, user3);
         followService.following(user3, user2);
 
     }
@@ -80,10 +81,4 @@ public class UserTest {
         userService.userSearch(user2, "test");
     }
 
-    @Test
-    public void DBTest() throws Exception {
-        for (User user : userService.findByEmail("ms").getFollowingList()) {
-            System.out.println(user.getEmail());
-        }
-    }
 }

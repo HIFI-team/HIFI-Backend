@@ -16,20 +16,12 @@ public class FollowService {
     public void following(User follower, User following) {
 
         // 팔로우 하고 있는지 아닌지 검증 필요
-        follower.getFollowingList().add(following);
-        following.getFollowerList().add(follower);
         followRepository.save(
                 Follow.builder()
                         .follower(follower)
                         .following(following)
                         .build()
         );
-    }
-
-    public void unfollowing(User follower, User following) {
-
-        follower.getFollowingList().remove(following);
-        following.getFollowerList().remove(follower);
     }
 
     public Long getFollowIdByFollowerAndFollowing(User follower, User following) {

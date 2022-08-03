@@ -67,7 +67,6 @@ public class UserController {
 
             followRepository.deleteById(followId);
 
-            followService.unfollowing(follower, following);
 
             return followerEmail + " 회원이 " + followingEmail + " 회원을 언팔로우했습니다.";
 
@@ -84,12 +83,9 @@ public class UserController {
         UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
 
         // TODO 본인이 프로필 볼 때 + 비공개일때 고려해야 함
-        List<User> followerList = userProfileDto.getFollowerList();
-        List<User> followingList = userProfileDto.getFollowingList();
+        //  FollowList 받아오는 코드 재작성 필요
 
-        // TODO 나중에 변경 해야함
-        //  followList user -> email 변경할지
-        return "followerList : " + followerList.toString() + "\n following List :" + followingList.toString();
+        return "followPage";
     }
 
 

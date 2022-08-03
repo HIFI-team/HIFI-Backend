@@ -51,14 +51,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Builder.Default
     private Boolean anonymous = false;
 
-    @OneToMany
-    @Builder.Default
-    private List<User> followerList = new ArrayList<>();
-
-    @OneToMany
-    @Builder.Default
-    private List<User> followingList = new ArrayList<>();
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Search> searchList = new ArrayList<>();
