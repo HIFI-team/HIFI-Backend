@@ -15,7 +15,7 @@ public class StoreRepository {
         em.persist(store);
     }
 
-    public Store findOne(Long id){
+    public Store findById(Long id){
         return em.find(Store.class,id);
     }
 
@@ -23,9 +23,10 @@ public class StoreRepository {
         return em.createQuery("select s from Store s", Store.class)
                 .getResultList();
     }
-//    public List<Restaurant> findByName(String name){
-//        return em.createQuery("select r from Restaurant r where  r.place_name=:place_name",Restaurant.class)
-//                .setParameter("place_name",place_name)
-//                .getResultList();
-//    }
+
+    public List<Store> findByName(String place_name){
+        return em.createQuery("select s from Store s where  s.place_name=:place_name",Store.class)
+                .setParameter("place_name",place_name)
+                .getResultList();
+    }
 }

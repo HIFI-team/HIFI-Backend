@@ -28,7 +28,7 @@ public class StoreServiceTest {
     @Test
     public void 가게_정보_등록() throws Exception{
         //given
-        Store store1 = Store.createRestaurant("서울 마포구 서교동 360-22",restaurant,"예티","13284457");
+        Store store1 = Store.createStore("서울 마포구 서교동 360-22",restaurant,"예티","13284457");
         //when
         storeService.registration(store1);
         //then
