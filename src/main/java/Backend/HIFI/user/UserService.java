@@ -3,6 +3,7 @@ package Backend.HIFI.user;
 
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
+import Backend.HIFI.user.search.Search;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,13 @@ public class UserService {
         if (findUser == user) {
             throw new IllegalStateException("이미 존재하는 회원입니다");
         }
+    }
+
+    public void userSearch(User user, String searchName) {
+        Search search = new Search();
+        search.setName(searchName);
+        search.setUser(user);
+        user.getSearchList().add(search);
     }
 
 }

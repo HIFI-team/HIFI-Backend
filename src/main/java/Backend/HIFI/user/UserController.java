@@ -5,6 +5,7 @@ import Backend.HIFI.user.follow.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @RestController
@@ -66,6 +67,24 @@ public class UserController {
         // TODO 나중에 변경 해야함
         //  followList user -> email 변경할지
         return "followerList : " + followerList.toString() + "\n following List :" + followingList.toString();
+    }
+
+
+    @GetMapping("/search")
+    @ResponseBody
+    public String searchPage() {
+        return "search";
+    }
+
+    @GetMapping("/search/{email}_{name}")
+    @ResponseBody
+    public String setUserSearch(
+            @PathVariable("email") String email,
+            @PathVariable("name") String name) {
+        User user = userService.findByEmail(email);
+        userService.userSearch(user, name);
+
+        return email + " 유저가 " + name + "을 검색했습니다.\n검색 리스트 : " + user.getSearchList().toString();
     }
 
 //    @GetMapping("/su")
