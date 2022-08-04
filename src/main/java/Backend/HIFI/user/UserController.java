@@ -80,12 +80,16 @@ public class UserController {
     @ResponseBody
     public String followPage(@PathVariable("email") String email) {
         User user = userService.findByEmail(email);
+
+        // TODO 프로필 보이도록 코드 추가 해야함
         UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
 
         // TODO 본인이 프로필 볼 때 + 비공개일때 고려해야 함
-        //  FollowList 받아오는 코드 재작성 필요
 
-        return "followPage";
+        List<User> followerList = followService.getFollower(user);
+        List<User> followingList = followService.getFollowing(user);
+
+        return "followerList = " + followerList + "\nfollowingList = " + followingList;
     }
 
 

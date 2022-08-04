@@ -1,5 +1,6 @@
 package Backend.HIFI.user;
 
+import Backend.HIFI.auth.dto.UserProfileUpdateDto;
 import Backend.HIFI.common.entity.BaseTimeEntity;
 import Backend.HIFI.user.search.Search;
 import lombok.*;
@@ -64,6 +65,13 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.role = UserRole.valueOf("ROLE_USER");
     }
 
+    public void update(UserProfileUpdateDto userProfileUpdateDto) {
+        this.name = userProfileUpdateDto.getName();
+        this.description = userProfileUpdateDto.getDescription();
+        this.anonymous = userProfileUpdateDto.getAnonymous();
+        this.image = userProfileUpdateDto.getImage();
+    }
+
     //권한 부여
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -104,4 +112,5 @@ public class User extends BaseTimeEntity implements UserDetails {
     public static void changeImage(User user, String image) {
         user.image = image;
     }
+
 }

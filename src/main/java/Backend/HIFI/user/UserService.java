@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 
+import Backend.HIFI.auth.dto.UserProfileUpdateDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import Backend.HIFI.user.search.Search;
@@ -45,4 +46,7 @@ public class UserService {
         user.getSearchList().add(search);
     }
 
+    public void updateProfile(User user, UserProfileUpdateDto userProfileUpdateDto) {
+        user.update(userProfileUpdateDto);
+    }
 }
