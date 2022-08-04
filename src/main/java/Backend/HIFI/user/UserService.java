@@ -17,6 +17,7 @@ public class UserService {
     private final FollowRepository followRepository;
     private final FollowService followService;
 
+
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));

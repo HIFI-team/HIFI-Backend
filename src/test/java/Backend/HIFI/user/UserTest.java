@@ -1,5 +1,6 @@
 package Backend.HIFI.user;
 
+import Backend.HIFI.user.follow.Follow;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import org.junit.Test;
@@ -53,9 +54,12 @@ public class UserTest {
 
         followService.following(user1, user2);
         followService.following(user1, user3);
-        followService.following(user3, user2);
+        followService.following(user2, user3);
 
+        System.out.println(followService.getFollowerEmail(user2));
+        System.out.println(followService.getFollowingEmail(user2));
     }
+
 
     @Test
     public void SearchTest() throws Exception {
