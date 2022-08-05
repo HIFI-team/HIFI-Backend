@@ -2,8 +2,7 @@ package Backend.HIFI.review;
 
 import Backend.HIFI.store.Store;
 import Backend.HIFI.user.User;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +11,9 @@ import java.util.Optional;
 @Entity
 @Getter @Setter
 @Table
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Review {
     @Id
     @Column(name = "review_id")
@@ -37,6 +39,7 @@ public class Review {
     @Column(columnDefinition = "int default 0")
     private int reports;
 
+    @Column(columnDefinition = "boolean default False")
     private Boolean isBlind;
     private LocalDateTime createdAt;
 
@@ -53,24 +56,11 @@ public class Review {
         }
     }
 
-    //==생성 매서드==//
-    public static Review createReview(Optional<User> user, Store store, String content){
-        Review review=new Review();
-
-        //review.setUser(user);
-        review.setStore(store);
-        review.setContent(content);
-        review.setCreatedAt(LocalDateTime.now());
-
-        return review;
-    }
     //==비즈니스 로직==//
     /**
      * 리뷰 삭제
      * */
-    public void removeReview(){
-        //본인이 쓴 리뷰인지 확인 필요
-    }
+
 
     /**
      * 리뷰 숨기기

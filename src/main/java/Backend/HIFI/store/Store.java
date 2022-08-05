@@ -1,8 +1,7 @@
 package Backend.HIFI.store;
 
 import Backend.HIFI.review.Review;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +10,9 @@ import java.util.List;
 @Entity
 @Table
 @Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Store {
     @Id
     @Column(name="store_id")
@@ -40,17 +42,8 @@ public class Store {
     @Column(columnDefinition = "float default 0.0")
     private float grade;
 
-    @OneToMany(mappedBy = "store")
-    private List<Review> reviews=new ArrayList<>();
-
-    //==생성매소드==//
-    public static Store createStore(String address_name, StoreCategoryCode category_group_code, String place_name, String place_uid) {
-        Store store =new Store();
-        store.setAddress_name(address_name);
-        store.setPlace_name(place_name);
-        store.setPlace_uid(place_uid);
-        store.setCategory_group_code(category_group_code);
-        return store;
-    }
+    @OneToMany(mappedBy = "store",cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Review> reviews = new ArrayList<>();
 
 }
