@@ -9,7 +9,7 @@ import java.util.List;
 
 import static Backend.HIFI.review.QReview.review;
 
-
+/**QuerydslSupport 페이징 시 필요*/
 @RequiredArgsConstructor
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;

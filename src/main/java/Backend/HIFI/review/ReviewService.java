@@ -15,7 +15,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReviewService {
-    private final ReviewRepositoryImpl reviewRepositoryImpl;
     private final ReviewRepository reviewRepository;
     private final UserService userService;
     private final StoreService storeService;
@@ -38,15 +37,15 @@ public class ReviewService {
      * 리뷰 조회
      * */
     public List<Review> findReview(){
-        return reviewRepositoryImpl.findAllByIsBlindFalse();
+        return reviewRepository.findAllByIsBlindFalse();
     }
     public List<Review> findReviewByUser(Long userId){
         User user=userService.findById(userId);
-        return reviewRepositoryImpl.findByUser(user);
+        return reviewRepository.findByUser(user);
     }
     public List<Review>findReviewByStore(Long storeId){
         Store store=storeService.findOneStore(storeId);
-        return reviewRepositoryImpl.findByStore(store);
+        return reviewRepository.findByStore(store);
     }
 
     /**
