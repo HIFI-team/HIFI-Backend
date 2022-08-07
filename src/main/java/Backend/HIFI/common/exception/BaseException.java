@@ -25,4 +25,8 @@ public class BaseException extends RuntimeException {
         this.httpStatusCode = httpStatusCode;
         this.responseMessage = responseMessage;
     }
+
+    public static BaseException toBaseException(Exception e) {
+        return new BaseException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
 }
