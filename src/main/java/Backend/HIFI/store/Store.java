@@ -1,16 +1,21 @@
 package Backend.HIFI.store;
 
-import lombok.Getter;
-import lombok.Setter;
+import Backend.HIFI.review.Review;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
 @Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Store {
     @Id
-    @Column(name="restaurant_id")
+    @Column(name="store_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -25,7 +30,9 @@ public class Store {
     @Enumerated(EnumType.STRING)
     private StoreCategoryCode category_group_code;
 
+    @Column(columnDefinition = "Text default ''")
     private String images;
+    @Column(columnDefinition = "Text default ''")
     private String description;
 
     @Column(columnDefinition = "int default 0")
@@ -35,14 +42,8 @@ public class Store {
     @Column(columnDefinition = "float default 0.0")
     private float grade;
 
-    //==생성매소드==//
-    public static Store createRestaurant(String address_name, StoreCategoryCode category_group_code, String place_name, String place_uid) {
-        Store store =new Store();
-        store.setAddress_name(address_name);
-        store.setPlace_name(place_name);
-        store.setPlace_uid(place_uid);
-        store.setCategory_group_code(category_group_code);
-        return store;
-    }
+    @OneToMany(mappedBy = "store",cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Review> reviews = new ArrayList<>();
 
 }

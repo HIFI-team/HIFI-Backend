@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class StoreController {
     private final StoreService storeService;
+
+    //지도 보여줌
     @GetMapping
-    public String address(Model model){
+    public String store(Model model){
         model.addAttribute("stores", storeService.findStores());
         return "store";
     }
