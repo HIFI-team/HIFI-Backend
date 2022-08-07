@@ -2,6 +2,7 @@ package Backend.HIFI.user;
 
 import Backend.HIFI.auth.dto.UserProfileUpdateDto;
 import Backend.HIFI.common.entity.BaseTimeEntity;
+import Backend.HIFI.review.Review;
 import Backend.HIFI.user.search.Search;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,9 +53,13 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Builder.Default
     private Boolean anonymous = false;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Search> searchList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Review> reviewList = new ArrayList<>();
 
 
     public User(String email, String password, String name) {

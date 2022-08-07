@@ -6,6 +6,7 @@ import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import Backend.HIFI.user.search.Search;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,11 @@ public class UserService {
         if (findUser == user) {
             throw new IllegalStateException("이미 존재하는 회원입니다");
         }
+    }
+
+    @Query("delete from Review rv where rv.user.id = :use")
+    public void deleteUser(User user) {
+        userRepository.deleteByUserId(user.getId());
     }
 
     public void userSearch(User user, String searchName) {
