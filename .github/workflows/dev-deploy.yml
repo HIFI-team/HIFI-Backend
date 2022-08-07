@@ -91,7 +91,8 @@ jobs:
         with:
           host: ${{ secrets.HOST_DEV }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY_DEV }}
+          password: ${{ secrets.PASSWORD }}
+          #key: ${{ secrets.KEY_DEV }}
           script: mkdir -p ~/srv/ubuntu/hifi_dev
 
       #Copy Source
@@ -102,7 +103,8 @@ jobs:
           remote_path: ~/srv/ubuntu/
           remote_host: ${{ secrets.HOST_DEV }}
           remote_user: ${{ secrets.USERNAME }}
-          remote_key: ${{ secrets.KEY_DEV }}
+          remote_password: ${{ secrets.PASSWORD }}
+          #remote_key: ${{ secrets.KEY_DEV }}
 
       #Execute
       - name: executing remote ssh commands using password
@@ -110,7 +112,8 @@ jobs:
         with:
           host: ${{ secrets.HOST_DEV }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY_DEV }}
+          password: ${{ secrets.PASSWORD }}
+          #key: ${{ secrets.KEY_DEV }}
           script: |
             sh ~/srv/ubuntu/config/scripts/deploy.sh
             sudo docker image prune -a
