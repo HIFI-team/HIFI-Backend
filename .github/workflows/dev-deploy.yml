@@ -59,7 +59,7 @@ jobs:
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: ${{ secrets.DOCKER_REPOSITORY }}
+          images: ${{ secrets.DOCKER_REPOSITORY }}/hifi-dev
           tag-semver: |
             {{version}}
             {{major}}.{{minor}}
