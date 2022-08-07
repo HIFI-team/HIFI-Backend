@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 import Backend.HIFI.auth.dto.UserProfileDto;
+import Backend.HIFI.auth.dto.UserProfileUpdateDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import lombok.RequiredArgsConstructor;
@@ -92,6 +93,20 @@ public class UserController {
         return "followerList = " + followerList + "\nfollowingList = " + followingList;
     }
 
+    @GetMapping("/update/{email}")
+    @ResponseBody
+    public String updatePage(@PathVariable("email") String email) { return "update";}
+
+    @PostMapping("/update/{email}")
+    @ResponseBody
+    public String updateProfile(@PathVariable("email") String email, UserProfileUpdateDto userProfileUpdateDto) {
+
+        // TODO UserProfileUpdateDto 받는 코드 작성 필요
+        User user = userService.findByEmail(email);
+        user.update(userProfileUpdateDto);
+
+        return "프로필이 업데이트 되었습니다.";
+    }
 
     @GetMapping("/search")
     @ResponseBody

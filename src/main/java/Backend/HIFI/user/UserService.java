@@ -49,4 +49,8 @@ public class UserService {
     public void updateProfile(User user, UserProfileUpdateDto userProfileUpdateDto) {
         user.update(userProfileUpdateDto);
     }
+
+    // 유저 리뷰 리스트
+
+
 }
