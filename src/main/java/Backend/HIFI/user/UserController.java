@@ -1,15 +1,16 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.auth.dto.UserProfileDto;
-import Backend.HIFI.auth.dto.UserProfileUpdateDto;
+import Backend.HIFI.auth.dto.*;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -20,11 +21,22 @@ public class UserController {
     private final FollowService followService;
     private final FollowRepository followRepository;
 
+    @PostMapping("/test")
+    @ResponseBody
+    public String authTest(@RequestHeader("Authorization") String token) {
+        User user = userService.findByEmail("ms");
+        UserResponseDto userResponseDto = UserResponseDto.of(user);
+
+        return token;
+    }
 
     // 아직 어떻게 처리해야 하는지 잘 몰라서 임의로 만들고 후에 다듬을 예정
     @PostMapping("/profile/{email}")
     @ResponseBody
-    public String profilePage(@PathVariable("email") String email) {
+    public String profilePage(@PathVariable("email") String email, @RequestHeader UserRequestDto userRequestDto) {
+        if (Objects.equals(userRequestDto.getEmail(), email)) {
+            return "본인의 프로필입니다.";
+        }
         try {
             // TODO 본인이 프로필 볼 때 + 비공개일때 고려해야 함
             User user = userService.findByEmail(email);
