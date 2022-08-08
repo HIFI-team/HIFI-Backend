@@ -23,14 +23,17 @@ public class ReviewService {
      * 리뷰 등록
      * */
     @Transactional
-    public void review(Long userId, Long storeId,String content){
-        User user = userService.findById(userId);
-        Store store= storeService.findOneStore(storeId);
+    public Review review(ReviewRequestDto dto){
+        User user = userService.findById(dto.getUser().getId());
+        Store store= storeService.findOneStore(dto.getStore().getId());
 
-        Review review =Review.builder()
-                .user(user).store(store).content(content).build();
+        Review review=dto.toEntity();
+
         store.getReviews().add(review);
+        user.getReviewList().add(review);
+
         reviewRepository.save(review);
+        return review;
     }
 
     /**
@@ -56,13 +59,17 @@ public class ReviewService {
 
         Review review = reviewRepository.findById(reviewId)
                         .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 스토어 입니다"));
-//        review.getStore().getReviews().remove(review);
-        //review.getUser().getReviews().remove(review);
+
+        //연관관계 끊어줌
+        review.getStore().getReviews().remove(review);
+        review.getUser().getReviewList().remove(review);
+
         reviewRepository.delete(review);
     }
 
-    // 리뷰 삭제 -> 스토어의 연관된 리뷰 "직접" 삭제
-    // 유저 삭제 -> 리뷰 알아서 삭제됨 (CASCADE)
-    // 그러나 리뷰 삭제됐다고 스토어에서는 삭제 안됨
+    /**
+     * 리뷰 신고 및 좋아요
+     * */
+
 
 }

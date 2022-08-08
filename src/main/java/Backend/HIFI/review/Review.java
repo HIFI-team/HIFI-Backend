@@ -44,17 +44,7 @@ public class Review {
     private LocalDateTime createdAt;
 
     //==연관관계 매서드==//
-    public void setUser(User user){
-        this.user=user;
-        //user.getReviews().add(this);
-    }
-    public void setStore(Store store){
-        //스토어 중복 방지
-        if (this.store== null) {
-            this.store = store;
-            store.getReviews().add(this);
-        }
-    }
+
 
     //==비즈니스 로직==//
     /**
