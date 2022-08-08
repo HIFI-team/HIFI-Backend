@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,7 +39,7 @@ public class ReviewService {
      * 리뷰 조회
      * */
     public List<Review> findReview(){
-        return reviewRepository.findAllByIsBlindFalse();
+        return reviewRepository.findAllByStatus();
     }
     public List<Review> findReviewByUser(Long userId){
         User user=userService.findById(userId);
@@ -59,12 +58,10 @@ public class ReviewService {
 
         Review review = reviewRepository.findById(reviewId)
                         .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
-
         //연관관계 끊어줌
-        review.getStore().getReviews().remove(review);
-        review.getUser().getReviewList().remove(review);
-
-        reviewRepository.delete(review);
+//        review.getStore().getReviews().remove(review);
+//        review.getUser().getReviewList().remove(review);
+        review.changeDeleteStatus();
     }
 
     /**

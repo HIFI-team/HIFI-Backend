@@ -1,12 +1,12 @@
 package Backend.HIFI.review;
 
+import Backend.HIFI.common.DeleteStatus;
+import Backend.HIFI.common.entity.BaseTimeEntity;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Entity
 @Getter @Setter
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Review {
+public class Review extends BaseTimeEntity {
     @Id
     @Column(name = "review_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,14 +39,20 @@ public class Review {
     @Column(columnDefinition = "int default 0")
     private int reports;
 
-    @Column(columnDefinition = "boolean default False")
-    private Boolean isBlind;
-    private LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
+    private DeleteStatus delStatus;
 
     //==연관관계 매서드==//
 
 
     //==비즈니스 로직==//
+    /**
+     * 리뷰 삭제 체크
+     * */
+    public void changeDeleteStatus(){
+        if(this.delStatus ==DeleteStatus.Y){this.delStatus =DeleteStatus.N;}
+        else{this.delStatus =DeleteStatus.Y;}
+    }
     /**
      * 리뷰 좋아요 및 신고 업데이트
      * */

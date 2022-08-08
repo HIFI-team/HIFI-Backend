@@ -35,18 +35,17 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     public List<Review> findByStore(Store store){
         return jpaQueryFactory.selectFrom(review)
                 .where(
-                        review.store.eq(store),
-                        review.isBlind.eq(Boolean.FALSE)
+                        review.store.eq(store)
                 )
                 .orderBy(review.createdAt.desc())
                 .fetch();
     }
     //리뷰 조회
     @Override
-    public List<Review> findAllByIsBlindFalse(){
+    public List<Review> findAllByStatus(){
         return jpaQueryFactory.selectFrom(review)
                 .where(
-                        review.isBlind.eq(Boolean.FALSE)
+
                 )
                 .orderBy(review.createdAt.desc())
                 .fetch();

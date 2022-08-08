@@ -1,5 +1,6 @@
 package Backend.HIFI.store;
 
+import Backend.HIFI.common.DeleteStatus;
 import Backend.HIFI.review.Review;
 import lombok.*;
 
