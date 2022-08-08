@@ -20,6 +20,7 @@ public class ReviewRequestDto {
     private Store store;
     @CreatedDate
     private LocalDateTime time;
+    private int likes;
 
     public Review toEntity(){
         Review review = Review.builder()
@@ -29,5 +30,12 @@ public class ReviewRequestDto {
                 .createdAt(time)
                 .build();
         return review;
+    }
+
+    public ReviewRequestDto(Review review){
+        this.content= review.getContent();
+        this.user=review.getUser();
+        this.store=review.getStore();
+        this.time=review.getCreatedAt();
     }
 }

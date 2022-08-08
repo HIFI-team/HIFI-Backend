@@ -58,7 +58,7 @@ public class ReviewService {
     public void deleteReview(Long reviewId){
 
         Review review = reviewRepository.findById(reviewId)
-                        .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 스토어 입니다"));
+                        .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
 
         //연관관계 끊어줌
         review.getStore().getReviews().remove(review);
@@ -68,8 +68,19 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 신고 및 좋아요
+     * 리뷰 신고
      * */
+//    public ReviewRequestDto updateLikes(Long reviewId, Long userId) {
+//        Review review = reviewRepository.findById(reviewId)
+//                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
+//        review.increaseLikes();
+//        ReviewRequestDto dto= new ReviewRequestDto(review);
+//        return dto;
+//    }
 
-
+    public void updateReports(Long reviewId){
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
+        review.increaseReports();
+    }
 }

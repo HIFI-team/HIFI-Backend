@@ -48,12 +48,14 @@ public class Review {
 
     //==비즈니스 로직==//
     /**
-     * 리뷰 삭제
+     * 리뷰 좋아요 및 신고 업데이트
      * */
+    public void increaseLikes(){
+        this.likes+=1;
+    }
+    public void increaseReports(){
+        this.reports+=1;
+    }
 
-
-    /**
-     * 리뷰 숨기기
-     * */
 
 }
