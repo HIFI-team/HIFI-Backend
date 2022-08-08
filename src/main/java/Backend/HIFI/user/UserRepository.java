@@ -18,5 +18,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Query("delete from Review rv where rv.user.id = :userId")
-    void deleteByUserId(@Param("userId") Long UserId);
+    void deleteReviewByUserId(@Param("userId") Long UserId);
+
+    @Modifying
+    @Query("delete from Follow f where f.following.id = :userId or f.follower.id = :userId")
+    void deleteFollowByUserId(@Param("userId") Long userId);
 }

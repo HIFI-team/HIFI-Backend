@@ -40,9 +40,10 @@ public class UserService {
         }
     }
 
-    @Query("delete from Review rv where rv.user.id = :use")
     public void deleteUser(User user) {
-        userRepository.deleteByUserId(user.getId());
+        // trigger 통해 리뷰 지워지면 store.review 지워지도록
+//        userRepository.deleteReviewByUserId(user.getId());
+        userRepository.deleteFollowByUserId(user.getId());
     }
 
     public void userSearch(User user, String searchName) {
