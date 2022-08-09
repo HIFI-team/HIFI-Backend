@@ -123,6 +123,19 @@ public class UserController {
         return "프로필이 업데이트 되었습니다.";
     }
 
+    @GetMapping("/delete")
+    public String deletePage(Authentication authentication) {
+        return "user/delete";
+    }
+
+    @PostMapping("/delete")
+    public String deleteUser(Authentication authentication) {
+        User user = userService.findByAuth(authentication);
+        userService.deleteUser(user);
+
+        return user.getEmail() + " was deleted";
+    }
+
     @GetMapping("/search")
     public String searchPage() {
         return "search";

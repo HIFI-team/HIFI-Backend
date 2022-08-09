@@ -52,7 +52,8 @@ public class UserService {
         // trigger 통해 리뷰 지워지면 store.review 지워지도록
 //        userRepository.deleteReviewByUserId(user.getId());
         userRepository.deleteFollowByUserId(user.getId());
-        userRepository.delete(user);
+//        userRepository.delete(user);
+        user.setDeleted(true);
     }
 
     public void userSearch(User user, String searchName) {
