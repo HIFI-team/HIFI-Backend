@@ -26,7 +26,6 @@ public class ReviewRequestDto {
                 .user(user)
                 .store(store)
                 .content(content)
-                .delStatus(DeleteStatus.Y)
                 .build();
     }
 
@@ -38,7 +37,7 @@ public class ReviewRequestDto {
                 .user(review.getUser())
                 .store(review.getStore())
                 .content(review.getContent())
-                //.time(review.getCreatedAt())
+                .time(review.getCreatedAt())
                 .build();
     }
 }

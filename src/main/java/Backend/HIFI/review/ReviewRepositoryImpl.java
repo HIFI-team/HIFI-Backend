@@ -1,5 +1,6 @@
 package Backend.HIFI.review;
 
+import Backend.HIFI.common.DeleteStatus;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.user.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,7 +23,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     public List<Review> findByUser(User user){
         return jpaQueryFactory.selectFrom(review)
                 .where(
-                        review.user.eq(user)
+                        review.user.eq(user),
+                        review.delStatus.eq(DeleteStatus.N)
                 )
                 .orderBy(review.createdAt.desc())
                 .fetch();
@@ -35,17 +37,18 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     public List<Review> findByStore(Store store){
         return jpaQueryFactory.selectFrom(review)
                 .where(
-                        review.store.eq(store)
+                        review.store.eq(store),
+                        review.delStatus.eq(DeleteStatus.N)
                 )
                 .orderBy(review.createdAt.desc())
                 .fetch();
     }
     //리뷰 조회
     @Override
-    public List<Review> findAllByStatus(){
+    public List<Review> findAllByDelStatus(){
         return jpaQueryFactory.selectFrom(review)
                 .where(
-
+                    review.delStatus.eq(DeleteStatus.N)
                 )
                 .orderBy(review.createdAt.desc())
                 .fetch();

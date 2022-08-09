@@ -1,5 +1,6 @@
 package Backend.HIFI.review;
 
+import Backend.HIFI.common.DeleteStatus;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.store.StoreService;
 import Backend.HIFI.user.User;
@@ -39,7 +40,7 @@ public class ReviewService {
      * 리뷰 조회
      * */
     public List<Review> findReview(){
-        return reviewRepository.findAllByStatus();
+        return reviewRepository.findAllByDelStatus();
     }
     public List<Review> findReviewByUser(Long userId){
         User user=userService.findById(userId);

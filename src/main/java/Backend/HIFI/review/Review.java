@@ -1,6 +1,5 @@
 package Backend.HIFI.review;
 
-import Backend.HIFI.common.DeleteStatus;
 import Backend.HIFI.common.entity.BaseTimeEntity;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.user.User;
@@ -34,34 +33,26 @@ public class Review extends BaseTimeEntity {
 
     @Column(columnDefinition = "int default 0")
     private int grade;
-    @Column(columnDefinition = "int default 0")
-    private int likes;
-    @Column(columnDefinition = "int default 0")
-    private int reports;
 
-    @Enumerated(EnumType.STRING)
-    private DeleteStatus delStatus;
+//    @Column(columnDefinition = "int default 0")
+//    private int likes;
+//    @Column(columnDefinition = "int default 0")
+//    private int reports;
+
 
     //==연관관계 매서드==//
 
 
     //==비즈니스 로직==//
     /**
-     * 리뷰 삭제 체크
-     * */
-    public void changeDeleteStatus(){
-        if(this.delStatus ==DeleteStatus.Y){this.delStatus =DeleteStatus.N;}
-        else{this.delStatus =DeleteStatus.Y;}
-    }
-    /**
      * 리뷰 좋아요 및 신고 업데이트
      * */
-    public void increaseLikes(){
-        this.likes+=1;
-    }
-    public void increaseReports(){
-        this.reports+=1;
-    }
+//    public void increaseLikes(){
+//        this.likes+=1;
+//    }
+//    public void increaseReports(){
+//        this.reports+=1;
+//    }
 
 
 }

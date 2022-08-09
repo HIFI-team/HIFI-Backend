@@ -10,9 +10,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -23,9 +27,8 @@ import static org.junit.Assert.*;
 public class ReviewServiceTest {
     @Autowired UserRepository userRepository;
     @Autowired StoreService storeService;
-    @Autowired ReviewService reviewService;
-    @Autowired
-    StoreRepository storeRepository;
+    @Autowired ReviewRepository reviewRepository;
+    @Autowired StoreRepository storeRepository;
 
     @Test
     public void 리뷰_삭제 () throws Exception{
@@ -41,12 +44,26 @@ public class ReviewServiceTest {
                 .place_uid("aa")
                 .build();
         storeRepository.save(store);
-        System.out.println(store.getId());
-        reviewService.review(user.getId(),store.getId(),"Test");
+        Review review1=Review.builder()
+                .user(user)
+                .store(store)
+                .content("hi")
+                .build();
+        reviewRepository.save(review1);
+        Review review2=Review.builder()
+                .user(user)
+                .store(store)
+                .content("bye")
+                .build();
+        reviewRepository.save(review2);
+        review2.changeDeleteStatus();
+        System.out.println(review2.getDelStatus());
 
-        System.out.println(store.getReviews());
-        reviewService.deleteReview(1L);
-        System.out.println(store.getReviews());
+        System.out.println("엥");
+        List<Review> reviews = reviewRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        for (Review review:reviews) {
+            System.out.println(review.getContent()+review.getCreatedAt()+review.getDelStatus());
+        }
         //when
 
         //then

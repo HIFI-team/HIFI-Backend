@@ -1,5 +1,6 @@
 package Backend.HIFI.store;
 
+import Backend.HIFI.common.DeleteStatus;
 import Backend.HIFI.review.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class StoreService {
     public Store findOneStore(Long storeId){
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 스토어 입니다"));
+        //delete store 제외 필요함
         return store;
     }
     public List<Store> findStores(){
@@ -38,7 +40,7 @@ public class StoreService {
     public void deleteStore(Long storeId){
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 스토어 입니다"));
-
-
+        store.changeDeleteStatus();
+        store.updateReviews();
     }
 }

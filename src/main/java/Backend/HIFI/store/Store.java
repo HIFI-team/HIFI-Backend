@@ -1,6 +1,7 @@
 package Backend.HIFI.store;
 
 import Backend.HIFI.common.DeleteStatus;
+import Backend.HIFI.common.entity.BaseEntity;
 import Backend.HIFI.review.Review;
 import lombok.*;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Store {
+public class Store extends BaseEntity {
     @Id
     @Column(name="store_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,11 +34,7 @@ public class Store {
 
     @Column(columnDefinition = "Text default ''")
     private String images;
-    @Column(columnDefinition = "Text default ''")
     private String description;
-
-    @Column(columnDefinition = "int default 0")
-    private int likes;
 
     //트리거로 계산
     @Column(columnDefinition = "float default 0.0")
@@ -46,5 +43,12 @@ public class Store {
     @OneToMany(mappedBy = "store",cascade = CascadeType.ALL)
     @Builder.Default
     private List<Review> reviews = new ArrayList<>();
+
+    //==비즈니스 매서드==//
+    public void updateReviews(){
+        for (Review review:reviews) {
+            if(review.getDelStatus()==DeleteStatus.N)review.changeDeleteStatus();
+        }
+    }
 
 }
