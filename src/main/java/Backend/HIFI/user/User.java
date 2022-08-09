@@ -44,6 +44,10 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name="user_description")
     private String description;
 
+    @Column(name="user_deleted", nullable = false)
+    @Builder.Default
+    private Boolean deleted = false;
+
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
