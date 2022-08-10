@@ -66,7 +66,7 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         //모든 ip에 응답 허용
-        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         //내 서버의 응답 json 을 javascript에서 처리할수 있게 하는것(axios 등)
