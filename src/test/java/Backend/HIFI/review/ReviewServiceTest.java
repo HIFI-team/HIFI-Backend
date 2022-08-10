@@ -28,6 +28,7 @@ public class ReviewServiceTest {
     @Autowired UserRepository userRepository;
     @Autowired StoreService storeService;
     @Autowired ReviewRepository reviewRepository;
+    @Autowired ReviewService reviewService;
     @Autowired StoreRepository storeRepository;
 
     @Test
@@ -56,10 +57,9 @@ public class ReviewServiceTest {
                 .content("bye")
                 .build();
         reviewRepository.save(review2);
-        review2.changeDeleteStatus();
+//        review2.changeDeleteStatus();
         System.out.println(review2.getDelStatus());
 
-        System.out.println("엥");
         List<Review> reviews = reviewRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         for (Review review:reviews) {
             System.out.println(review.getContent()+review.getCreatedAt()+review.getDelStatus());

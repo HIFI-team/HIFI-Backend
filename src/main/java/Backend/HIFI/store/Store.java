@@ -30,7 +30,7 @@ public class Store extends BaseEntity {
     private String place_uid;
 
     @Enumerated(EnumType.STRING)
-    private StoreCategoryCode category_group_code;
+    private StoreCategoryCode categoryCode;
 
     @Column(columnDefinition = "Text default ''")
     private String images;

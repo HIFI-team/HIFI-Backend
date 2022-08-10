@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static Backend.HIFI.store.StoreCategoryCode.restaurant;
 import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ public class StoreServiceTest {
     @Test
     public void 정보_확인() throws Exception{
         //given
-        List<Store> stores = storeService.findStores();
+        List<Store> stores = storeService.getStores();
         //when
 
         //then

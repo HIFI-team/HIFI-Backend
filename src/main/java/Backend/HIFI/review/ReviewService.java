@@ -1,6 +1,5 @@
 package Backend.HIFI.review;
 
-import Backend.HIFI.common.DeleteStatus;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.store.StoreService;
 import Backend.HIFI.user.User;
@@ -23,11 +22,9 @@ public class ReviewService {
      * 리뷰 등록
      * */
     @Transactional
-    public Review review(ReviewRequestDto dto){
-        User user = userService.findById(dto.getUser().getId());
-        Store store= storeService.findOneStore(dto.getStore().getId());
-
-        Review review=dto.toEntity();
+    public Review review(Review review){
+        User user = userService.findById(review.getUser().getId());
+        Store store= storeService.getStore(review.getStore().getId());
 
         store.getReviews().add(review);
         user.getReviewList().add(review);
@@ -39,7 +36,11 @@ public class ReviewService {
     /**
      * 리뷰 조회
      * */
-    public List<Review> findReview(){
+    public Review findReview(Long reviewId){
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
+    }
+    public List<Review> findReviews(){
         return reviewRepository.findAllByDelStatus();
     }
     public List<Review> findReviewByUser(Long userId){
@@ -47,7 +48,7 @@ public class ReviewService {
         return reviewRepository.findByUser(user);
     }
     public List<Review>findReviewByStore(Long storeId){
-        Store store=storeService.findOneStore(storeId);
+        Store store=storeService.getStore(storeId);
         return reviewRepository.findByStore(store);
     }
 
@@ -79,6 +80,6 @@ public class ReviewService {
     public void updateReports(Long reviewId){
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
-        review.increaseReports();
+        //review.increaseReports();
     }
 }
