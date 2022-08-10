@@ -5,6 +5,7 @@ import Backend.HIFI.auth.security.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -59,10 +60,22 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         //로컬 react 개발 환경
-        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowedOrigins(Arrays.asList(
+                "https://hifihifi.site",
+                "https://api.hifihifi.site",
+                "http://localhost:3000",
+                "http://localhost:3100"
+        ));
         //서버 react 프론트 환경
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "TOKEN_ID", "X-Requested-With",
+                "Authorization", "Content-Type",
+                "Content-Length", "Cache-Control")
+        );
+        configuration.setAllowedMethods(Arrays.asList(
+                "HEAD", "GET", "POST", "PUT", "DELETE", "OPTION"
+        ));
         //내 서버의 응답 json 을 javascript에서 처리할수 있게 하는것(axios 등)
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
