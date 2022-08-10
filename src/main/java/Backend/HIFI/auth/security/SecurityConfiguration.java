@@ -59,16 +59,10 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         //로컬 react 개발 환경
-        configuration.setAllowedOrigins(Arrays.asList(
-                "https://hifihifi.site",
-                "https://api.hifihifi.site",
-                "https://admin.hifihifi.site",
-                "http://localhost:8000",
-                "http://localhost:3000"
-        ));
+        configuration.addAllowedOriginPattern("*");
         //서버 react 프론트 환경
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
         //내 서버의 응답 json 을 javascript에서 처리할수 있게 하는것(axios 등)
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
