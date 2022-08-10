@@ -65,10 +65,13 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        //모든 ip에 응답 허용
-        configuration.addAllowedOriginPattern("*");
+        //로컬 react 개발 환경
+        configuration.addAllowedOrigin("http://localhost:3000");
+        //서버 react 프론트 환경
+        configuration.addAllowedOrigin("https://hifihifi.site");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
+        configuration.addExposedHeader("X-AUTH-TOKEN");
         //내 서버의 응답 json 을 javascript에서 처리할수 있게 하는것(axios 등)
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
