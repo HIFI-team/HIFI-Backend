@@ -5,6 +5,7 @@ import lombok.*;
 /** JwtToken 응답 Dto
  * @author gengminy (220728) */
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
