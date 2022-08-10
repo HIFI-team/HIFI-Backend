@@ -32,31 +32,20 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors().configurationSource(corsConfigurationSource()).and()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .csrf().disable()
                 //예외처리 핸들러
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
-                //세션을 사용하지 않음
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .formLogin().disable() //폼 로그인 사용 x
-                .httpBasic().disable()
                 //권한이 필요한 요청에 대한 설정
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/user/**").authenticated()
-                .anyRequest().permitAll()
-                .and()
-                .headers().frameOptions().disable()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true); //세션 날리기
+                .anyRequest().permitAll();
 
                 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
                 return http.build();
@@ -74,11 +63,12 @@ public class SecurityConfiguration {
                 "https://hifihifi.site",
                 "https://api.hifihifi.site",
                 "https://admin.hifihifi.site",
+                "http://localhost:8000",
                 "http://localhost:3000"
         ));
         //서버 react 프론트 환경
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
         //내 서버의 응답 json 을 javascript에서 처리할수 있게 하는것(axios 등)
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
