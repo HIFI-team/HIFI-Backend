@@ -5,10 +5,12 @@ import Backend.HIFI.user.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRequestDto {
