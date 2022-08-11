@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public UserResponseDto join(UserRequestDto userRequestDto) {
         if (userRepository.existsByEmail(userRequestDto.getEmail())) {
-            throw new RuntimeException("이미 가입된 유저입니다");
+            throw new BadRequestException("이미 가입된 유저입니다");
         }
 
         User user = userRequestDto.toUser(passwordEncoder);
