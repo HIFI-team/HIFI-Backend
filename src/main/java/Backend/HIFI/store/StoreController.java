@@ -61,11 +61,12 @@ public class StoreController {
         model.addAttribute("reviews",reviewDtoList);
 
         User user = userService.findByEmail(principal.getName());
+        //Todo: 빈 객체 보내는 방식 바꿔야 할지도?
         /** 빈 리뷰 객체 */
         ReviewRequestDto dto = ReviewRequestDto.builder()
-                .user(user)
-                .store(store)
-                .build();
+                                                .user(user)
+                                                .store(store)
+                                                .build();
         model.addAttribute("newReview",dto);
 
         return "store/show";

@@ -2,6 +2,7 @@ package Backend.HIFI.store;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,20 +20,27 @@ import org.slf4j.LoggerFactory;
 public class StoreServiceTest {
     Logger log = (Logger) LoggerFactory.getLogger(StoreServiceTest.class);
 
-    @Autowired
-    StoreRepository storeRepository;
-    @Autowired
-    StoreService storeService;
+    @Autowired StoreRepository storeRepository;
+    @Autowired StoreService storeService;
+    @Autowired ModelMapper mapper;
 
     @Test
     public void 정보_확인() throws Exception{
         //given
-        List<Store> stores = storeService.getStores();
+        Store store = Store.builder()
+                .address_name("서울 마포구 서교동 360-22")
+                .place_name("aaaa")
+                .place_uid("aa")
+                .categoryCode(StoreCategoryCode.cafe)
+                .build();
+        storeRepository.save(store);
         //when
-
+        System.out.println("왜 또");
+        StoreRequestDto dto = mapper.map(store, StoreRequestDto.class);
+        System.out.println(dto);
         //then
-        assertNotNull(stores);
-        System.out.println("what?"+stores);
+        List<Store> stores = storeService.getStores();
+
 
     }
 
