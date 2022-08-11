@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -39,12 +41,15 @@ public class ReviewController {
     /**리뷰 클릭 시*/
     @ApiOperation("리뷰 자세히 보기 요청")
     @GetMapping("/{id}")
-    public String getComment(@PathVariable Long id, Model model, Principal principal){
+    public ResponseEntity<Map<String ,Object>> getComment(@PathVariable Long id, Model model, Principal principal){
+        Map<String,Object> result= new HashMap<>();
+
         Review review = reviewService.findReview(id);
         ReviewRequestDto dto = mapper.map(review, ReviewRequestDto.class);
-        model.addAttribute("review",dto);
+        result.put("review",review);
+
 
         // 코맨트 리스트 및 작성 폼
-        return "reviews/"+id;
+        return ResponseEntity.ok(result);
     }
 }
