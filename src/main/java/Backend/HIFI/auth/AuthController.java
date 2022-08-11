@@ -32,22 +32,22 @@ public class AuthController {
     /** 로그인 요청 */
     @ApiOperation(value = "로그인 요청")
     @PostMapping(value = "/login")
-    public ResponseEntity<TokenResponseDto> postLoginForm(@RequestBody UserRequestDto userRequestDto) {
+    public TokenResponseDto postLoginForm(@RequestBody UserRequestDto userRequestDto) {
         final TokenResponseDto tokenResponseDto = authService.login(userRequestDto);
         log.info("api = 로그인 요청, req = {}", userRequestDto);
-        return ResponseEntity.ok(tokenResponseDto);
+        return tokenResponseDto;
     }
 
     /** 회원가입을 요청 */
     @ApiOperation(value = "회원가입 요청")
     @PostMapping(value = "/join")
-    public ResponseEntity<UserResponseDto> postJoin(@RequestBody UserRequestDto userRequestDto) {
+    public UserResponseDto postJoin(@RequestBody UserRequestDto userRequestDto) {
         final UserResponseDto userResponseDto = authService.join(userRequestDto);
         log.info("api = 회원가입 요청, req = {}", userRequestDto);
-        return ResponseEntity.ok(userResponseDto);
+        return userResponseDto;
     }
 
-    /** 유저를 로그아운 시킵니다, 엑세스 토큰 쿠키 삭제 */
+    /** 유저를 로그아웃  시킵니다 */
     @ApiOperation(value = "로그아웃 요청")
     @PostMapping("/logout")
     public String postLogout(HttpServletResponse response) {
