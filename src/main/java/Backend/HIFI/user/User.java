@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 import Backend.HIFI.auth.dto.UserProfileUpdateDto;
+import Backend.HIFI.common.entity.BaseEntity;
 import Backend.HIFI.common.entity.BaseTimeEntity;
 import Backend.HIFI.review.Review;
 import Backend.HIFI.user.search.Search;
@@ -22,7 +23,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseTimeEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,10 +44,6 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Column(name="user_description")
     private String description;
-
-    @Column(name="user_deleted", nullable = false)
-    @Builder.Default
-    private Boolean deleted = false;
 
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)

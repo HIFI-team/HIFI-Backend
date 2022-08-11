@@ -12,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -54,10 +55,18 @@ public class StoreController {
         return  ResponseEntity.ok(dto);
     }
 
+    /**가게 삭제*/
+    @ApiOperation(value = "리뷰 삭제 요청")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        storeService.deleteStore(id);
+        return ResponseEntity.ok("success");
+    }
+
     /** 가게 더보기 */
     @ApiOperation(value = "리뷰 출력 요청")
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String ,Object>> getReview(@PathVariable Long id, Principal principal){
+    public ResponseEntity<Map<String ,Object>> getReview(@PathVariable Long id, Authentication authentication, Principal principal){
         Map<String,Object> result= new HashMap<>();
         Store store = storeService.getStore(id);
         StoreRequestDto storeDto = mapper.map(store, StoreRequestDto.class);
@@ -68,8 +77,12 @@ public class StoreController {
                                                     .map(review -> mapper.map(review, ReviewRequestDto.class))
                                                     .collect(Collectors.toList());
         result.put("reviews",reviewDtoList);
+        log.info("api = review 호출 요청 , req = {}", reviewDtoList);
 
-        User user = userService.findByEmail(principal.getName());
+//        User user = userService.findByAuth(authentication);
+//        log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
+        User byEmail = userService.findByEmail(principal.getName());
+        log.info("api = user 찾기 , req = {}", principal.getName());
 //        //Todo: 빈 객체 보내는 방식 바꿔야 할지도?
 //        /** 빈 리뷰 객체 */
 //        ReviewRequestDto dto = ReviewRequestDto.builder()

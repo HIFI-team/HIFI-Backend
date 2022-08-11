@@ -29,7 +29,12 @@ public class ReviewController {
     }
 
     /**리뷰 삭제*/
-    //@DeleteMapping("/delete")
+    @ApiOperation("리뷰 삭제 요청")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        reviewService.deleteReview(id);
+        return ResponseEntity.ok("success");
+    }
 
     /**리뷰 클릭 시*/
     @ApiOperation("리뷰 자세히 보기 요청")

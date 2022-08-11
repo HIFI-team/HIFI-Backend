@@ -53,7 +53,7 @@ public class UserService {
 //        userRepository.deleteReviewByUserId(user.getId());
         userRepository.deleteFollowByUserId(user.getId());
 //        userRepository.delete(user);
-        user.setDeleted(true);
+        user.changeDeleteStatus();
     }
 
     public void userSearch(User user, String searchName) {
