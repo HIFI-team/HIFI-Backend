@@ -5,6 +5,7 @@ import Backend.HIFI.auth.security.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
@@ -31,30 +33,26 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors().configurationSource(corsConfigurationSource()).and()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .csrf().disable()
                 //예외처리 핸들러
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
-                //세션을 사용하지 않음
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .formLogin().disable() //폼 로그인 사용 x
                 .httpBasic().disable()
                 //권한이 필요한 요청에 대한 설정
                 .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/user/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .headers().frameOptions().disable()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true); //세션 날리기
+                .headers().frameOptions().disable();
 
                 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
                 return http.build();
@@ -68,13 +66,11 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         //로컬 react 개발 환경
-        configuration.setAllowedOrigins(Arrays.asList(
-                "https://hifihifi.site",
-                "http://localhost:3000"
-        ));
+        configuration.addAllowedOriginPattern("*");
         //서버 react 프론트 환경
-        configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.addExposedHeader("x-auth-token");
         //내 서버의 응답 json 을 javascript에서 처리할수 있게 하는것(axios 등)
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
