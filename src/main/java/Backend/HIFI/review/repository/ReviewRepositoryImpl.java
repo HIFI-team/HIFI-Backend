@@ -1,6 +1,8 @@
-package Backend.HIFI.review;
+package Backend.HIFI.review.repository;
 
 import Backend.HIFI.common.DeleteStatus;
+import Backend.HIFI.review.Review;
+import Backend.HIFI.review.repository.ReviewRepositoryCustom;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.user.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;

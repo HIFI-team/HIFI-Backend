@@ -1,5 +1,6 @@
 package Backend.HIFI.store;
 
+import Backend.HIFI.store.dto.StoreRequestDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +29,8 @@ public class StoreServiceTest {
         //given
         Store store = Store.builder()
                 .address_name("서울 마포구 서교동 360-22")
-                .place_name("aaaa")
-                .place_uid("aa")
+                .name("aaaa")
+                .uid("aa")
                 .categoryCode(StoreCategoryCode.cafe)
                 .build();
         storeRepository.save(store);

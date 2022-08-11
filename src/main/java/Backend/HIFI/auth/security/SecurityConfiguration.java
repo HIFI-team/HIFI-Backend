@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 /** 인증 및 Security 관련 설정 클래스입니다
  * @author gengminy (220728) */
 @EnableWebSecurity
@@ -29,7 +31,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors().and()
+                .cors().configurationSource(corsConfigurationSource()).and()
                 .csrf().disable()
                 //예외처리 핸들러
                 .exceptionHandling()
@@ -65,8 +67,12 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        //모든 ip에 응답 허용
-        configuration.addAllowedOrigin("*");
+        //로컬 react 개발 환경
+        configuration.setAllowedOrigins(Arrays.asList(
+                "https://hifihifi.site",
+                "http://localhost:3000"
+        ));
+        //서버 react 프론트 환경
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         //내 서버의 응답 json 을 javascript에서 처리할수 있게 하는것(axios 등)

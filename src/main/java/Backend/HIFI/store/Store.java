@@ -25,9 +25,9 @@ public class Store extends BaseEntity {
     private String address_name;
 
     @Column(nullable = false)
-    private String place_name;
+    private String name;
     @Column(unique = true)
-    private String place_uid;
+    private String uid;
 
     @Enumerated(EnumType.STRING)
     private StoreCategoryCode categoryCode;

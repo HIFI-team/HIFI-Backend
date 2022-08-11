@@ -1,11 +1,11 @@
 package Backend.HIFI.review;
 
+import Backend.HIFI.review.repository.ReviewRepository;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.store.StoreRepository;
 import Backend.HIFI.store.StoreService;
 import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserRepository;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,7 +24,8 @@ import static org.junit.Assert.*;
 public class ReviewServiceTest {
     @Autowired UserRepository userRepository;
     @Autowired StoreService storeService;
-    @Autowired ReviewRepository reviewRepository;
+    @Autowired
+    ReviewRepository reviewRepository;
     @Autowired ReviewService reviewService;
     @Autowired StoreRepository storeRepository;
 
@@ -41,8 +39,8 @@ public class ReviewServiceTest {
         userRepository.save(user);
         Store store = Store.builder()
                 .address_name("서울 마포구 서교동 360-22")
-                .place_name("aaaa")
-                .place_uid("aa")
+                .name("aaaa")
+                .uid("aa")
                 .build();
         storeRepository.save(store);
         Review review1=Review.builder()

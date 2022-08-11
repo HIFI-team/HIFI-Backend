@@ -1,5 +1,6 @@
-package Backend.HIFI.review;
+package Backend.HIFI.review.repository;
 
+import Backend.HIFI.review.Review;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.user.User;
 

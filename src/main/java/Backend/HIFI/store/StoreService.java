@@ -1,5 +1,7 @@
 package Backend.HIFI.store;
 
+import Backend.HIFI.store.dto.StoreRequestDto;
+import Backend.HIFI.store.dto.StoreResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +18,13 @@ public class StoreService {
      * 스토어 등록
      * */
     @Transactional
-    public Store registration(Store store){
+    public StoreResponseDto registration(StoreRequestDto dto){
+        if (storeRepository.existsByUid(dto.getName())){
+            throw new RuntimeException("이미 등록된 스토어입니다");
+        }
+        Store store = dto.toEntity();
         storeRepository.save(store);
-        return store;
+        return StoreResponseDto.of(store);
     }
     /**
      * 스토어 찾기

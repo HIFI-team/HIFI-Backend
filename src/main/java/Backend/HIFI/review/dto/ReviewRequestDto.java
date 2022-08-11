@@ -1,5 +1,6 @@
-package Backend.HIFI.review;
+package Backend.HIFI.review.dto;
 
+import Backend.HIFI.review.Review;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.user.User;
 import lombok.AllArgsConstructor;

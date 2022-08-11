@@ -1,5 +1,7 @@
-package Backend.HIFI.store;
+package Backend.HIFI.store.dto;
 
+import Backend.HIFI.store.Store;
+import Backend.HIFI.store.StoreCategoryCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,10 +14,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StoreRequestDto {
-    private Long id;
     private String address_name;
-    private String place_name;
-    private String place_uid;
+    private String name;
+    private String uid;
     private StoreCategoryCode categoryCode;
     private String images;
     private String description;
@@ -24,8 +25,8 @@ public class StoreRequestDto {
     public Store toEntity(){
         return Store.builder()
                 .address_name(address_name)
-                .place_name(place_name)
-                .place_uid(place_uid)
+                .name(name)
+                .uid(uid)
                 .categoryCode(categoryCode)
                 .build();
     }
