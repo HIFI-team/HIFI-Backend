@@ -7,6 +7,7 @@ import Backend.HIFI.user.follow.FollowService;
 import Backend.HIFI.user.search.Search;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,13 @@ public class UserService {
         return user;
     }
 
+    public User findByAuth(Authentication authentication) {
+        Long userId = Long.parseLong(authentication.getName());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
+        return user;
+    }
+
     private void validateDuplicateUser(User user) {
         User findUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다"));
@@ -40,9 +48,12 @@ public class UserService {
         }
     }
 
-    @Query("delete from Review rv where rv.user.id = :use")
     public void deleteUser(User user) {
-        userRepository.deleteByUserId(user.getId());
+        // trigger 통해 리뷰 지워지면 store.review 지워지도록
+//        userRepository.deleteReviewByUserId(user.getId());
+        userRepository.deleteFollowByUserId(user.getId());
+//        userRepository.delete(user);
+        user.setDeleted(true);
     }
 
     public void userSearch(User user, String searchName) {

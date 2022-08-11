@@ -56,8 +56,7 @@ public class UserTest {
         followService.following(user1, user3);
         followService.following(user2, user3);
 
-        System.out.println(followService.getFollowerEmail(user2));
-        System.out.println(followService.getFollowingEmail(user2));
+        userService.deleteUser(user1);
     }
 
 

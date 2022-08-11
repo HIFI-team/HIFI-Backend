@@ -18,6 +18,7 @@ public class UserProfileDto {
     private String description;
     private String image;
     private Boolean anonymous;
+    // TODO 리뷰, 팔로우 추가 필요
 
     public UserProfileDto toUserProfileDto(User user) {
         // 비공개 유저 처리 해야함

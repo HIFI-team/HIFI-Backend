@@ -1,15 +1,19 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.auth.dto.UserProfileDto;
-import Backend.HIFI.auth.dto.UserProfileUpdateDto;
+import Backend.HIFI.auth.dto.*;
+import Backend.HIFI.common.redis.RedisService;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -19,49 +23,63 @@ public class UserController {
     private final UserService userService;
     private final FollowService followService;
     private final FollowRepository followRepository;
+    private final RedisService redisService;
 
 
     // 아직 어떻게 처리해야 하는지 잘 몰라서 임의로 만들고 후에 다듬을 예정
+
+    @GetMapping("/profile")
+    public String profilePage(Authentication authentication) {
+        User user = userService.findByAuth(authentication);
+        UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
+        return "user/profile";
+    }
+
     @PostMapping("/profile/{email}")
-    @ResponseBody
-    public String profilePage(@PathVariable("email") String email) {
+    public String profilePage(@PathVariable("email") String email, Authentication authentication) {
         try {
-            // TODO 본인이 프로필 볼 때 + 비공개일때 고려해야 함
+            // TODO 비공개일때 고려해야 함
             User user = userService.findByEmail(email);
             UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
 
-            // TODO 나중에 변경 해야함
-            return userProfileDto.toString();
+            User loginUser = userService.findByAuth(authentication);
+            String loginUserEmail = loginUser.getEmail();
+
+            // 본인의 프로필인 경우
+            if (email.equals(loginUserEmail)) {
+                // TODO 수정할 수 있게 해야함
+                return "본인의 프로필입니다.";
+            }
+
+            // 타인의 프로필인 경우
+            else {
+                return userProfileDto.toString();
+            }
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
     }
 
-    @PostMapping("/follow/{followerEmail}_{followingEmail}")
+    @PostMapping("/follow/{followingEmail}")
     @ResponseBody
-    public String followUser
-            (@PathVariable("followerEmail") String followerEmail,
-            @PathVariable("followingEmail") String followingEmail) {
+    public String followUser(@PathVariable("followingEmail") String followingEmail, Authentication authentication) {
 
         try {
-            User follower = userService.findByEmail(followerEmail);
+            User follower = userService.findByAuth(authentication);
             User following = userService.findByEmail(followingEmail);
             followService.following(follower, following);
 
-            return followerEmail + " 회원이 " + followingEmail + " 회원을 팔로우했습니다.";
+            return follower.getEmail() + " 회원이 " + followingEmail + " 회원을 팔로우했습니다.";
 
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
     }
 
-    @DeleteMapping("/follow/{followerEmail}_{followingEmail}")
-    @ResponseBody
-    public String unfollowUser
-            (@PathVariable("followerEmail") String followerEmail,
-             @PathVariable("followingEmail") String followingEmail) {
+    @DeleteMapping("/follow/{followingEmail}")
+    public String unfollowUser(@PathVariable("followingEmail") String followingEmail, Authentication authentication) {
         try {
-            User follower = userService.findByEmail(followerEmail);
+            User follower = userService.findByAuth(authentication);
             User following = userService.findByEmail(followingEmail);
 
             Long followId = followService.getFollowIdByFollowerAndFollowing(follower, following);
@@ -69,7 +87,7 @@ public class UserController {
             followRepository.deleteById(followId);
 
 
-            return followerEmail + " 회원이 " + followingEmail + " 회원을 언팔로우했습니다.";
+            return follower.getEmail() + " 회원이 " + followingEmail + " 회원을 언팔로우했습니다.";
 
         } catch (IllegalArgumentException e) {
             return e.getMessage();
@@ -78,7 +96,6 @@ public class UserController {
 
 
     @PostMapping("/followList/{email}")
-    @ResponseBody
     public String followPage(@PathVariable("email") String email) {
         User user = userService.findByEmail(email);
 
@@ -94,11 +111,9 @@ public class UserController {
     }
 
     @GetMapping("/update/{email}")
-    @ResponseBody
     public String updatePage(@PathVariable("email") String email) { return "update";}
 
     @PostMapping("/update/{email}")
-    @ResponseBody
     public String updateProfile(@PathVariable("email") String email, UserProfileUpdateDto userProfileUpdateDto) {
 
         // TODO UserProfileUpdateDto 받는 코드 작성 필요
@@ -108,8 +123,20 @@ public class UserController {
         return "프로필이 업데이트 되었습니다.";
     }
 
+    @GetMapping("/delete")
+    public String deletePage(Authentication authentication) {
+        return "user/delete";
+    }
+
+    @PostMapping("/delete")
+    public String deleteUser(Authentication authentication) {
+        User user = userService.findByAuth(authentication);
+        userService.deleteUser(user);
+
+        return user.getEmail() + " was deleted";
+    }
+
     @GetMapping("/search")
-    @ResponseBody
     public String searchPage() {
         return "search";
     }
@@ -117,7 +144,6 @@ public class UserController {
     // TODO
     //  은근 고려할게 많아서 나중에 해야할 듯
     @PostMapping("/search/{email}_{name}")
-    @ResponseBody
     public String setUserSearch(
             @PathVariable("email") String email,
             @PathVariable("name") String name) {
