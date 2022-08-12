@@ -1,31 +1,13 @@
 package Backend.HIFI.store;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import java.util.List;
+import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
-public class StoreRepository {
-    private final EntityManager em;
+public interface StoreRepository extends JpaRepository<Store,Long> {
+    Optional<Store> findById(Long id);
+    boolean existsByUid(String name);
 
-    public void save(Store store){
-        em.persist(store);
-    }
-
-    public Store findOne(Long id){
-        return em.find(Store.class,id);
-    }
-
-    public List<Store> findAll(){
-        return em.createQuery("select s from Store s", Store.class)
-                .getResultList();
-    }
-//    public List<Restaurant> findByName(String name){
-//        return em.createQuery("select r from Restaurant r where  r.place_name=:place_name",Restaurant.class)
-//                .setParameter("place_name",place_name)
-//                .getResultList();
-//    }
 }

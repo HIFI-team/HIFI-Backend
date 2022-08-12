@@ -1,6 +1,10 @@
 package Backend.HIFI.user;
 
+import Backend.HIFI.auth.dto.UserProfileUpdateDto;
+import Backend.HIFI.common.entity.BaseEntity;
 import Backend.HIFI.common.entity.BaseTimeEntity;
+import Backend.HIFI.review.Review;
+import Backend.HIFI.user.search.Search;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +23,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseTimeEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,25 +50,32 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Builder.Default
     private UserRole role = UserRole.ROLE_USER;
 
-    @Column(name="user_annonymous",nullable = false)
+    @Column(name="user_anonymous",nullable = false)
     @Builder.Default
-    private Boolean annonymous = false;
+    private Boolean anonymous = false;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<User> followerList = new ArrayList<>();
+    private List<Search> searchList = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<User> followingList = new ArrayList<>();
+    private List<Review> reviewList = new ArrayList<>();
 
 
     public User(String email, String password, String name) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.annonymous = true;
+        this.anonymous = true;
         this.role = UserRole.valueOf("ROLE_USER");
+    }
+
+    public void update(UserProfileUpdateDto userProfileUpdateDto) {
+        this.name = userProfileUpdateDto.getName();
+        this.description = userProfileUpdateDto.getDescription();
+        this.anonymous = userProfileUpdateDto.getAnonymous();
+        this.image = userProfileUpdateDto.getImage();
     }
 
     //권한 부여
@@ -99,4 +110,13 @@ public class User extends BaseTimeEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public static void changeDescription(User user, String description) {
+        user.description = description;
+    }
+
+    public static void changeImage(User user, String image) {
+        user.image = image;
+    }
+
 }
