@@ -28,6 +28,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = resolveToken(request); //request에서 jwt 토큰을 꺼낸다.
 
+            if (jwt == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             System.out.println("jwt = " + jwt); //test
 
             if (StringUtils.isNotEmpty(jwt) && jwtTokenProvider.validateToken(jwt)) {

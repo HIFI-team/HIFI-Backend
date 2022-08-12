@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
+/** 레디스 관련 서비스입니다
+ * @author gengminy (220812) */
 @Service
 @RequiredArgsConstructor
 public class RedisService {

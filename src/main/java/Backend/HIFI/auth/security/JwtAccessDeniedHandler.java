@@ -1,5 +1,7 @@
 package Backend.HIFI.auth.security;
 
+import Backend.HIFI.common.exception.ErrorCode;
+import Backend.HIFI.common.exception.ForbiddenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -21,6 +23,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
             AccessDeniedException accessDeniedException
     ) throws IOException, ServletException {
         // 필요한 권한이 없이 접근하려 할때 403
-        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        throw new ForbiddenException(ErrorCode.FORBIDDEN_USER);
     }
 }

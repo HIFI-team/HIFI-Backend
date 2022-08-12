@@ -16,7 +16,7 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
 #        show_sql: true
@@ -28,6 +28,11 @@ spring:
     cache: false
     prefix: classpath:/templates/
     suffix: .html
+
+  springfox:
+    documentation:
+      swagger:
+        use-model-v3: false
 
 logging.level:
     org.hibernate.SQL: debug
