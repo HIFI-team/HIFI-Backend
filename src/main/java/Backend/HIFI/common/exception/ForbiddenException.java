@@ -3,20 +3,20 @@ package Backend.HIFI.common.exception;
 import lombok.Getter;
 
 @Getter
-public class InternalServerException extends BusinessException {
+public class ForbiddenException extends BusinessException {
     private String message;
 
-    public InternalServerException(String message) {
+    public ForbiddenException(String message) {
         super(ErrorCode._BAD_REQUEST);
         this.message = message;
     }
 
-    public InternalServerException(ErrorCode errorCode, String message) {
+    public ForbiddenException(ErrorCode errorCode, String message) {
         super(errorCode);
         this.message = message;
     }
 
-    public InternalServerException(ErrorCode errorCode) {
+    public ForbiddenException(ErrorCode errorCode) {
         super(errorCode);
     }
 }

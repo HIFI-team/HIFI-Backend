@@ -2,36 +2,50 @@ package Backend.HIFI.common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.*;
 
 /** 에러 코드를 관리하기 위한 Enum 입니다
- * @author gengminy (220728) */
+ * @author gengminy (220812) */
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
 
-    /* 400 BAD_REQUEST : 잘못된 요청 */
-    INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
-    MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
-    CANNOT_FOLLOW_MYSELF(BAD_REQUEST, "자기 자신은 팔로우 할 수 없습니다"),
+    /* 공통 오류 */
+    _INTERNAL_SERVER_ERROR(INTERNAL_SERVER_ERROR, "C000", "서버 에러, 관리자에게 문의 바랍니다"),
+    _BAD_REQUEST(BAD_REQUEST, "C001", "잘못된 요청입니다"),
+    _UNAUTHORIZED(UNAUTHORIZED, "C002", "권한이 없습니다"),
 
-    /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
-    INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다"),
-    UNAUTHORIZED_MEMBER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
+    _METHOD_NOT_ALLOWED(METHOD_NOT_ALLOWED, "C003", "지원하지 않는 Http Method 입니다"),
 
-    /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
-    MEMBER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
-    REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
-    NOT_FOLLOW(NOT_FOUND, "팔로우 중이지 않습니다"),
 
-    /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
-    DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),
+    /* Auth 관련 오류 */
+    EXPIRED_TOKEN(BAD_REQUEST, "AUTH001", "만료된 엑세스 토큰입니다"),
+    INVALID_REFRESH_TOKEN(BAD_REQUEST, "AUTH002", "리프레시 토큰이 유효하지 않습니다"),
+    MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "AUTH003", "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
+    INVALID_AUTH_TOKEN(UNAUTHORIZED, "AUTH004", "권한 정보가 없는 토큰입니다"),
+    UNAUTHORIZED_USER(UNAUTHORIZED, "AUTH005", "현재 내 계정 정보가 존재하지 않습니다"),
+    REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "AUTH006", "로그아웃 된 사용자입니다"),
+    FORBIDDEN_USER(FORBIDDEN, "AUTH007", "권한이 없는 유저입니다"),
+    LOGIN_FAILED(UNAUTHORIZED, "AUTH008", "로그인에 실패했습니다"),
+
+
+    /* User 관련 오류 */
+    CANNOT_FOLLOW_MYSELF(BAD_REQUEST, "U001", "자기 자신은 팔로우 할 수 없습니다"),
+    USER_ALREADY_EXIST(BAD_REQUEST, "U002","이미 가입된 유저입니다"),
+    USER_NOT_FOUND(NOT_FOUND, "U003","해당 유저 정보를 찾을 수 없습니다"),
+    NOT_FOLLOW(NOT_FOUND, "U004","팔로우 중이지 않습니다"),
+
+
+    /* Database 관련 오류 */
+    DUPLICATE_RESOURCE(CONFLICT, "D001", "데이터가 이미 존재합니다"),
+
+
 
     ;
 
     private final HttpStatus httpStatus;
+    private final String code;
     private final String detail;
 }

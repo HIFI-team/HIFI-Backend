@@ -1,15 +1,22 @@
 package Backend.HIFI.common.exception;
 
-import org.springframework.http.HttpStatus;
+import lombok.Getter;
 
-/** Status: 401
- * Unauthorized Error 반환하는 커스텀 클래스입니다 */
-public class UnauthorizedException extends BaseException {
-    public UnauthorizedException() {
-        super(HttpStatus.UNAUTHORIZED);
+@Getter
+public class UnauthorizedException extends BusinessException {
+    private String message;
+
+    public UnauthorizedException(String message) {
+        super(ErrorCode._BAD_REQUEST);
+        this.message = message;
     }
 
-    public  UnauthorizedException(String message) {
-        super(HttpStatus.UNAUTHORIZED, message);
+    public UnauthorizedException(ErrorCode errorCode, String message) {
+        super(errorCode);
+        this.message = message;
+    }
+
+    public UnauthorizedException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

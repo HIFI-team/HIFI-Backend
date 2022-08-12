@@ -1,15 +1,24 @@
 package Backend.HIFI.common.exception;
 
-import org.springframework.http.HttpStatus;
+import lombok.Getter;
 
 /** Status: 400
  * Bad Request Error 반환하는 커스텀 클래스입니다 */
-public class BadRequestException extends BaseException {
-    public BadRequestException() {
-        super(HttpStatus.BAD_REQUEST);
+@Getter
+public class BadRequestException extends BusinessException {
+    private String message;
+
+    public BadRequestException(String message) {
+        super(ErrorCode._BAD_REQUEST);
+        this.message = message;
     }
 
-    public  BadRequestException(String message) {
-        super(HttpStatus.BAD_REQUEST, message);
+    public BadRequestException(ErrorCode errorCode, String message) {
+        super(errorCode);
+        this.message = message;
+    }
+
+    public BadRequestException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }
