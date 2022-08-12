@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 /** 인증 및 Security 관련 설정 클래스입니다
  * @author gengminy (220728) */
@@ -25,6 +26,12 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfiguration {
+    private static final String[] SwaggerPatterns = {
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -48,6 +55,7 @@ public class SecurityConfiguration {
                 //권한이 필요한 요청에 대한 설정
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers(SwaggerPatterns).permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/user/**").authenticated()
                 .anyRequest().permitAll()

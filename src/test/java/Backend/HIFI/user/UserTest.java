@@ -1,11 +1,13 @@
 package Backend.HIFI.user;
 
+import Backend.HIFI.user.follow.Follow;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ import javax.persistence.Persistence;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
+@Rollback(value = false)
 public class UserTest {
 
     @Autowired
@@ -31,17 +34,54 @@ public class UserTest {
     @Test
     public void followTest() throws Exception {
 
-        User user1 = new User("phanre@naver.com", "test1234", "minseok");
-        userService.saveUser(user1);
+        User user1 = User.builder()
+                .email("ms")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user1);
 
-        User user2 = new User("jsm6616@police.com","don't know", "daramg");
-        userService.saveUser(user2);
+        User user2 = User.builder()
+                .email("sm")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user2);
+
+        User user3 = User.builder()
+                .email("gm")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user3);
 
         followService.following(user1, user2);
+        followService.following(user1, user3);
+        followService.following(user2, user3);
 
-
-        for (User user : user1.getFollowingList()) {
-            System.out.println(user.getEmail());
-        }
+        userService.deleteUser(user1);
     }
+
+
+    @Test
+    public void SearchTest() throws Exception {
+        User user1 = User.builder()
+                .email("ms")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user1);
+
+        User user2 = User.builder()
+                .email("sm")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user2);
+
+        User user3 = User.builder()
+                .email("gm")
+                .password("test")
+                .build();
+        userRepository.saveAndFlush(user3);
+
+        userService.userSearch(user1, "test");
+        userService.userSearch(user2, "test");
+    }
+
 }

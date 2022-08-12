@@ -1,15 +1,22 @@
 package Backend.HIFI.common.exception;
 
-import org.springframework.http.HttpStatus;
+import lombok.Getter;
 
-/** Status: 500
- * Internal Server Error 반환하는 커스텀 클래스입니다 */
-public class InternalServerException extends BaseException {
-    public InternalServerException() {
-        super(HttpStatus.INTERNAL_SERVER_ERROR);
+@Getter
+public class InternalServerException extends BusinessException {
+    private String message;
+
+    public InternalServerException(String message) {
+        super(ErrorCode._BAD_REQUEST);
+        this.message = message;
     }
 
-    public  InternalServerException(String message) {
-        super(HttpStatus.INTERNAL_SERVER_ERROR, message);
+    public InternalServerException(ErrorCode errorCode, String message) {
+        super(errorCode);
+        this.message = message;
+    }
+
+    public InternalServerException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

@@ -2,6 +2,8 @@ package Backend.HIFI.auth.jwt;
 
 import Backend.HIFI.auth.dto.TokenResponseDto;
 import Backend.HIFI.common.exception.BadRequestException;
+import Backend.HIFI.common.exception.ErrorCode;
+import Backend.HIFI.common.exception.UnauthorizedException;
 import Backend.HIFI.common.redis.RedisService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -105,7 +107,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다");
+            throw new UnauthorizedException(ErrorCode.INVALID_AUTH_TOKEN);
         }
 
         //권한 정보 가져오기
@@ -151,7 +153,7 @@ public class JwtTokenProvider {
     public void validateRefreshToken(String userId, String refreshToken) {
         String redisRt = redisService.getValues(userId);
         if (!refreshToken.equals(redisRt)) {
-            throw new BadRequestException("만료된 리프레시 토큰입니다");
+            throw new BadRequestException(ErrorCode.EXPIRED_TOKEN);
         }
     }
 
