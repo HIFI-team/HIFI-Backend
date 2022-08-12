@@ -29,15 +29,17 @@ public class UserController {
     // 아직 어떻게 처리해야 하는지 잘 몰라서 임의로 만들고 후에 다듬을 예정
 
     @GetMapping("/profile")
-    public String profilePage(Authentication authentication) {
-        User user = userService.findByAuth(authentication);
+//    public UserProfileDto profilePage(Authentication authentication) {
+    public UserProfileDto profilePage() {
+//        User user = userService.findByAuth(authentication);
+        User user = userService.findByEmail("ms");
         UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
-        return "user/profile";
+        return userProfileDto;
     }
 
     @PostMapping("/profile/{email}")
-    public String profilePage(@PathVariable("email") String email, Authentication authentication) {
-        try {
+    public UserProfileDto profilePage(@PathVariable("email") String email, Authentication authentication) {
+//        try {
             // TODO 비공개일때 고려해야 함
             User user = userService.findByEmail(email);
             UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
@@ -46,18 +48,18 @@ public class UserController {
             String loginUserEmail = loginUser.getEmail();
 
             // 본인의 프로필인 경우
-            if (email.equals(loginUserEmail)) {
-                // TODO 수정할 수 있게 해야함
-                return "본인의 프로필입니다.";
-            }
+//            if (email.equals(loginUserEmail)) {
+//                 TODO 수정할 수 있게 해야함
+//                return "본인의 프로필입니다.";
+//            }
 
             // 타인의 프로필인 경우
-            else {
-                return userProfileDto.toString();
-            }
-        } catch (IllegalArgumentException e) {
-            return e.getMessage();
-        }
+//            else {
+            return userProfileDto;
+//            }
+//        } catch (IllegalArgumentException e) {
+//            return e.getMessage();
+//        }
     }
 
     @PostMapping("/follow/{followingEmail}")
