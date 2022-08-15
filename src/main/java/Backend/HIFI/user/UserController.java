@@ -4,6 +4,7 @@ import Backend.HIFI.auth.dto.*;
 import Backend.HIFI.common.redis.RedisService;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,8 +29,8 @@ public class UserController {
 
     // 아직 어떻게 처리해야 하는지 잘 몰라서 임의로 만들고 후에 다듬을 예정
 
+    @ApiOperation(value = "마이프로필 요청")
     @GetMapping("/profile")
-//    public UserProfileDto profilePage(Authentication authentication) {
     public UserProfileDto profilePage() {
 //        User user = userService.findByAuth(authentication);
         User user = userService.findByEmail("ms");
@@ -112,17 +113,16 @@ public class UserController {
         return "followerList = " + followerList + "\nfollowingList = " + followingList;
     }
 
-    @GetMapping("/update/{email}")
-    public String updatePage(@PathVariable("email") String email) { return "update";}
 
-    @PostMapping("/update/{email}")
-    public String updateProfile(@PathVariable("email") String email, UserProfileUpdateDto userProfileUpdateDto) {
+    @PostMapping("/update")
+    public UserProfileUpdateDto updateProfile(Authentication authentication, UserProfileUpdateDto userProfileUpdateDto) {
 
-        // TODO UserProfileUpdateDto 받는 코드 작성 필요
-        User user = userService.findByEmail(email);
+        User user = userService.findByAuth(authentication);
         user.update(userProfileUpdateDto);
 
-        return "프로필이 업데이트 되었습니다.";
+        // 1. userProfileUpdateDto 필요한가 ?
+        // 2. 받은 값 말고 실제 변경된 값을 보여줘야 함
+        return userProfileUpdateDto;
     }
 
     @GetMapping("/delete")
