@@ -1,7 +1,6 @@
 package Backend.HIFI.review;
 
-import Backend.HIFI.review.dto.ReviewRequestDto;
-import Backend.HIFI.review.dto.ReviewResponseDto;
+import Backend.HIFI.review.dto.ReviewDto;
 import Backend.HIFI.review.repository.ReviewRepository;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.store.StoreService;
@@ -25,7 +24,7 @@ public class ReviewService {
      * 리뷰 등록
      * */
     @Transactional
-    public ReviewResponseDto review(ReviewRequestDto dto){
+    public ReviewDto review(ReviewDto dto){
         Review review = dto.toEntity();
 
         User user = userService.findById(review.getUser().getId());
@@ -36,7 +35,7 @@ public class ReviewService {
 
         reviewRepository.save(review);
 
-        return ReviewResponseDto.of(review);
+        return ReviewDto.of(review);
     }
 
     /**

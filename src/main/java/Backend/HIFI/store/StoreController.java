@@ -1,7 +1,7 @@
 package Backend.HIFI.store;
 
 import Backend.HIFI.review.Review;
-import Backend.HIFI.review.dto.ReviewRequestDto;
+import Backend.HIFI.review.dto.ReviewDto;
 import Backend.HIFI.review.ReviewService;
 import Backend.HIFI.store.dto.StoreRequestDto;
 import Backend.HIFI.store.dto.StoreResponseDto;
@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,23 +72,18 @@ public class StoreController {
         result.put("store",storeDto);
 
         List<Review> reviews = reviewService.findReviewByStore(id);
-        List<ReviewRequestDto> reviewDtoList = reviews.stream()
-                                                    .map(review -> mapper.map(review, ReviewRequestDto.class))
-                                                    .collect(Collectors.toList());
+        List<ReviewDto> reviewDtoList = reviews.stream()
+                                            .map(review -> mapper.map(review, ReviewDto.class))
+                                            .collect(Collectors.toList());
         result.put("reviews",reviewDtoList);
         log.info("api = review 호출 요청 , req = {}", reviewDtoList);
 
-//        User user = userService.findByAuth(authentication);
-//        log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
-        User byEmail = userService.findByEmail(principal.getName());
-        log.info("api = user 찾기 , req = {}", principal.getName());
-//        //Todo: 빈 객체 보내는 방식 바꿔야 할지도?
-//        /** 빈 리뷰 객체 */
-//        ReviewRequestDto dto = ReviewRequestDto.builder()
-//                                                .user(user)
-//                                                .store(store)
-//                                                .build();
-//        result.put("newReview",dto);
+        User user = userService.findByAuth(authentication);
+        log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
+        //Todo: 빈 객체 보내는 방식 바꿔야 할지도?
+        /** 빈 리뷰 객체 */
+        ReviewDto dto = ReviewDto.builder().user(user).store(store).build();
+        result.put("newReview",dto);
 
         return  ResponseEntity.ok(result);
     }
