@@ -1,19 +1,23 @@
 package Backend.HIFI.review;
 
-import Backend.HIFI.review.dto.ReviewRequestDto;
-import Backend.HIFI.review.dto.ReviewResponseDto;
+import Backend.HIFI.comment.Comment;
+import Backend.HIFI.comment.dto.CommentDto;
+import Backend.HIFI.review.dto.ReviewDto;
+import Backend.HIFI.user.User;
+import Backend.HIFI.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -21,12 +25,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
+    private final UserService userService;
     private final ModelMapper mapper;
 
     /** 리뷰 등록 */
     @ApiOperation("리뷰 등록 요청")
     @PostMapping("/new")
-    public ResponseEntity<ReviewResponseDto> create(@RequestBody ReviewRequestDto dto){
+    public ResponseEntity<ReviewDto> create(@RequestBody ReviewDto dto){
         return ResponseEntity.ok(reviewService.review(dto));
     }
 
@@ -39,15 +44,25 @@ public class ReviewController {
     }
 
     /**리뷰 클릭 시*/
-    @ApiOperation("리뷰 자세히 보기 요청")
+    @ApiOperation("리뷰 코멘트 보기 요청")
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String ,Object>> getComment(@PathVariable Long id, Model model, Principal principal){
+    public ResponseEntity<Map<String ,Object>> getComment(@PathVariable Long id, Authentication authentication){
         Map<String,Object> result= new HashMap<>();
 
         Review review = reviewService.findReview(id);
-        ReviewRequestDto dto = mapper.map(review, ReviewRequestDto.class);
-        result.put("review",review);
+        ReviewDto dto = mapper.map(review, ReviewDto.class);
+        result.put("review",dto);
 
+        List<Comment> comments = review.getComments();
+        List<CommentDto> commentDto = comments.stream()
+                .map(CommentDto::of)
+                .collect(Collectors.toList());
+        result.put("comment",commentDto);
+
+        User user = userService.findByAuth(authentication);
+        log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
+        CommentDto buildComment = CommentDto.builder().user(user).review(review).build();
+        result.put("newComment",buildComment);
 
         // 코맨트 리스트 및 작성 폼
         return ResponseEntity.ok(result);
