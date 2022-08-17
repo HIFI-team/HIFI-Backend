@@ -31,9 +31,8 @@ public class UserController {
 
     @ApiOperation(value = "마이프로필 요청")
     @GetMapping("/profile")
-    public UserProfileDto profilePage() {
-//        User user = userService.findByAuth(authentication);
-        User user = userService.findByEmail("ms");
+    public UserProfileDto profilePage(Authentication authentication) {
+        User user = userService.findByAuth(authentication);
         UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
         return userProfileDto;
     }
@@ -61,6 +60,17 @@ public class UserController {
 //        } catch (IllegalArgumentException e) {
 //            return e.getMessage();
 //        }
+    }
+
+    @ApiOperation("프로필 업데이트 요청")
+    @PostMapping("/update")
+    public UserProfileDto updateProfile(Authentication authentication, @RequestBody UserProfileDto userProfileDto) {
+
+        User user = userService.findByAuth(authentication);
+        userService.updateProfile(user, userProfileDto);
+        // 1. userProfileUpdateDto 필요한가 ? 일단 없이 짜봄
+
+        return new UserProfileDto().toUserProfileDto(user);
     }
 
     @PostMapping("/follow/{followingEmail}")
@@ -113,17 +123,6 @@ public class UserController {
         return "followerList = " + followerList + "\nfollowingList = " + followingList;
     }
 
-
-    @PostMapping("/update")
-    public UserProfileUpdateDto updateProfile(Authentication authentication, UserProfileUpdateDto userProfileUpdateDto) {
-
-        User user = userService.findByAuth(authentication);
-        user.update(userProfileUpdateDto);
-
-        // 1. userProfileUpdateDto 필요한가 ?
-        // 2. 받은 값 말고 실제 변경된 값을 보여줘야 함
-        return userProfileUpdateDto;
-    }
 
     @GetMapping("/delete")
     public String deletePage(Authentication authentication) {

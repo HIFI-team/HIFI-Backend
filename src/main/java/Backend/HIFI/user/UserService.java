@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 
+import Backend.HIFI.auth.dto.UserProfileDto;
 import Backend.HIFI.auth.dto.UserProfileUpdateDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
@@ -63,8 +64,9 @@ public class UserService {
         user.getSearchList().add(search);
     }
 
-    public void updateProfile(User user, UserProfileUpdateDto userProfileUpdateDto) {
-        user.update(userProfileUpdateDto);
+    public void updateProfile(User user, UserProfileDto userProfileDto) {
+        user.update(userProfileDto);
+        userRepository.save(user);
     }
 
     // 유저 리뷰 리스트
