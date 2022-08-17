@@ -7,6 +7,8 @@ import Backend.HIFI.auth.dto.UserResponseDto;
 import Backend.HIFI.auth.jwt.JwtTokenProvider;
 import Backend.HIFI.auth.security.UserAuthentication;
 import Backend.HIFI.common.exception.BadRequestException;
+import Backend.HIFI.common.exception.ErrorCode;
+import Backend.HIFI.common.exception.NotFoundException;
 import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserRepository;
 import Backend.HIFI.user.UserRole;
@@ -39,7 +41,7 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public UserResponseDto join(UserRequestDto userRequestDto) {
         if (userRepository.existsByEmail(userRequestDto.getEmail())) {
-            throw new BadRequestException("이미 가입된 유저입니다");
+            throw new BadRequestException(ErrorCode.USER_ALREADY_EXIST);
         }
 
         User user = userRequestDto.toUser(passwordEncoder);
@@ -70,7 +72,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public User changeRole(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId"));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
         user.setRole(UserRole.ROLE_ADMIN);
 
@@ -89,7 +91,7 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public TokenResponseDto reissue(TokenRequestDto tokenRequestDto) {
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("유효하지 않은 Refresh Token");
+            throw new BadRequestException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         // Access Token 에서 User id 가져오기
@@ -98,7 +100,7 @@ public class AuthServiceImpl implements AuthService{
 
         //User id를 기반으로 Refresh Token 가져오기
         User user = userRepository.findById(Long.parseLong(authentication.getName()))
-                .orElseThrow(() -> new BadRequestException("존재하지 않는 유저"));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
         //redis memory에 리프레시 토큰이 존재하는지 체크
         jwtTokenProvider.validateRefreshToken(user.getId().toString(), tokenRequestDto.getRefreshToken());

@@ -3,10 +3,7 @@ package Backend.HIFI.review.dto;
 import Backend.HIFI.review.Review;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,12 +11,13 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewRequestDto {
+@RequiredArgsConstructor
+public class ReviewDto {
     private String content;
     private User user;
     private Store store;
     private LocalDateTime createdAt;
-//    private int likes;
+    private int grade;
 
     public Review toEntity(){
         return Review.builder()
@@ -28,4 +26,9 @@ public class ReviewRequestDto {
                 .content(content)
                 .build();
     }
+
+    public static ReviewDto of(Review review){
+        return new ReviewDto(review.getContent(),review.getUser(),review.getStore(),review.getCreatedAt(),review.getGrade());
+    }
+
 }

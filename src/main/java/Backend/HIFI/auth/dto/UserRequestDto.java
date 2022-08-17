@@ -9,12 +9,16 @@ import lombok.ToString;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.validation.Valid;
+
 @Getter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRequestDto {
+    @Valid
     private String email;
+    @Valid
     private String password;
 
     public User toUser(PasswordEncoder passwordEncoder) {

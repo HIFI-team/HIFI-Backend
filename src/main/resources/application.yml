@@ -29,6 +29,11 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
 
+  springfox:
+    documentation:
+      swagger:
+        use-model-v3: false
+
 logging.level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace

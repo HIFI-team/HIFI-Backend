@@ -1,5 +1,7 @@
 package Backend.HIFI.auth.security;
 
+import Backend.HIFI.common.exception.ErrorCode;
+import Backend.HIFI.common.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -20,6 +22,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             AuthenticationException e
     ) throws IOException {
         //유저 정보가 없을 경우 401 Unauthorized Error
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        throw new UnauthorizedException(ErrorCode.INVALID_AUTH_TOKEN);
     }
 }
