@@ -6,6 +6,7 @@ import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,89 +28,72 @@ public class UserController {
     private final RedisService redisService;
 
 
-    // 아직 어떻게 처리해야 하는지 잘 몰라서 임의로 만들고 후에 다듬을 예정
-
     @ApiOperation(value = "마이프로필 요청")
     @GetMapping("/profile")
-    public UserProfileDto profilePage(Authentication authentication) {
-        User user = userService.findByAuth(authentication);
+    public UserProfileDto profilePage(Authentication auth) {
+        // TODO
+        //  user return -> front 에서 프로필 요청 api 이용
+
+        User user = userService.findByAuth(auth);
         UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
+
         return userProfileDto;
     }
 
-    @PostMapping("/profile/{email}")
-    public UserProfileDto profilePage(@PathVariable("email") String email, Authentication authentication) {
-//        try {
-            // TODO 비공개일때 고려해야 함
-            User user = userService.findByEmail(email);
-            UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
+    @ApiOperation(value = "프로필 요청")
+    @PostMapping("/profile")
+    public UserProfileDto profilePage(@RequestBody String email, Authentication auth) {
+        // TODO
+        //  비공개인지 확인
 
-            User loginUser = userService.findByAuth(authentication);
-            String loginUserEmail = loginUser.getEmail();
+        User user = userService.findByEmail(email);
+        UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
 
-            // 본인의 프로필인 경우
-//            if (email.equals(loginUserEmail)) {
-//                 TODO 수정할 수 있게 해야함
-//                return "본인의 프로필입니다.";
-//            }
+        User loginUser = userService.findByAuth(auth);
+        String loginUserEmail = loginUser.getEmail();
 
-            // 타인의 프로필인 경우
-//            else {
-            return userProfileDto;
-//            }
-//        } catch (IllegalArgumentException e) {
-//            return e.getMessage();
-//        }
+        return userProfileDto;
     }
 
-    @ApiOperation("프로필 업데이트 요청")
+    @ApiOperation(value = "프로필 업데이트 요청")
     @PostMapping("/update")
-    public UserProfileDto updateProfile(Authentication authentication, @RequestBody UserProfileDto userProfileDto) {
+    public UserProfileDto updateProfile(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
 
-        User user = userService.findByAuth(authentication);
+        User user = userService.findByAuth(auth);
         userService.updateProfile(user, userProfileDto);
-        // 1. userProfileUpdateDto 필요한가 ? 일단 없이 짜봄
 
         return new UserProfileDto().toUserProfileDto(user);
     }
 
-    @PostMapping("/follow/{followingEmail}")
-    @ResponseBody
-    public String followUser(@PathVariable("followingEmail") String followingEmail, Authentication authentication) {
+    @ApiOperation(value = "팔로우 요청")
+    @PostMapping("/follow")
+    public ResponseEntity<String> followUser(@RequestBody String followingEmail, Authentication auth) {
 
-        try {
-            User follower = userService.findByAuth(authentication);
-            User following = userService.findByEmail(followingEmail);
-            followService.following(follower, following);
+        User follower = userService.findByAuth(auth);
+        User following = userService.findByEmail(followingEmail);
+        followService.following(follower, following);
 
-            return follower.getEmail() + " 회원이 " + followingEmail + " 회원을 팔로우했습니다.";
-
-        } catch (IllegalArgumentException e) {
-            return e.getMessage();
-        }
+        return ResponseEntity.ok("팔로우 완료");
     }
 
-    @DeleteMapping("/follow/{followingEmail}")
-    public String unfollowUser(@PathVariable("followingEmail") String followingEmail, Authentication authentication) {
-        try {
-            User follower = userService.findByAuth(authentication);
-            User following = userService.findByEmail(followingEmail);
+    @ApiOperation(value = "언팔로우 요청")
+    @DeleteMapping("/follow")
+    public ResponseEntity<String> unfollowUser(@RequestBody String followingEmail, Authentication auth) {
 
-            Long followId = followService.getFollowIdByFollowerAndFollowing(follower, following);
+        User follower = userService.findByAuth(auth);
+        User following = userService.findByEmail(followingEmail);
 
-            followRepository.deleteById(followId);
+        Long followId = followService.getFollowIdByFollowerAndFollowing(follower, following);
 
+        followRepository.deleteById(followId);
 
-            return follower.getEmail() + " 회원이 " + followingEmail + " 회원을 언팔로우했습니다.";
-
-        } catch (IllegalArgumentException e) {
-            return e.getMessage();
-        }
+        return ResponseEntity.ok("언팔로우 완료");
     }
 
 
-    @PostMapping("/followList/{email}")
-    public String followPage(@PathVariable("email") String email) {
+    @ApiOperation(value = "팔로우 리스트 요청")
+    @PostMapping("/followList")
+    public String followPage(@RequestBody String email, Authentication auth) {
         User user = userService.findByEmail(email);
 
         // TODO 프로필 보이도록 코드 추가 해야함
@@ -124,35 +108,24 @@ public class UserController {
     }
 
 
+    @ApiOperation(value = "회원 탈퇴")
     @GetMapping("/delete")
-    public String deletePage(Authentication authentication) {
-        return "user/delete";
-    }
-
-    @PostMapping("/delete")
-    public String deleteUser(Authentication authentication) {
-        User user = userService.findByAuth(authentication);
+    public String deletePage(Authentication auth) {
+        User user = userService.findByAuth(auth);
         userService.deleteUser(user);
 
         return user.getEmail() + " was deleted";
     }
 
-    @GetMapping("/search")
-    public String searchPage() {
-        return "search";
-    }
-
     // TODO
     //  은근 고려할게 많아서 나중에 해야할 듯
-    @PostMapping("/search/{email}_{name}")
-    public String setUserSearch(
-            @PathVariable("email") String email,
-            @PathVariable("name") String name) {
-        User user = userService.findByEmail(email);
+    @ApiOperation(value = "유저 검색")
+    @PostMapping("/search")
+    public String setUserSearch(@RequestBody String name, Authentication auth) {
+        User user = userService.findByAuth(auth);
         userService.userSearch(user, name);
 
-
-        return email + " 유저가 " + name + "을 검색했습니다.\n검색 리스트 : " + user.getSearchList().toString();
+        return user.getEmail() + " 유저가 " + name + "을 검색했습니다.\n검색 리스트 : " + user.getSearchList().toString();
     }
 
 //    @GetMapping("/su")
