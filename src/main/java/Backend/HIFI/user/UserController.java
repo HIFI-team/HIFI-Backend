@@ -33,26 +33,25 @@ public class UserController {
 
     @ApiOperation(value = "프로필 요청")
     @PostMapping("/profile")
-    public ResponseEntity<UserProfileDto> profilePage(@RequestBody String email, Authentication auth) {
-        User user = userService.findByEmail(email);
-        UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
+    public ResponseEntity<UserDto> profilePage(@RequestBody String email, Authentication auth) {
+        User toUser = userService.findByEmail(email);
+        User fromUser = userService.findByAuth(auth);
 
-        User loginUser = userService.findByAuth(auth);
-        String loginUserEmail = loginUser.getEmail();
-
-
-
-        return ResponseEntity.ok(userProfileDto);
+        UserDto userDto = new UserDto().toUserDto(toUser);
+        if (!userService.canWatchReview(fromUser, toUser)) {
+            userDto.setReviewList(null);
+        }
+        return ResponseEntity.ok(userDto);
     }
 
     @ApiOperation(value = "프로필 업데이트 요청")
     @PostMapping("/update")
-    public UserProfileDto updateProfile(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
+    public ResponseEntity<String> updateProfile(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
 
         User user = userService.findByAuth(auth);
         userService.updateProfile(user, userProfileDto);
 
-        return new UserProfileDto().toUserProfileDto(user);
+        return ResponseEntity.ok("프로필 업데이트 완료");
     }
 
     @ApiOperation(value = "팔로우 요청")

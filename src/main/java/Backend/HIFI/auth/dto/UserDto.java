@@ -2,10 +2,7 @@ package Backend.HIFI.auth.dto;
 
 import Backend.HIFI.review.Review;
 import Backend.HIFI.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
@@ -16,6 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 public class UserDto {
 
     private String email;
@@ -39,6 +37,6 @@ public class UserDto {
                 .anonymous(user.getAnonymous())
                 .reviewList(user.getReviewList())
                 .build();
-
     }
+
 }
