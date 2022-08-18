@@ -1,6 +1,5 @@
-package Backend.HIFI.heart;
+package Backend.HIFI.store.dto;
 
-import Backend.HIFI.auth.dto.UserMapDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HeartDto {
-    private UserMapDto user;
+public class StoreMapDto {
+    private Long id;
+    private String name;
 }

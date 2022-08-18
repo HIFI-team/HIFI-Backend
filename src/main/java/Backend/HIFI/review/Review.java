@@ -33,7 +33,7 @@ public class Review extends BaseTimeEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String content;
     private String image;
 

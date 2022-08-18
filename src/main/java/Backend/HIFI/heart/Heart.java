@@ -25,7 +25,7 @@ public class Heart {
     @JoinColumn(name = "review_id")
     private Review review;
     //유저
-    @JsonIgnoreProperties({"reviewList","hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({"reviewList"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

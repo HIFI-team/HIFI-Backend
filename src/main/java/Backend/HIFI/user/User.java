@@ -1,5 +1,6 @@
 package Backend.HIFI.user;
 
+import Backend.HIFI.auth.dto.UserProfileDto;
 import Backend.HIFI.auth.dto.UserProfileUpdateDto;
 import Backend.HIFI.common.entity.BaseEntity;
 import Backend.HIFI.common.entity.BaseTimeEntity;
@@ -9,6 +10,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -63,19 +65,11 @@ public class User extends BaseEntity implements UserDetails {
     private List<Review> reviewList = new ArrayList<>();
 
 
-    public User(String email, String password, String name) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.anonymous = true;
-        this.role = UserRole.valueOf("ROLE_USER");
-    }
-
-    public void update(UserProfileUpdateDto userProfileUpdateDto) {
-        this.name = userProfileUpdateDto.getName();
-        this.description = userProfileUpdateDto.getDescription();
-        this.anonymous = userProfileUpdateDto.getAnonymous();
-        this.image = userProfileUpdateDto.getImage();
+    public void update(UserProfileDto userProfileDto) {
+        this.name = userProfileDto.getName();
+        this.description = userProfileDto.getDescription();
+        this.anonymous = userProfileDto.getAnonymous();
+        this.image = userProfileDto.getImage();
     }
 
     //권한 부여

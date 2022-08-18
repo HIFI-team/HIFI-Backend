@@ -1,6 +1,5 @@
-package Backend.HIFI.heart;
+package Backend.HIFI.auth.dto;
 
-import Backend.HIFI.auth.dto.UserMapDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HeartDto {
-    private UserMapDto user;
+public class UserMapDto {
+    private Long id;
+    private String email;
+    private String name;
+    private String image;
 }

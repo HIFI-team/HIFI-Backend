@@ -1,6 +1,5 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.user.follow.Follow;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import org.junit.Test;
@@ -10,11 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,28 +29,31 @@ public class UserTest {
     public void followTest() throws Exception {
 
         User user1 = User.builder()
-                .email("ms")
+                .email("A")
                 .password("test")
+                .anonymous(true)
                 .build();
         userRepository.saveAndFlush(user1);
 
         User user2 = User.builder()
-                .email("sm")
+                .email("B")
                 .password("test")
                 .build();
         userRepository.saveAndFlush(user2);
 
         User user3 = User.builder()
-                .email("gm")
+                .email("C")
                 .password("test")
                 .build();
         userRepository.saveAndFlush(user3);
 
         followService.following(user1, user2);
-        followService.following(user1, user3);
-        followService.following(user2, user3);
+        followService.following(user2, user1);
 
-        userService.deleteUser(user1);
+        System.out.println(userService.canWatchReview(user1, user2));
+        System.out.println(userService.canWatchReview(user1, user3));
+        System.out.println(userService.canWatchReview(user3, user1));
+
     }
 
 

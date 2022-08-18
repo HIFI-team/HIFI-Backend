@@ -6,6 +6,7 @@ import Backend.HIFI.review.ReviewService;
 import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,18 +18,21 @@ public class CommentService {
     private final UserService userService;
     private final ReviewService reviewService;
 
+    private final ModelMapper mapper;
+
     /**코멘트 등록*/
     @Transactional
     public CommentDto comment(CommentDto dto){
-        Comment comment=dto.toEntity();
-        User user = userService.findById(comment.getUser().getId());
-        Review review = reviewService.findReview(comment.getReview().getId());
+        User user = userService.findByEmail(dto.getUser().getEmail());
+        Review review = reviewService.findReview(dto.getReview().getId());
+
+        Comment comment = mapper.map(dto,Comment.class);
 
         //user.getComments().add(comment);
         review.getComments().add(comment);
         commentRepository.save(comment);
 
-        return CommentDto.of(comment);
+        return dto;
     }
 
     //실질적으로 필요한가?
