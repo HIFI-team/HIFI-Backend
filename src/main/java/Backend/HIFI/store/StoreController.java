@@ -2,7 +2,6 @@ package Backend.HIFI.store;
 
 import Backend.HIFI.review.Review;
 import Backend.HIFI.review.dto.ReviewDto;
-import Backend.HIFI.review.ReviewService;
 import Backend.HIFI.store.dto.StoreRequestDto;
 import Backend.HIFI.store.dto.StoreResponseDto;
 import Backend.HIFI.user.User;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StoreController {
     private final StoreService storeService;
-    private final ReviewService reviewService;
     private final UserService userService;
 
     private final ModelMapper mapper;
@@ -71,7 +69,7 @@ public class StoreController {
         StoreRequestDto storeDto = mapper.map(store, StoreRequestDto.class);
         result.put("store",storeDto);
 
-        List<Review> reviews = reviewService.findReviewByStore(id);
+        List<Review> reviews = store.getReviews();
         List<ReviewDto> reviewDtoList = reviews.stream()
                                             .map(review -> mapper.map(review, ReviewDto.class))
                                             .collect(Collectors.toList());
