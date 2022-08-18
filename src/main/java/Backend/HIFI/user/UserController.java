@@ -24,29 +24,25 @@ public class UserController {
 
     @ApiOperation(value = "마이프로필 요청")
     @GetMapping("/profile")
-    public UserProfileDto profilePage(Authentication auth) {
-        // TODO
-        //  user return -> front 에서 프로필 요청 api 이용
-
+    public ResponseEntity<UserDto> profilePage(Authentication auth) {
         User user = userService.findByAuth(auth);
-        UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
+        UserDto userDto = new UserDto().toUserDto(user);
 
-        return userProfileDto;
+        return ResponseEntity.ok(userDto);
     }
 
     @ApiOperation(value = "프로필 요청")
     @PostMapping("/profile")
-    public UserProfileDto profilePage(@RequestBody String email, Authentication auth) {
-        // TODO
-        //  비공개인지 확인
-
+    public ResponseEntity<UserProfileDto> profilePage(@RequestBody String email, Authentication auth) {
         User user = userService.findByEmail(email);
         UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
 
         User loginUser = userService.findByAuth(auth);
         String loginUserEmail = loginUser.getEmail();
 
-        return userProfileDto;
+
+
+        return ResponseEntity.ok(userProfileDto);
     }
 
     @ApiOperation(value = "프로필 업데이트 요청")

@@ -65,14 +65,6 @@ public class User extends BaseEntity implements UserDetails {
     private List<Review> reviewList = new ArrayList<>();
 
 
-    public User(String email, String password, String name) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.anonymous = true;
-        this.role = UserRole.valueOf("ROLE_USER");
-    }
-
     public void update(UserProfileDto userProfileDto) {
         this.name = userProfileDto.getName();
         this.description = userProfileDto.getDescription();
