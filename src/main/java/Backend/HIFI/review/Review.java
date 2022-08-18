@@ -4,6 +4,7 @@ import Backend.HIFI.comment.Comment;
 import Backend.HIFI.common.entity.BaseTimeEntity;
 import Backend.HIFI.store.Store;
 import Backend.HIFI.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,10 +23,12 @@ public class Review extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnoreProperties({"reviewList"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
+    @JsonIgnoreProperties({"reviews"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
