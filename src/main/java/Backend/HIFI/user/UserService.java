@@ -1,7 +1,9 @@
 package Backend.HIFI.user;
 
 
+import Backend.HIFI.auth.dto.UserProfileDto;
 import Backend.HIFI.auth.dto.UserProfileUpdateDto;
+import Backend.HIFI.user.follow.Follow;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import Backend.HIFI.user.search.Search;
@@ -63,8 +65,21 @@ public class UserService {
         user.getSearchList().add(search);
     }
 
-    public void updateProfile(User user, UserProfileUpdateDto userProfileUpdateDto) {
-        user.update(userProfileUpdateDto);
+    public void updateProfile(User user, UserProfileDto userProfileDto) {
+        user.update(userProfileDto);
+        userRepository.save(user);
+    }
+
+    // 맞팔 확인
+    public boolean F4F(User user1, User user2) {
+        Follow follow1 = followRepository.findFollowByFollowerAndFollowing(user1, user2);
+        Follow follow2 = followRepository.findFollowByFollowerAndFollowing(user2, user1);
+
+        return follow1 != null && follow2 != null;
+    }
+    public boolean canWatchReview(User fromUser, User toUser) {
+
+        return F4F(fromUser, toUser) || !toUser.getAnonymous();
     }
 
     // 유저 리뷰 리스트
