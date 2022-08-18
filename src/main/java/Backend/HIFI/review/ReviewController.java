@@ -1,8 +1,10 @@
 package Backend.HIFI.review;
 
+import Backend.HIFI.auth.dto.UserMapDto;
 import Backend.HIFI.comment.Comment;
 import Backend.HIFI.comment.dto.CommentDto;
 import Backend.HIFI.review.dto.ReviewDto;
+import Backend.HIFI.review.dto.ReviewMapDto;
 import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -55,13 +57,15 @@ public class ReviewController {
 
         List<Comment> comments = review.getComments();
         List<CommentDto> commentDto = comments.stream()
-                .map(CommentDto::of)
+                .map(comment -> mapper.map(comment,CommentDto.class))
                 .collect(Collectors.toList());
         result.put("comment",commentDto);
 
         User user = userService.findByAuth(authentication);
         log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
-        CommentDto buildComment = CommentDto.builder().user(user).review(review).build();
+        UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
+        ReviewMapDto reviewMapDto = mapper.map(review, ReviewMapDto.class);
+        CommentDto buildComment = CommentDto.builder().user(userMapDto).review(reviewMapDto).build();
         result.put("newComment",buildComment);
 
         // 코맨트 리스트 및 작성 폼

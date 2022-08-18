@@ -1,7 +1,9 @@
 package Backend.HIFI.store;
 
+import Backend.HIFI.auth.dto.UserMapDto;
 import Backend.HIFI.review.Review;
 import Backend.HIFI.review.dto.ReviewDto;
+import Backend.HIFI.store.dto.StoreMapDto;
 import Backend.HIFI.store.dto.StoreRequestDto;
 import Backend.HIFI.store.dto.StoreResponseDto;
 import Backend.HIFI.user.User;
@@ -80,7 +82,9 @@ public class StoreController {
         log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
         //Todo: 빈 객체 보내는 방식 바꿔야 할지도?
         /** 빈 리뷰 객체 */
-        ReviewDto dto = ReviewDto.builder().user(user).store(store).build();
+        StoreMapDto storeMapDto = mapper.map(store, StoreMapDto.class);
+        UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
+        ReviewDto dto = ReviewDto.builder().user(userMapDto).store(storeMapDto).build();
         result.put("newReview",dto);
 
         return  ResponseEntity.ok(result);
