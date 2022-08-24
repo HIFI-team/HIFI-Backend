@@ -1,10 +1,9 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.auth.dto.UserProfileDto;
-import Backend.HIFI.auth.dto.UserProfileUpdateDto;
 import Backend.HIFI.common.entity.BaseEntity;
 import Backend.HIFI.common.entity.BaseTimeEntity;
 import Backend.HIFI.review.Review;
+import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.search.Search;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

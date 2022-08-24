@@ -1,8 +1,7 @@
 package Backend.HIFI.user;
 
 
-import Backend.HIFI.auth.dto.UserProfileDto;
-import Backend.HIFI.auth.dto.UserProfileUpdateDto;
+import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.Follow;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;

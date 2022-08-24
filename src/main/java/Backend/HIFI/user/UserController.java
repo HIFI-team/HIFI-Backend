@@ -1,7 +1,8 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.auth.dto.*;
 import Backend.HIFI.common.redis.RedisService;
+import Backend.HIFI.user.dto.UserDto;
+import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import io.swagger.annotations.ApiOperation;

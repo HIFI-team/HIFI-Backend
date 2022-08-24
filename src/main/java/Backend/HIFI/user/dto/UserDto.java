@@ -1,11 +1,9 @@
-package Backend.HIFI.auth.dto;
+package Backend.HIFI.user.dto;
 
 import Backend.HIFI.review.Review;
 import Backend.HIFI.user.User;
 import lombok.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
