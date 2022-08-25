@@ -98,8 +98,7 @@ public class UserTest {
                 .build();
         userRepository.saveAndFlush(user2);
 
-        for (UserDto userDto : userService.searchUserByName("ms")) {
-            System.out.println(userDto.getEmail());
-        }
+
+
     }
 }

@@ -5,6 +5,7 @@ import Backend.HIFI.user.dto.UserDto;
 import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
+import Backend.HIFI.user.search.SearchDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -109,10 +110,12 @@ public class UserController {
 
     @ApiOperation(value = "유저 검색")
     @PostMapping("/search")
-    public ResponseEntity<List<UserProfileDto>> setUserSearch(@RequestBody String name, Authentication auth) {
+    public ResponseEntity<List<UserProfileDto>> setUserSearch(@RequestBody SearchDto searchDto, Authentication auth) {
         User user = userService.findByAuth(auth);
+        String name = searchDto.getName();
         userService.userSearch(user, name);
         List<UserProfileDto> searchUserProfileDtoList = userService.searchUserByName(name);
+        System.out.println("/*\n" + name + "\n" + searchUserProfileDtoList + "\n*/");
         return ResponseEntity.ok(searchUserProfileDtoList);
     }
 
