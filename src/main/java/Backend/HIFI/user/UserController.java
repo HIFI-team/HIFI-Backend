@@ -107,14 +107,14 @@ public class UserController {
 //        return user.getEmail() + " was deleted";
 //    }
 
-//    @ApiOperation(value = "유저 검색")
-//    @PostMapping("/search")
-//    public String setUserSearch(@RequestBody String name, Authentication auth) {
-//        User user = userService.findByAuth(auth);
-//        userService.userSearch(user, name);
-//
-//        return user.getEmail() + " 유저가 " + name + "을 검색했습니다.\n검색 리스트 : " + user.getSearchList().toString();
-//    }
+    @ApiOperation(value = "유저 검색")
+    @PostMapping("/search")
+    public ResponseEntity<List<UserProfileDto>> setUserSearch(@RequestBody String name, Authentication auth) {
+        User user = userService.findByAuth(auth);
+        userService.userSearch(user, name);
+        List<UserProfileDto> searchUserProfileDtoList = userService.searchUserByName(name);
+        return ResponseEntity.ok(searchUserProfileDtoList);
+    }
 
 //    @GetMapping("/su")
 //    public ResponseEntity<User> searchUserPage() {
