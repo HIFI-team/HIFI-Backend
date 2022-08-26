@@ -1,10 +1,9 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.auth.dto.UserProfileDto;
-import Backend.HIFI.auth.dto.UserProfileUpdateDto;
 import Backend.HIFI.common.entity.BaseEntity;
 import Backend.HIFI.common.entity.BaseTimeEntity;
 import Backend.HIFI.review.Review;
+import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.search.Search;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,7 +32,8 @@ public class User extends BaseEntity implements UserDetails {
     private Long id;
 
     @Column(name="user_name")
-    private String name;
+    @Builder.Default
+    private String name = "test";
 
     @Column(name="user_email", nullable = false)
     private String email;

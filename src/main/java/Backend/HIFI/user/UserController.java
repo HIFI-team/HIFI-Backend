@@ -1,9 +1,11 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.auth.dto.*;
 import Backend.HIFI.common.redis.RedisService;
+import Backend.HIFI.user.dto.UserDto;
+import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
+import Backend.HIFI.user.search.SearchDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -80,41 +82,41 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "팔로우 리스트 요청")
-    @PostMapping("/followList")
-    public String followPage(@RequestBody String email, Authentication auth) {
-        User user = userService.findByEmail(email);
+//    @ApiOperation(value = "팔로우 리스트 요청")
+//    @PostMapping("/followList")
+//    public String followPage(@RequestBody String email, Authentication auth) {
+//        User user = userService.findByEmail(email);
+//
+//        // TODO 프로필 보이도록 코드 추가 해야함
+//        UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
+//
+//        // TODO 본인이 프로필 볼 때 + 비공개일때 고려해야 함
+//
+//        List<User> followerList = followService.getFollower(user);
+//        List<User> followingList = followService.getFollowing(user);
+//
+//        return "followerList = " + followerList + "\nfollowingList = " + followingList;
+//    }
 
-        // TODO 프로필 보이도록 코드 추가 해야함
-        UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
+//
+//    @ApiOperation(value = "회원 탈퇴")
+//    @GetMapping("/delete")
+//    public String deletePage(Authentication auth) {
+//        User user = userService.findByAuth(auth);
+//        userService.deleteUser(user);
+//
+//        return user.getEmail() + " was deleted";
+//    }
 
-        // TODO 본인이 프로필 볼 때 + 비공개일때 고려해야 함
-
-        List<User> followerList = followService.getFollower(user);
-        List<User> followingList = followService.getFollowing(user);
-
-        return "followerList = " + followerList + "\nfollowingList = " + followingList;
-    }
-
-
-    @ApiOperation(value = "회원 탈퇴")
-    @GetMapping("/delete")
-    public String deletePage(Authentication auth) {
-        User user = userService.findByAuth(auth);
-        userService.deleteUser(user);
-
-        return user.getEmail() + " was deleted";
-    }
-
-    // TODO
-    //  은근 고려할게 많아서 나중에 해야할 듯
     @ApiOperation(value = "유저 검색")
     @PostMapping("/search")
-    public String setUserSearch(@RequestBody String name, Authentication auth) {
+    public ResponseEntity<List<UserProfileDto>> setUserSearch(@RequestBody SearchDto searchDto, Authentication auth) {
         User user = userService.findByAuth(auth);
+        String name = searchDto.getName();
         userService.userSearch(user, name);
-
-        return user.getEmail() + " 유저가 " + name + "을 검색했습니다.\n검색 리스트 : " + user.getSearchList().toString();
+        List<UserProfileDto> searchUserProfileDtoList = userService.searchUserByName(name);
+        System.out.println("/*\n" + name + "\n" + searchUserProfileDtoList + "\n*/");
+        return ResponseEntity.ok(searchUserProfileDtoList);
     }
 
 //    @GetMapping("/su")

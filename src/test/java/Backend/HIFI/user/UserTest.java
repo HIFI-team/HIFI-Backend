@@ -1,5 +1,6 @@
 package Backend.HIFI.user;
 
+import Backend.HIFI.user.dto.UserDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import org.junit.Test;
@@ -81,4 +82,23 @@ public class UserTest {
         userService.userSearch(user2, "test");
     }
 
+    @Test
+    public void searchTest() throws Exception {
+        User user1 = User.builder()
+                .email("a")
+                .password("abc")
+                .name("ms")
+                .build();
+        userRepository.saveAndFlush(user1);
+
+        User user2 = User.builder()
+                .email("b")
+                .password("abc")
+                .name("kms")
+                .build();
+        userRepository.saveAndFlush(user2);
+
+
+
+    }
 }

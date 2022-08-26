@@ -1,8 +1,8 @@
 package Backend.HIFI.user;
 
 
-import Backend.HIFI.auth.dto.UserProfileDto;
-import Backend.HIFI.auth.dto.UserProfileUpdateDto;
+import Backend.HIFI.user.dto.UserDto;
+import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.Follow;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
@@ -12,6 +12,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -70,7 +73,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // 맞팔 확인
+    /** 맞팔 확인 */
     public boolean F4F(User user1, User user2) {
         Follow follow1 = followRepository.findFollowByFollowerAndFollowing(user1, user2);
         Follow follow2 = followRepository.findFollowByFollowerAndFollowing(user2, user1);
@@ -83,6 +86,17 @@ public class UserService {
     }
 
     // 유저 리뷰 리스트
+
+    /** user.name 통한 유저 검색 */
+    public List<UserProfileDto> searchUserByName(String name) {
+        List<User> userList = userRepository.findUserListByName(name)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 유저가 없습니다."));
+        List<UserProfileDto> userProfileDtoList = new ArrayList<>();
+        for (User user : userList) {
+            userProfileDtoList.add(new UserProfileDto().toUserProfileDto(user));
+        }
+        return userProfileDtoList;
+    }
 
 
 }
