@@ -15,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 
@@ -92,6 +93,25 @@ public class JwtTokenProvider {
      */
     public TokenResponseDto generateToken(Authentication authentication)
             throws HttpServerErrorException.InternalServerError {
+        //권한 가져오기
+        final String accessToken = generateAccessToken(authentication);
+        final String refreshToken = generateRefreshToken(authentication);
+
+        return TokenResponseDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+//                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+                .build();
+    }
+
+    /** Jwt 토큰 생성
+     * @param oAuth2User 인증 요청하는 유저 정보
+     */
+    public TokenResponseDto generateOAuth2Token(OAuth2User oAuth2User)
+            throws HttpServerErrorException.InternalServerError {
+
+        Authentication authentication
+                = new UsernamePasswordAuthenticationToken(oAuth2User.getName(), "", oAuth2User.getAuthorities());
         //권한 가져오기
         final String accessToken = generateAccessToken(authentication);
         final String refreshToken = generateRefreshToken(authentication);

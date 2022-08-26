@@ -18,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(Long id);
     boolean existsByEmail(String email);
 
+    boolean existsByEmailAndProvider(String email, String provider);
+
     @Modifying
     @Query("delete from Review rv where rv.user.id = :userId")
     void deleteReviewByUserId(@Param("userId") Long UserId);
@@ -28,6 +30,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u from User u where u.name like %:userName%")
     Optional<List<User>> findUserListByName(@Param("userName") String userName);
-
 
 }

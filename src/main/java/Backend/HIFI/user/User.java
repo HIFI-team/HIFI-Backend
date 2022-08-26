@@ -38,7 +38,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name="user_email", nullable = false)
     private String email;
 
-    @Column(name="user_password", nullable = false)
+    //OAuth 사용시 null 이 들어올 수 있음
+    @Column(name="user_password")
     private String password;
 
     @Column(name="user_image")
@@ -46,6 +47,13 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name="user_description")
     private String description;
+
+    @Column //OAuth Provider
+    private String provider;
+
+    @Column //user nickname
+    private String nickname;
+
 
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
