@@ -46,9 +46,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         TokenResponseDto tokenResponseDto = jwtTokenProvider.generateOAuth2Token(oAuth2User);
         log.info("토큰 발행");
 
-        String targetUrl = UriComponentsBuilder.fromUriString("/oauth2/redirect")
-                        .queryParam("token", tokenResponseDto.getAccessToken())
-                                .build().toUriString();
+        //리디렉션 url 프론트로 지정필요
+        String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect")
+                        .queryParam("access", tokenResponseDto.getAccessToken())
+                        .queryParam("refresh", tokenResponseDto.getRefreshToken())
+                        .build().toUriString();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
