@@ -65,7 +65,7 @@ public class StoreController {
     /** 가게 더보기 */
     @ApiOperation(value = "리뷰 출력 요청")
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String ,Object>> getReview(@PathVariable Long id, Authentication authentication, Principal principal){
+    public ResponseEntity<Map<String ,Object>> getReview(@PathVariable Long id, Authentication authentication){
         Map<String,Object> result= new HashMap<>();
         Store store = storeService.getStore(id);
         StoreRequestDto storeDto = mapper.map(store, StoreRequestDto.class);
@@ -78,15 +78,16 @@ public class StoreController {
         result.put("reviews",reviewDtoList);
         log.info("api = review 호출 요청 , req = {}", reviewDtoList);
 
-        User user = userService.findByAuth(authentication);
-        log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
-        //Todo: 빈 객체 보내는 방식 바꿔야 할지도?
-        /** 빈 리뷰 객체 */
-        StoreMapDto storeMapDto = mapper.map(store, StoreMapDto.class);
-        UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
-        ReviewDto dto = ReviewDto.builder().user(userMapDto).store(storeMapDto).build();
-        result.put("newReview",dto);
-
+        if(authentication!=null) {
+            User user = userService.findByAuth(authentication);
+            log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
+            //Todo: 빈 객체 보내는 방식 바꿔야 할지도?
+            /** 빈 리뷰 객체 */
+            StoreMapDto storeMapDto = mapper.map(store, StoreMapDto.class);
+            UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
+            ReviewDto dto = ReviewDto.builder().user(userMapDto).store(storeMapDto).build();
+            result.put("newReview", dto);
+        }
         return  ResponseEntity.ok(result);
     }
 

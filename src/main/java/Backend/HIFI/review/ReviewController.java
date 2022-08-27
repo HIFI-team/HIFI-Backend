@@ -52,8 +52,8 @@ public class ReviewController {
         Map<String,Object> result= new HashMap<>();
 
         Review review = reviewService.findReview(id);
-        ReviewDto dto = mapper.map(review, ReviewDto.class);
-        result.put("review",dto);
+//        ReviewDto dto = mapper.map(review, ReviewDto.class);
+//        result.put("review",dto);
 
         List<Comment> comments = review.getComments();
         List<CommentDto> commentDto = comments.stream()
@@ -61,12 +61,14 @@ public class ReviewController {
                 .collect(Collectors.toList());
         result.put("comment",commentDto);
 
-        User user = userService.findByAuth(authentication);
-        log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
-        UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
-        ReviewMapDto reviewMapDto = mapper.map(review, ReviewMapDto.class);
-        CommentDto buildComment = CommentDto.builder().user(userMapDto).review(reviewMapDto).build();
-        result.put("newComment",buildComment);
+        if(authentication!=null) {
+            User user = userService.findByAuth(authentication);
+            log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
+            UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
+            ReviewMapDto reviewMapDto = mapper.map(review, ReviewMapDto.class);
+            CommentDto buildComment = CommentDto.builder().user(userMapDto).review(reviewMapDto).build();
+            result.put("newComment", buildComment);
+        }
 
         // 코맨트 리스트 및 작성 폼
         return ResponseEntity.ok(result);

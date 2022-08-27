@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewDto {
+    private Long id;
     private String content;
     private UserMapDto user;
     private StoreMapDto store;
