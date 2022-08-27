@@ -29,7 +29,7 @@ public class UserRequestDto {
                 .build();
     }
 
-    public UsernamePasswordAuthenticationToken toAuthentication(PasswordEncoder passwordEncoder) {
-        return new UsernamePasswordAuthenticationToken(email, passwordEncoder.encode(password));
+    public UsernamePasswordAuthenticationToken toAuthentication() {
+        return new UsernamePasswordAuthenticationToken(email, password);
     }
 }

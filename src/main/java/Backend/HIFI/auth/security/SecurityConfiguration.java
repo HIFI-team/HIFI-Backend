@@ -1,8 +1,8 @@
 package Backend.HIFI.auth.security;
 
 import Backend.HIFI.auth.jwt.JwtAuthenticationFilter;
-import Backend.HIFI.auth.oauth.OAuth2AuthenticationSuccessHandler;
 import Backend.HIFI.auth.oauth.CustomOAuth2Service;
+import Backend.HIFI.auth.oauth.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
