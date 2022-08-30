@@ -98,7 +98,19 @@ public class UserTest {
                 .build();
         userRepository.saveAndFlush(user2);
 
+    }
 
+    @Test
+    public void allUserSearch() throws Exception {
+        User user1 = User.builder()
+                .email("a")
+                .build();
+        userRepository.saveAndFlush(user1);
 
+        User user2 = User.builder()
+                .email("b")
+                .build();
+        userRepository.saveAndFlush(user2);
+//        System.out.println(userService.searchAllUser());
     }
 }

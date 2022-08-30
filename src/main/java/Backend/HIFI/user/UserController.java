@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 import Backend.HIFI.common.redis.RedisService;
+import Backend.HIFI.common.response.CommonApiResponse;
 import Backend.HIFI.user.dto.UserDto;
 import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.FollowRepository;
@@ -107,6 +108,12 @@ public class UserController {
 //
 //        return user.getEmail() + " was deleted";
 //    }
+
+    @ApiOperation(value = "모든 유저 반환")
+    @GetMapping("/search")
+    public CommonApiResponse<List<UserProfileDto>> allUserSearch() {
+        return CommonApiResponse.of(userService.searchAllUser());
+    }
 
     @ApiOperation(value = "유저 검색")
     @PostMapping("/search")

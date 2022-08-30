@@ -87,6 +87,16 @@ public class UserService {
 
     // 유저 리뷰 리스트
 
+    /** 모든 유저 return */
+    public List<UserProfileDto> searchAllUser() {
+        List<User> userList = userRepository.findAll();
+        List<UserProfileDto> userProfileDtoList = new ArrayList<>();
+        for (User user : userList) {
+            userProfileDtoList.add(new UserProfileDto().toUserProfileDto(user));
+        }
+        return userProfileDtoList;
+    }
+
     /** user.name 통한 유저 검색 */
     public List<UserProfileDto> searchUserByName(String name) {
         List<User> userList = userRepository.findUserListByName(name)
