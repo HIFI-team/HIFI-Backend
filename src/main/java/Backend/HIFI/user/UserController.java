@@ -29,7 +29,7 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<UserDto> profilePage(Authentication auth) {
         User user = userService.findByAuth(auth);
-        UserDto userDto = new UserDto().toUserDto(user);
+        UserDto userDto = new UserDto().of(user);
 
         return ResponseEntity.ok(userDto);
     }
@@ -40,7 +40,7 @@ public class UserController {
         User toUser = userService.findByEmail(email);
         User fromUser = userService.findByAuth(auth);
 
-        UserDto userDto = new UserDto().toUserDto(toUser);
+        UserDto userDto = new UserDto().of(toUser);
         if (!userService.canWatchReview(fromUser, toUser)) {
             userDto.setReviewList(null);
         }
@@ -111,8 +111,11 @@ public class UserController {
 
     @ApiOperation(value = "모든 유저 반환")
     @GetMapping("/search")
-    public CommonApiResponse<List<UserProfileDto>> allUserSearch() {
-        return CommonApiResponse.of(userService.searchAllUser());
+    public CommonApiResponse<List<UserProfileDto>> allUserSearch(Authentication auth) {
+        User user = userService.findByAuth(auth);
+        List<UserProfileDto> allUserList = userService.searchAllUser(user);
+        System.out.println(allUserList);
+        return CommonApiResponse.of(allUserList);
     }
 
     @ApiOperation(value = "유저 검색")
@@ -121,7 +124,7 @@ public class UserController {
         User user = userService.findByAuth(auth);
         String name = searchDto.getName();
         userService.userSearch(user, name);
-        List<UserProfileDto> searchUserProfileDtoList = userService.searchUserByName(name);
+        List<UserProfileDto> searchUserProfileDtoList = userService.searchUserByName(user, name);
         System.out.println("/*\n" + name + "\n" + searchUserProfileDtoList + "\n*/");
         return ResponseEntity.ok(searchUserProfileDtoList);
     }

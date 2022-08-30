@@ -16,8 +16,9 @@ public class UserProfileDto {
     private String description;
     private String image;
     private Boolean anonymous;
+    private Boolean followed;
 
-    public UserProfileDto toUserProfileDto(User user) {
+    public UserProfileDto of(User user) {
         // 비공개 유저 처리 해야함
         // 얼마나 비공개 할 것인지?
         return UserProfileDto.builder()
