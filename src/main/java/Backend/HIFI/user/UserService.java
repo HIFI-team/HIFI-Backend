@@ -98,6 +98,8 @@ public class UserService {
         List<User> userList = userRepository.findAll();
         List<UserProfileDto> userProfileDtoList = new ArrayList<>();
         for (User toUser : userList) {
+            if (fromUser == toUser)
+                continue;
             UserProfileDto upd = new UserProfileDto().of(toUser);
             upd.setFollowed(isFollowed(fromUser, toUser));
             userProfileDtoList.add(upd);

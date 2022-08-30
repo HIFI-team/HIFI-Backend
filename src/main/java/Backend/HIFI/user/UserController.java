@@ -9,7 +9,6 @@ import Backend.HIFI.user.follow.FollowService;
 import Backend.HIFI.user.search.SearchDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -27,16 +26,16 @@ public class UserController {
 
     @ApiOperation(value = "마이프로필 요청")
     @GetMapping("/profile")
-    public ResponseEntity<UserDto> profilePage(Authentication auth) {
+    public CommonApiResponse<UserDto> profilePage(Authentication auth) {
         User user = userService.findByAuth(auth);
         UserDto userDto = new UserDto().of(user);
 
-        return ResponseEntity.ok(userDto);
+        return CommonApiResponse.of(userDto);
     }
 
     @ApiOperation(value = "프로필 요청")
     @PostMapping("/profile")
-    public ResponseEntity<UserDto> profilePage(@RequestBody String email, Authentication auth) {
+    public CommonApiResponse<UserDto> profilePage(@RequestBody String email, Authentication auth) {
         User toUser = userService.findByEmail(email);
         User fromUser = userService.findByAuth(auth);
 
@@ -44,33 +43,33 @@ public class UserController {
         if (!userService.canWatchReview(fromUser, toUser)) {
             userDto.setReviewList(null);
         }
-        return ResponseEntity.ok(userDto);
+        return CommonApiResponse.of(userDto);
     }
 
     @ApiOperation(value = "프로필 업데이트 요청")
     @PostMapping("/update")
-    public ResponseEntity<String> updateProfile(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
+    public CommonApiResponse<String> updateProfile(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
 
         User user = userService.findByAuth(auth);
         userService.updateProfile(user, userProfileDto);
 
-        return ResponseEntity.ok("프로필 업데이트 완료");
+        return CommonApiResponse.of("프로필 업데이트 완료");
     }
 
     @ApiOperation(value = "팔로우 요청")
     @PostMapping("/follow")
-    public ResponseEntity<String> followUser(@RequestBody String followingEmail, Authentication auth) {
+    public CommonApiResponse<String> followUser(@RequestBody String followingEmail, Authentication auth) {
 
         User follower = userService.findByAuth(auth);
         User following = userService.findByEmail(followingEmail);
         followService.following(follower, following);
 
-        return ResponseEntity.ok("팔로우 완료");
+        return CommonApiResponse.of("팔로우 완료");
     }
 
     @ApiOperation(value = "언팔로우 요청")
     @DeleteMapping("/follow")
-    public ResponseEntity<String> unfollowUser(@RequestBody String followingEmail, Authentication auth) {
+    public CommonApiResponse<String> unfollowUser(@RequestBody String followingEmail, Authentication auth) {
 
         User follower = userService.findByAuth(auth);
         User following = userService.findByEmail(followingEmail);
@@ -79,7 +78,7 @@ public class UserController {
 
         followRepository.deleteById(followId);
 
-        return ResponseEntity.ok("언팔로우 완료");
+        return CommonApiResponse.of("언팔로우 완료");
     }
 
 
@@ -120,17 +119,17 @@ public class UserController {
 
     @ApiOperation(value = "유저 검색")
     @PostMapping("/search")
-    public ResponseEntity<List<UserProfileDto>> setUserSearch(@RequestBody SearchDto searchDto, Authentication auth) {
+    public CommonApiResponse<List<UserProfileDto>> setUserSearch(@RequestBody SearchDto searchDto, Authentication auth) {
         User user = userService.findByAuth(auth);
         String name = searchDto.getName();
         userService.userSearch(user, name);
         List<UserProfileDto> searchUserProfileDtoList = userService.searchUserByName(user, name);
         System.out.println("/*\n" + name + "\n" + searchUserProfileDtoList + "\n*/");
-        return ResponseEntity.ok(searchUserProfileDtoList);
+        return CommonApiResponse.of(searchUserProfileDtoList);
     }
 
 //    @GetMapping("/su")
-//    public ResponseEntity<User> searchUserPage() {
+//    public CommonApiResponse<User> searchUserPage() {
 
 //    }
 
