@@ -3,7 +3,7 @@ package Backend.HIFI.auth.oauth.kakao;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Getter
 @ToString
@@ -19,6 +19,20 @@ public class KakaoUserDto {
     private Timestamp connectedAt;
 
     @JsonProperty("kakao_account")
-    private KakaoProfileDto kakaoAccount;
+    private KakaoAccount kakaoAccount;
 
+    @JsonProperty("properties")
+    private Properties properties;
+
+    @Getter
+    @ToString
+    public static class KakaoAccount {
+        private String email;
+    }
+
+    @Getter
+    @ToString
+    public static class Properties {
+        private String nickname;
+    }
 }

@@ -1,15 +1,15 @@
 package Backend.HIFI.auth.oauth.kakao;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
+@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class KakaoRequest {
+public class KakaoJoinRequest {
     private String accessToken;
 }
