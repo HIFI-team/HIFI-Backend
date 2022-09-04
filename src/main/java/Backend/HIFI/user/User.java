@@ -54,7 +54,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column //user nickname
     private String nickname;
 
-    @Column(name = "authentication_code", nullable = false, unique = true)
+    @Column(name = "authentication_code", unique = true)
     private String authenticationCode;
 
     @Column(name = "user_role", nullable = false)

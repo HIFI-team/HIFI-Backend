@@ -11,5 +11,5 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 public class KakaoRequest {
-    private String accessToken;
+    private String code;
 }

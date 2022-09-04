@@ -93,18 +93,21 @@ public class KakaoService {
         return userRepository.save(user);
     }
 
-    public TokenResponseDto login(KakaoRequest kakaoRequest) {
-        KakaoUserDto kakaoUserDto =
-                getKakaoUser(kakaoRequest.getAccessToken());
-
-        if (kakaoUserDto == null) throw new NotFoundException(ErrorCode.KAKAO_USER_NOT_FOUND);
+//    public TokenResponseDto login(KakaoRequest kakaoRequest) {
+//        KakaoUserDto kakaoUserDto =
+//                getKakaoUser(kakaoRequest.getAccessToken());
+//
+//        if (kakaoUserDto == null) throw new NotFoundException(ErrorCode.KAKAO_USER_NOT_FOUND);
 //
 //        User user = userRepository.findByEmailAndProvider(
 //                kakaoUserDto.getKakaoAccount().getEmail(), "kakao")
-//                .orElseThrow(NotFoundException(ErrorCode.KAKAO_USER_NOT_FOUND)::new);
+//                .orElseThrow(() -> new NotFoundException(ErrorCode.KAKAO_USER_NOT_FOUND));
 //
-
-    }
+//        TokenResponseDto tokenResponseDto = jwtTokenProvider.generateOAuth2Token(user);
+//
+//        //Refresh Token 저장
+//        return tokenResponseDto;
+//    }
 
     public void unlink(String kakaoAccessToken) {
         String unlinkUrl = "https://kapi.kakao.com/v1/user/unlink";
