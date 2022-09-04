@@ -1,8 +1,6 @@
 package Backend.HIFI.auth.security;
 
 import Backend.HIFI.auth.jwt.JwtAuthenticationFilter;
-import Backend.HIFI.auth.oauth.CustomOAuth2Service;
-import Backend.HIFI.auth.oauth.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,8 +30,6 @@ public class SecurityConfiguration {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-    private final CustomOAuth2Service customOAuth2Service;
 
 
     @Bean
@@ -59,13 +55,13 @@ public class SecurityConfiguration {
                 .antMatchers("/user/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .headers().frameOptions().disable()
-                .and()
-                .oauth2Login()
-                .defaultSuccessUrl("/login-success")
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .userInfoEndpoint()
-                .userService(customOAuth2Service);
+                .headers().frameOptions().disable();
+//                .and()
+//                .oauth2Login()
+//                .defaultSuccessUrl("/login-success")
+//                .successHandler(oAuth2AuthenticationSuccessHandler)
+//                .userInfoEndpoint()
+//                .userService(customOAuth2Service);
 
                 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
                 return http.build();
