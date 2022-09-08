@@ -49,11 +49,14 @@ public class UserController {
 
     @ApiOperation(value = "프로필 업데이트 요청")
     @PostMapping("/update")
-    public CommonApiResponse<String> updateProfile(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
+    public CommonApiResponse<String> updateProfile(@RequestBody UserProfileDto userProfileDto) {
 
-        User user = userService.findByAuth(auth);
+        // token 못받아와서 userProfileDto email 추가하여 이용
+//        User user = userService.findByAuth(auth);
+        User user = userService.findByEmail(userProfileDto.getEmail());
         userService.updateProfile(user, userProfileDto);
 
+        System.out.println("***************\n"+userProfileDto);
         return CommonApiResponse.of("프로필 업데이트 완료");
     }
 

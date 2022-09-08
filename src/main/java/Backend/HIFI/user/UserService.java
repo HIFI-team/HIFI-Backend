@@ -39,8 +39,10 @@ public class UserService {
     }
 
     public User findByAuth(Authentication authentication) {
+        System.out.println("^&^&^&^\n"+authentication.getName());
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
+        System.out.println(user);
         return user;
     }
 
