@@ -4,7 +4,9 @@ import Backend.HIFI.auth.dto.TokenRequestDto;
 import Backend.HIFI.auth.dto.TokenResponseDto;
 import Backend.HIFI.auth.dto.UserRequestDto;
 import Backend.HIFI.auth.dto.UserResponseDto;
+import Backend.HIFI.auth.jwt.JwtDto;
 import Backend.HIFI.auth.jwt.JwtTokenProvider;
+import Backend.HIFI.auth.oauth.kakao.KakaoUserDto;
 import Backend.HIFI.auth.security.UserAuthentication;
 import Backend.HIFI.common.exception.BadRequestException;
 import Backend.HIFI.common.exception.ErrorCode;
@@ -24,9 +26,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -58,10 +62,51 @@ public class AuthServiceImpl implements AuthService{
         Authentication authentication
                 = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        TokenResponseDto tokenResponseDto = jwtTokenProvider.generateToken(authentication);
+        JwtDto jwtDto = new JwtDto(userRequestDto.toUser(passwordEncoder));
+
+        TokenResponseDto tokenResponseDto = jwtTokenProvider.generateToken(jwtDto);
 
         //Refresh Token 저장
         return tokenResponseDto;
+    }
+
+    @Override
+    @Transactional
+    public TokenResponseDto loginKakao(KakaoUserDto kakaoUserDto) {
+        String provider = "kakao";
+
+        log.info("로그인 시도");
+
+        Optional<User> user = userRepository.findByEmailAndProvider(
+                kakaoUserDto.getKakaoAccount().getEmail(),
+                provider
+        );
+
+        if (user.isPresent()) {
+            log.info("가입된 회원");
+            /* 이미 가입된 회원 */
+            TokenResponseDto tokenResponseDto = jwtTokenProvider.generateSocialToken(user.get());
+            return tokenResponseDto;
+        } else {
+            /* 새로 가입할 회원 */
+
+            String email = kakaoUserDto.getKakaoAccount().getEmail();
+            String name = kakaoUserDto.getProperties().getNickname();
+
+            User newUser = User.builder()
+                    .email(email)
+                    .name(name)
+                    .role(UserRole.ROLE_USER)
+                    .provider(provider)
+                    .authenticationCode(kakaoUserDto.getAuthenticationCode())
+                    .build();
+            userRepository.save(newUser);
+
+            log.info("새로운 회원");
+
+            TokenResponseDto tokenResponseDto = jwtTokenProvider.generateSocialToken(newUser);
+            return tokenResponseDto;
+        }
     }
 
     @Override
@@ -107,7 +152,7 @@ public class AuthServiceImpl implements AuthService{
 
         //새로운 엑세스 토큰 생성
         TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-                .accessToken(jwtTokenProvider.generateAccessToken(authentication))
+                .accessToken(jwtTokenProvider.generateAccessToken(new JwtDto(user)))
                 .refreshToken(tokenRequestDto.getRefreshToken())
                 .build();
 

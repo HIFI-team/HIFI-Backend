@@ -43,22 +43,20 @@ public class JwtTokenProvider {
     private static final long REFRESH_TOKEN_EXPIRATION_MS = 1000L * 60 * 60 * 24 * 7; //7일
     private static final String AUTHORITIES_KEY = "role"; //권한 정보 컬럼명
 
-    public String generateAccessToken(Authentication authentication) {
+    public String generateAccessToken(JwtDto jwtDto) {
         //권한 가져오기
-        final String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
 
         final String encodedKey = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
         final Date now = new Date();
-
         final Date accessTokenExpiresIn = new Date(now.getTime() + JWT_EXPIRATION_MS);
+
+
         final String accessToken = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer("hifi")
                 .setIssuedAt(now) // 생성일자 지정(현재)
-                .setSubject(authentication.getName()) // 사용자(principal, email)
-                .claim(AUTHORITIES_KEY, authorities) //권한 설정
+                .setSubject(jwtDto.getEmail()) // 사용자(principal, email)
+                .claim(AUTHORITIES_KEY, jwtDto.getAuthorities()) //권한 설정
                 .setExpiration(accessTokenExpiresIn) // 만료일자
                 .signWith(SignatureAlgorithm.HS512, encodedKey) // signature에 들어갈 secret 값 세팅
                 .compact();
@@ -66,11 +64,11 @@ public class JwtTokenProvider {
         return accessToken;
     }
 
-    public String generateRefreshToken(Authentication authentication) {
+    public String generateRefreshToken(JwtDto jwtDto) {
         final String encodedKey = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes());
         final Date now = new Date();
-
         final Date refreshTokenExpiresIn = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION_MS);
+
         final String refreshToken = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer("hifi")
@@ -80,7 +78,7 @@ public class JwtTokenProvider {
 
         //redis에 해당 userId 의 리프레시 토큰 등록
         redisService.setValues(
-                authentication.getName(),
+                jwtDto.getEmail(),
                 refreshToken,
                 Duration.ofMillis(REFRESH_TOKEN_EXPIRATION_MS)
         );
@@ -89,37 +87,33 @@ public class JwtTokenProvider {
     }
 
     /** Jwt 토큰 생성
-     * @param authentication 인증 요청하는 유저 정보
+     * @param jwtDto 인증 요청하는 유저 정보
      */
-    public TokenResponseDto generateToken(Authentication authentication)
+    public TokenResponseDto generateToken(JwtDto jwtDto)
             throws HttpServerErrorException.InternalServerError {
         //권한 가져오기
-        final String accessToken = generateAccessToken(authentication);
-        final String refreshToken = generateRefreshToken(authentication);
+        final String accessToken = generateAccessToken(jwtDto);
+        final String refreshToken = generateRefreshToken(jwtDto);
 
         return TokenResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-//                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .build();
     }
 
     /** Jwt 토큰 생성
-     * @param oAuth2User 인증 요청하는 유저 정보
+     * @param user 인증 요청하는 유저 정보
      */
-    public TokenResponseDto generateOAuth2Token(OAuth2User oAuth2User)
+    public TokenResponseDto generateSocialToken(Backend.HIFI.user.User user)
             throws HttpServerErrorException.InternalServerError {
-
-        Authentication authentication
-                = new UsernamePasswordAuthenticationToken(oAuth2User.getName(), "", oAuth2User.getAuthorities());
+        JwtDto jwtDto = new JwtDto(user);
         //권한 가져오기
-        final String accessToken = generateAccessToken(authentication);
-        final String refreshToken = generateRefreshToken(authentication);
+        final String accessToken = generateAccessToken(jwtDto);
+        final String refreshToken = generateRefreshToken(jwtDto);
 
         return TokenResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-//                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .build();
     }
 
