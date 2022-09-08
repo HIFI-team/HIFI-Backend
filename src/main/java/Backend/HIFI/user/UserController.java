@@ -6,6 +6,7 @@ import Backend.HIFI.user.dto.UserDto;
 import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
+import Backend.HIFI.user.follow.dto.FollowRequestDto;
 import Backend.HIFI.user.search.SearchDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -62,9 +63,12 @@ public class UserController {
 
     @ApiOperation(value = "팔로우 요청")
     @PostMapping("/follow")
-    public CommonApiResponse<String> followUser(@RequestBody String followingEmail, Authentication auth) {
+    public CommonApiResponse<String> followUser(@RequestBody FollowRequestDto followRequestDto) {
 
-        User follower = userService.findByAuth(auth);
+        String followerEmail = followRequestDto.getFromEmail();
+        String followingEmail = followRequestDto.getToEmail();
+
+        User follower = userService.findByEmail(followerEmail);
         User following = userService.findByEmail(followingEmail);
         followService.following(follower, following);
 
@@ -72,10 +76,15 @@ public class UserController {
     }
 
     @ApiOperation(value = "언팔로우 요청")
-    @DeleteMapping("/follow")
-    public CommonApiResponse<String> unfollowUser(@RequestBody String followingEmail, Authentication auth) {
+    @PostMapping("/unfollow")
+    public CommonApiResponse<String> unfollowUser(@RequestBody FollowRequestDto followRequestDto) {
 
-        User follower = userService.findByAuth(auth);
+        String followerEmail = followRequestDto.getFromEmail();
+        String followingEmail = followRequestDto.getToEmail();
+
+        System.out.println(followerEmail + " ****" + followingEmail);
+
+        User follower = userService.findByEmail(followerEmail);
         User following = userService.findByEmail(followingEmail);
 
         Long followId = followService.getFollowIdByFollowerAndFollowing(follower, following);
