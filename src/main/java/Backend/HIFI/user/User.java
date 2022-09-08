@@ -51,9 +51,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column //OAuth Provider
     private String provider;
 
-    @Column //user nickname
-    private String nickname;
-
     @Column(name = "authentication_code", unique = true)
     private String authenticationCode;
 

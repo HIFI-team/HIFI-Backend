@@ -1,6 +1,5 @@
 package Backend.HIFI.user.follow;
 
-import Backend.HIFI.auth.dto.FollowDto;
 import Backend.HIFI.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

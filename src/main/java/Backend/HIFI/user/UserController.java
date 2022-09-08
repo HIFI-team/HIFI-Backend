@@ -9,6 +9,7 @@ import Backend.HIFI.user.follow.FollowService;
 import Backend.HIFI.user.search.SearchDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

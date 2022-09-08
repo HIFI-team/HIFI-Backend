@@ -39,8 +39,7 @@ public class UserService {
     }
 
     public User findByAuth(Authentication authentication) {
-        Long userId = Long.parseLong(authentication.getName());
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
         return user;
     }

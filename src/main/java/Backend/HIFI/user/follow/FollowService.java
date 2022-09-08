@@ -1,6 +1,5 @@
 package Backend.HIFI.user.follow;
 
-import Backend.HIFI.auth.dto.FollowDto;
 import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserService;
 import lombok.RequiredArgsConstructor;
