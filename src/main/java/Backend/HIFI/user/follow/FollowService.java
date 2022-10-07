@@ -50,7 +50,7 @@ public class FollowService {
 
     public List<User> getFollower(User user) {
         List<Follow> followList = followRepository.findFollowByFollowing(user)
-                .orElseThrow(() -> new IllegalArgumentException("팔로어가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("팔로워가 없습니다."));
         List<User> followerList = new ArrayList<>();
         for (Follow follow : followList) {
             followerList.add(follow.getFollower());

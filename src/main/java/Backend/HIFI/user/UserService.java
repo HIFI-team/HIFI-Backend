@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 
+import Backend.HIFI.review.Review;
 import Backend.HIFI.user.dto.UserDto;
 import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.Follow;
@@ -91,6 +92,11 @@ public class UserService {
     }
 
     // 유저 리뷰 리스트
+    public List<Review> getReviewListFromUser(User user) {
+        List<Review> reviewList = user.getReviewList();
+
+        return reviewList;
+    }
 
     // UserProfileDto followed 추가
 

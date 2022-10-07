@@ -2,6 +2,7 @@ package Backend.HIFI.user;
 
 import Backend.HIFI.common.redis.RedisService;
 import Backend.HIFI.common.response.CommonApiResponse;
+import Backend.HIFI.review.Review;
 import Backend.HIFI.user.dto.UserDto;
 import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.FollowRepository;
@@ -31,6 +32,8 @@ public class UserController {
     public CommonApiResponse<UserDto> profilePage(Authentication auth) {
         User user = userService.findByAuth(auth);
         UserDto userDto = new UserDto().of(user);
+        userDto.setFollower(followService.getFollower(user).size());
+        userDto.setFollowing(followService.getFollowing(user).size());
 
         return CommonApiResponse.of(userDto);
     }
@@ -141,6 +144,13 @@ public class UserController {
         return CommonApiResponse.of(searchUserProfileDtoList);
     }
 
+    @ApiOperation(value = "리뷰 리스트 반환")
+    @GetMapping("/review")
+    public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {
+        User user = userService.findByAuth(auth);
+        return CommonApiResponse.of(userService.getReviewListFromUser(user));
+
+    }
 //    @GetMapping("/su")
 //    public CommonApiResponse<User> searchUserPage() {
 
