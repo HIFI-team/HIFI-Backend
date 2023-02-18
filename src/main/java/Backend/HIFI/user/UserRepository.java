@@ -1,5 +1,6 @@
 package Backend.HIFI.user;
 
+import Backend.HIFI.review.Review;
 import Backend.HIFI.user.dto.UserDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

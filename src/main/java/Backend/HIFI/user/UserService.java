@@ -1,6 +1,7 @@
 package Backend.HIFI.user;
 
 
+import Backend.HIFI.review.Review;
 import Backend.HIFI.user.dto.UserDto;
 import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.follow.Follow;
@@ -39,9 +40,10 @@ public class UserService {
     }
 
     public User findByAuth(Authentication authentication) {
-        Long userId = Long.parseLong(authentication.getName());
-        User user = userRepository.findById(userId)
+        System.out.println("^&^&^&^\n"+authentication.getName());
+        User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
+        System.out.println(user);
         return user;
     }
 
@@ -73,27 +75,54 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public boolean isFollowed(User fromUser, User toUser) {
+        Follow follow = followRepository.findFollowByFollowerAndFollowing(fromUser, toUser);
+        return follow != null;
+    }
     /** 맞팔 확인 */
-    public boolean F4F(User user1, User user2) {
-        Follow follow1 = followRepository.findFollowByFollowerAndFollowing(user1, user2);
-        Follow follow2 = followRepository.findFollowByFollowerAndFollowing(user2, user1);
+    public boolean isFollowForFollowed(User user1, User user2) {
+//        Follow follow1 = followRepository.findFollowByFollowerAndFollowing(user1, user2);
+//        Follow follow2 = followRepository.findFollowByFollowerAndFollowing(user2, user1);
 
-        return follow1 != null && follow2 != null;
+        return isFollowed(user1, user2) && isFollowed(user2, user1);
     }
     public boolean canWatchReview(User fromUser, User toUser) {
 
-        return F4F(fromUser, toUser) || !toUser.getAnonymous();
+        return isFollowForFollowed(fromUser, toUser) || !toUser.getAnonymous();
     }
 
     // 유저 리뷰 리스트
+    public List<Review> getReviewListFromUser(User user) {
+        List<Review> reviewList = user.getReviewList();
+
+        return reviewList;
+    }
+
+    // UserProfileDto followed 추가
+
+    /** 모든 유저 return */
+    public List<UserProfileDto> searchAllUser(User fromUser) {
+        List<User> userList = userRepository.findAll();
+        List<UserProfileDto> userProfileDtoList = new ArrayList<>();
+        for (User toUser : userList) {
+            if (fromUser == toUser)
+                continue;
+            UserProfileDto upd = new UserProfileDto().of(toUser);
+            upd.setFollowed(isFollowed(fromUser, toUser));
+            userProfileDtoList.add(upd);
+        }
+        return userProfileDtoList;
+    }
 
     /** user.name 통한 유저 검색 */
-    public List<UserProfileDto> searchUserByName(String name) {
+    public List<UserProfileDto> searchUserByName(User fromUser, String name) {
         List<User> userList = userRepository.findUserListByName(name)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 유저가 없습니다."));
         List<UserProfileDto> userProfileDtoList = new ArrayList<>();
-        for (User user : userList) {
-            userProfileDtoList.add(new UserProfileDto().toUserProfileDto(user));
+        for (User toUser : userList) {
+            UserProfileDto upd = new UserProfileDto().of(toUser);
+            upd.setFollowed(isFollowed(fromUser, toUser));
+            userProfileDtoList.add(upd);
         }
         return userProfileDtoList;
     }

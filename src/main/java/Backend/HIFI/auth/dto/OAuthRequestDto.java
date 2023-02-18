@@ -11,7 +11,7 @@ public class OAuthRequestDto {
     @Valid
     private String email;
 
-    private String nickname;
+    private String name;
 
     @Valid
     private String provider;
@@ -21,7 +21,7 @@ public class OAuthRequestDto {
                 .email(email)
                 .role(UserRole.ROLE_USER)
                 .provider(provider)
-                .nickname(nickname)
+                .name(name)
                 .build();
     }
 }

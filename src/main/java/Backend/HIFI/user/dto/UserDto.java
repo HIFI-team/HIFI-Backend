@@ -20,13 +20,13 @@ public class UserDto {
     private String image;
     private Boolean anonymous;
 
-//    private int follower;
-//    private int following;
+    private int follower;
+    private int following;
 
     @Builder.Default
     private List<Review> reviewList = new ArrayList<>();
 
-    public UserDto toUserDto(User user) {
+    public UserDto of(User user) {
         return UserDto.builder()
                 .email(user.getEmail())
                 .name(user.getName())
