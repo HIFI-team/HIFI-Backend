@@ -1,5 +1,9 @@
 package Backend.HIFI.user;
 
+import Backend.HIFI.review.Review;
+import Backend.HIFI.review.repository.ReviewRepository;
+import Backend.HIFI.store.Store;
+import Backend.HIFI.store.StoreRepository;
 import Backend.HIFI.user.dto.UserDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
@@ -25,6 +29,10 @@ public class UserTest {
     FollowRepository followRepository;
     @Autowired
     FollowService followService;
+    @Autowired
+    ReviewRepository reviewRepository;
+    @Autowired
+    StoreRepository storeRepository;
 
     @Test
     public void followTest() throws Exception {
@@ -112,5 +120,27 @@ public class UserTest {
                 .build();
         userRepository.saveAndFlush(user2);
 //        System.out.println(userService.searchAllUser());
+    }
+
+    @Test
+    public void reviewListTest() throws Exception {
+        User user = userService.findByEmail("ms");
+        Store store = Store.builder()
+                .address_name("testAddressName")
+                .name("testName")
+                .build();
+        storeRepository.saveAndFlush(store);
+        Review review = Review.builder()
+                .grade(5)
+                .store(store)
+                .user(user)
+                .image("imageTest")
+                .build();
+        user.getReviewList().add(review);
+        store.getReviews().add(review);
+        userRepository.saveAndFlush(user);
+        reviewRepository.saveAndFlush(review);
+//        storeRepository.saveAndFlush(store);
+
     }
 }

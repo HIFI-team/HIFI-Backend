@@ -148,6 +148,14 @@ public class UserController {
     @GetMapping("/review")
     public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {
         User user = userService.findByAuth(auth);
+        System.out.println("ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ");
+
+        List<Review> reviewList = userService.getReviewListFromUser(user);
+        for (Review review : reviewList) {
+            System.out.println(review.getImage());
+        }
+
+        System.out.println("ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ");
         return CommonApiResponse.of(userService.getReviewListFromUser(user));
 
     }
