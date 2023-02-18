@@ -1,11 +1,9 @@
 package Backend.HIFI.auth.security;
 
 import Backend.HIFI.auth.jwt.JwtAuthenticationFilter;
-import Backend.HIFI.auth.security.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,9 +14,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
-import java.util.List;
 
 /** 인증 및 Security 관련 설정 클래스입니다
  * @author gengminy (220728) */
@@ -61,6 +56,12 @@ public class SecurityConfiguration {
                 .anyRequest().permitAll()
                 .and()
                 .headers().frameOptions().disable();
+//                .and()
+//                .oauth2Login()
+//                .defaultSuccessUrl("/login-success")
+//                .successHandler(oAuth2AuthenticationSuccessHandler)
+//                .userInfoEndpoint()
+//                .userService(customOAuth2Service);
 
                 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
                 return http.build();

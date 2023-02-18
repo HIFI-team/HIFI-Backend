@@ -30,6 +30,11 @@ public enum ErrorCode {
     FORBIDDEN_USER(FORBIDDEN, "AUTH007", "권한이 없는 유저입니다"),
     LOGIN_FAILED(UNAUTHORIZED, "AUTH008", "로그인에 실패했습니다"),
 
+    /* OAuth 관련 오류 */
+    KAKAO_BAD_REQUEST(BAD_REQUEST, "OAUTH001", "카카오 토큰 오류"),
+    KAKAO_USER_NOT_FOUND(BAD_REQUEST, "OAUTH002", "카카오 유저를 찾을 수 없습니다"),
+    KAKAO_USER_EMAIL_NOT_FOUND(BAD_REQUEST, "OAUTH003", "이메일 동의를 하지 않았습니다"),
+
 
     /* User 관련 오류 */
     CANNOT_FOLLOW_MYSELF(BAD_REQUEST, "U001", "자기 자신은 팔로우 할 수 없습니다"),

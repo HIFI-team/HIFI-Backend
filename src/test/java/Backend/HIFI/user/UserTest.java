@@ -1,6 +1,10 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.user.follow.Follow;
+import Backend.HIFI.review.Review;
+import Backend.HIFI.review.repository.ReviewRepository;
+import Backend.HIFI.store.Store;
+import Backend.HIFI.store.StoreRepository;
+import Backend.HIFI.user.dto.UserDto;
 import Backend.HIFI.user.follow.FollowRepository;
 import Backend.HIFI.user.follow.FollowService;
 import org.junit.Test;
@@ -10,11 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,33 +29,40 @@ public class UserTest {
     FollowRepository followRepository;
     @Autowired
     FollowService followService;
+    @Autowired
+    ReviewRepository reviewRepository;
+    @Autowired
+    StoreRepository storeRepository;
 
     @Test
     public void followTest() throws Exception {
 
         User user1 = User.builder()
-                .email("ms")
+                .email("A")
                 .password("test")
+                .anonymous(true)
                 .build();
         userRepository.saveAndFlush(user1);
 
         User user2 = User.builder()
-                .email("sm")
+                .email("B")
                 .password("test")
                 .build();
         userRepository.saveAndFlush(user2);
 
         User user3 = User.builder()
-                .email("gm")
+                .email("C")
                 .password("test")
                 .build();
         userRepository.saveAndFlush(user3);
 
         followService.following(user1, user2);
-        followService.following(user1, user3);
-        followService.following(user2, user3);
+        followService.following(user2, user1);
 
-        userService.deleteUser(user1);
+        System.out.println(userService.canWatchReview(user1, user2));
+        System.out.println(userService.canWatchReview(user1, user3));
+        System.out.println(userService.canWatchReview(user3, user1));
+
     }
 
 
@@ -84,4 +90,57 @@ public class UserTest {
         userService.userSearch(user2, "test");
     }
 
+    @Test
+    public void searchTest() throws Exception {
+        User user1 = User.builder()
+                .email("a")
+                .password("abc")
+                .name("ms")
+                .build();
+        userRepository.saveAndFlush(user1);
+
+        User user2 = User.builder()
+                .email("b")
+                .password("abc")
+                .name("kms")
+                .build();
+        userRepository.saveAndFlush(user2);
+
+    }
+
+    @Test
+    public void allUserSearch() throws Exception {
+        User user1 = User.builder()
+                .email("a")
+                .build();
+        userRepository.saveAndFlush(user1);
+
+        User user2 = User.builder()
+                .email("b")
+                .build();
+        userRepository.saveAndFlush(user2);
+//        System.out.println(userService.searchAllUser());
+    }
+
+    @Test
+    public void reviewListTest() throws Exception {
+        User user = userService.findByEmail("ms");
+        Store store = Store.builder()
+                .address_name("testAddressName")
+                .name("testName")
+                .build();
+        storeRepository.saveAndFlush(store);
+        Review review = Review.builder()
+                .grade(5)
+                .store(store)
+                .user(user)
+                .image("imageTest")
+                .build();
+        user.getReviewList().add(review);
+        store.getReviews().add(review);
+        userRepository.saveAndFlush(user);
+        reviewRepository.saveAndFlush(review);
+//        storeRepository.saveAndFlush(store);
+
+    }
 }

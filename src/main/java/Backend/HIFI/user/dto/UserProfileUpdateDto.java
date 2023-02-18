@@ -1,4 +1,4 @@
-package Backend.HIFI.auth.dto;
+package Backend.HIFI.user.dto;
 
 import lombok.*;
 

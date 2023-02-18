@@ -1,14 +1,15 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.auth.dto.UserProfileUpdateDto;
 import Backend.HIFI.common.entity.BaseEntity;
 import Backend.HIFI.common.entity.BaseTimeEntity;
 import Backend.HIFI.review.Review;
+import Backend.HIFI.user.dto.UserProfileDto;
 import Backend.HIFI.user.search.Search;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,12 +32,14 @@ public class User extends BaseEntity implements UserDetails {
     private Long id;
 
     @Column(name="user_name")
-    private String name;
+    @Builder.Default
+    private String name = "test";
 
     @Column(name="user_email", nullable = false)
     private String email;
 
-    @Column(name="user_password", nullable = false)
+    //OAuth 사용시 null 이 들어올 수 있음
+    @Column(name="user_password")
     private String password;
 
     @Column(name="user_image")
@@ -44,6 +47,12 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name="user_description")
     private String description;
+
+    @Column //OAuth Provider
+    private String provider;
+
+    @Column(name = "authentication_code", unique = true)
+    private String authenticationCode;
 
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -63,19 +72,11 @@ public class User extends BaseEntity implements UserDetails {
     private List<Review> reviewList = new ArrayList<>();
 
 
-    public User(String email, String password, String name) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.anonymous = true;
-        this.role = UserRole.valueOf("ROLE_USER");
-    }
-
-    public void update(UserProfileUpdateDto userProfileUpdateDto) {
-        this.name = userProfileUpdateDto.getName();
-        this.description = userProfileUpdateDto.getDescription();
-        this.anonymous = userProfileUpdateDto.getAnonymous();
-        this.image = userProfileUpdateDto.getImage();
+    public void update(UserProfileDto userProfileDto) {
+        this.name = userProfileDto.getName();
+        this.description = userProfileDto.getDescription();
+        this.anonymous = userProfileDto.getAnonymous();
+        this.image = userProfileDto.getImage();
     }
 
     //권한 부여

@@ -1,6 +1,5 @@
 package Backend.HIFI.user.follow;
 
-import Backend.HIFI.auth.dto.FollowDto;
 import Backend.HIFI.user.User;
 import Backend.HIFI.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +50,7 @@ public class FollowService {
 
     public List<User> getFollower(User user) {
         List<Follow> followList = followRepository.findFollowByFollowing(user)
-                .orElseThrow(() -> new IllegalArgumentException("팔로어가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("팔로워가 없습니다."));
         List<User> followerList = new ArrayList<>();
         for (Follow follow : followList) {
             followerList.add(follow.getFollower());
