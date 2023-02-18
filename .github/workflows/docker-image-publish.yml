@@ -87,37 +87,37 @@ jobs:
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
 
-#       #Using Dev Server
-#
-#       #Create Remote Directory
-#       - name: create remote directory
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.HOST_DEV }}
-#           username: ${{ secrets.USERNAME }}
-#           #password: ${{ secrets.PASSWORD }}
-#           key: ${{ secrets.KEY_DEV }}
-#           script: mkdir -p ~/srv/ubuntu/hifi_dev
+      #Using Dev Server
 
-#       #Copy Source
-#       - name: copy source via ssh key
-#         uses: burnett01/rsync-deployments@4.1
-#         with:
-#           switches: -avzr --delete
-#           remote_path: ~/srv/ubuntu/
-#           remote_host: ${{ secrets.HOST_DEV }}
-#           remote_user: ${{ secrets.USERNAME }}
-#           remote_key: ${{ secrets.KEY_DEV }}
+      #Create Remote Directory
+      - name: create remote directory
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DEV }}
+          username: ${{ secrets.USERNAME }}
+          #password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY_DEV }}
+          script: mkdir -p ~/srv/ubuntu/hifi_dev
 
-#       #Execute
-#       - name: executing remote ssh commands using password
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.HOST_DEV }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.KEY_DEV }}
-#           script: |
-#             sh ~/srv/ubuntu/config/scripts/deploy.sh
-#             sudo docker image prune -a
-#             sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml pull
-#             sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml up --build -d
+      #Copy Source
+      - name: copy source via ssh key
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avzr --delete
+          remote_path: ~/srv/ubuntu/
+          remote_host: ${{ secrets.HOST_DEV }}
+          remote_user: ${{ secrets.USERNAME }}
+          remote_key: ${{ secrets.KEY_DEV }}
+
+      #Execute
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DEV }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY_DEV }}
+          script: |
+            sh ~/srv/ubuntu/config/scripts/deploy.sh
+            sudo docker image prune -a
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml pull
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml up --build -d
