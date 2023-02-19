@@ -1,8 +1,10 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.user.dto.UserDto;
-import Backend.HIFI.user.follow.FollowRepository;
-import Backend.HIFI.user.follow.FollowService;
+import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.UserRepository;
+import Backend.HIFI.domain.user.UserService;
+import Backend.HIFI.domain.user.follow.FollowRepository;
+import Backend.HIFI.domain.user.follow.FollowService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
