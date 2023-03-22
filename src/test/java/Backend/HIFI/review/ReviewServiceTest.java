@@ -1,11 +1,13 @@
 package Backend.HIFI.review;
 
-import Backend.HIFI.review.repository.ReviewRepository;
-import Backend.HIFI.store.Store;
-import Backend.HIFI.store.StoreRepository;
-import Backend.HIFI.store.StoreService;
-import Backend.HIFI.user.User;
-import Backend.HIFI.user.UserRepository;
+import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.review.ReviewService;
+import Backend.HIFI.domain.review.repository.ReviewRepository;
+import Backend.HIFI.domain.store.Store;
+import Backend.HIFI.domain.store.StoreRepository;
+import Backend.HIFI.domain.store.StoreService;
+import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,8 @@ public class ReviewServiceTest {
     @Autowired StoreService storeService;
     @Autowired
     ReviewRepository reviewRepository;
-    @Autowired ReviewService reviewService;
+    @Autowired
+    ReviewService reviewService;
     @Autowired StoreRepository storeRepository;
 
     @Test
