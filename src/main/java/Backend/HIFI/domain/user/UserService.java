@@ -69,9 +69,17 @@ public class UserService {
         user.getSearchList().add(search);
     }
 
-    public void updateProfile(User user, UserProfileDto userProfileDto) {
+    public void updateProfile(UserProfileDto userProfileDto) {
+        // token 못받아와서 userProfileDto email 추가하여 이용
+//        User user = userService.findByAuth(auth);
+        User user = findByEmail(userProfileDto.getEmail());
         user.update(userProfileDto);
+
+
+        // throw exception 추가할 것
         userRepository.save(user);
+        System.out.println("***************\n"+userProfileDto);
+
     }
 
     public boolean isFollowed(User fromUser, User toUser) {
@@ -124,6 +132,28 @@ public class UserService {
             userProfileDtoList.add(upd);
         }
         return userProfileDtoList;
+    }
+
+
+    public UserDto getMyProfilePage(Authentication auth) {
+        User user = findByAuth(auth);
+        UserDto userDto = new UserDto().of(user);
+        userDto.setFollower(followService.getFollower(user).size());
+        userDto.setFollowing(followService.getFollowing(user).size());
+
+        return userDto;
+    }
+
+    public UserDto getProfilePage(Authentication auth, String email) {
+        User toUser = findByEmail(email);
+        User fromUser = findByAuth(auth);
+
+        UserDto userDto = new UserDto().of(toUser);
+        if (!canWatchReview(fromUser, toUser)) {
+            userDto.setReviewList(null);
+        }
+
+        return userDto;
     }
 
 
