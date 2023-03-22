@@ -1,8 +1,8 @@
 //package Backend.HIFI.domain;
 //
-//import Backend.HIFI.user.follow.Follow;
-//import Backend.HIFI.user.User;
-//import Backend.HIFI.user.follow.FollowRepository;
+//import Follow;
+//import User;
+//import FollowRepository;
 //import org.junit.Test;
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.transaction.annotation.Transactional;

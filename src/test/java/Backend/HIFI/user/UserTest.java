@@ -1,12 +1,19 @@
 package Backend.HIFI.user;
 
-import Backend.HIFI.review.Review;
-import Backend.HIFI.review.repository.ReviewRepository;
-import Backend.HIFI.store.Store;
-import Backend.HIFI.store.StoreRepository;
-import Backend.HIFI.user.dto.UserDto;
-import Backend.HIFI.user.follow.FollowRepository;
-import Backend.HIFI.user.follow.FollowService;
+
+
+
+
+import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.UserRepository;
+import Backend.HIFI.domain.user.UserService;
+import Backend.HIFI.domain.user.follow.FollowRepository;
+import Backend.HIFI.domain.user.follow.FollowService;
+import Backend.HIFI.domain.user.dto.UserDto;
+import Backend.HIFI.domain.store.*;
+import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.review.repository.ReviewRepository;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

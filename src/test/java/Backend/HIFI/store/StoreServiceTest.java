@@ -1,6 +1,10 @@
 package Backend.HIFI.store;
 
-import Backend.HIFI.store.dto.StoreRequestDto;
+import Backend.HIFI.domain.store.Store;
+import Backend.HIFI.domain.store.StoreCategoryCode;
+import Backend.HIFI.domain.store.StoreRepository;
+import Backend.HIFI.domain.store.StoreService;
+import Backend.HIFI.domain.store.dto.StoreRequestDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -20,8 +24,10 @@ import org.slf4j.LoggerFactory;
 public class StoreServiceTest {
     Logger log = (Logger) LoggerFactory.getLogger(StoreServiceTest.class);
 
-    @Autowired StoreRepository storeRepository;
-    @Autowired StoreService storeService;
+    @Autowired
+    StoreRepository storeRepository;
+    @Autowired
+    StoreService storeService;
     @Autowired ModelMapper mapper;
 
     @Test
