@@ -8,6 +8,7 @@ import Backend.HIFI.domain.user.follow.Follow;
 import Backend.HIFI.domain.user.follow.FollowRepository;
 import Backend.HIFI.domain.user.follow.FollowService;
 
+import Backend.HIFI.domain.user.search.SearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,7 @@ public class UserService {
         user.changeDeleteStatus();
     }
 
+    /** 유저 검색 리스트에 추가 */
     public void userSearch(User user, String searchName) {
         Search search = new Search();
         search.setName(searchName);
@@ -99,8 +101,14 @@ public class UserService {
     }
 
     // 유저 리뷰 리스트
-    public List<Review> getReviewListFromUser(User user) {
+    public List<Review> getReviewListFromUser(Authentication auth) {
+        User user = findByAuth(auth);
         List<Review> reviewList = user.getReviewList();
+
+        // 리뷰 테스트
+        for (Review review : reviewList) {
+            System.out.println(review.getImage());
+        }
 
         return reviewList;
     }
@@ -108,7 +116,8 @@ public class UserService {
     // UserProfileDto followed 추가
 
     /** 모든 유저 return */
-    public List<UserProfileDto> searchAllUser(User fromUser) {
+    public List<UserProfileDto> searchAllUser(Authentication auth) {
+        User fromUser = findByAuth(auth);
         List<User> userList = userRepository.findAll();
         List<UserProfileDto> userProfileDtoList = new ArrayList<>();
         for (User toUser : userList) {
@@ -122,7 +131,12 @@ public class UserService {
     }
 
     /** user.name 통한 유저 검색 */
-    public List<UserProfileDto> searchUserByName(User fromUser, String name) {
+    public List<UserProfileDto> searchUserByName(Authentication auth, SearchDto searchDto) {
+        User fromUser = findByAuth(auth);
+        String name = searchDto.getName();
+        // 유저 검색 리스트에 추가
+        userSearch(fromUser, name);
+
         List<User> userList = userRepository.findUserListByName(name)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 유저가 없습니다."));
         List<UserProfileDto> userProfileDtoList = new ArrayList<>();

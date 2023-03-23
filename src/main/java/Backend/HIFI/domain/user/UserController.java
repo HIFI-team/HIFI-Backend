@@ -52,30 +52,14 @@ public class UserController {
     @ApiOperation(value = "팔로우 요청")
     @PostMapping("/follow")
     public CommonApiResponse<String> followUser(@RequestBody FollowRequestDto followRequestDto) {
-
         followService.requestFollow(followRequestDto);
-
-
-
         return CommonApiResponse.of("팔로우 완료");
     }
 
     @ApiOperation(value = "언팔로우 요청")
     @PostMapping("/unfollow")
     public CommonApiResponse<String> unfollowUser(@RequestBody FollowRequestDto followRequestDto) {
-
-        String followerEmail = followRequestDto.getFromEmail();
-        String followingEmail = followRequestDto.getToEmail();
-
-        System.out.println(followerEmail + " ****" + followingEmail);
-
-        User follower = userService.findByEmail(followerEmail);
-        User following = userService.findByEmail(followingEmail);
-
-        Long followId = followService.getFollowIdByFollowerAndFollowing(follower, following);
-
-        followRepository.deleteById(followId);
-
+        followService.requestUnFollow(followRequestDto);
         return CommonApiResponse.of("언팔로우 완료");
     }
 
@@ -109,36 +93,22 @@ public class UserController {
     @ApiOperation(value = "모든 유저 반환")
     @GetMapping("/search")
     public CommonApiResponse<List<UserProfileDto>> allUserSearch(Authentication auth) {
-        User user = userService.findByAuth(auth);
-        List<UserProfileDto> allUserList = userService.searchAllUser(user);
-        System.out.println(allUserList);
+        List<UserProfileDto> allUserList = userService.searchAllUser(auth);
         return CommonApiResponse.of(allUserList);
     }
 
     @ApiOperation(value = "유저 검색")
     @PostMapping("/search")
     public CommonApiResponse<List<UserProfileDto>> setUserSearch(@RequestBody SearchDto searchDto, Authentication auth) {
-        User user = userService.findByAuth(auth);
-        String name = searchDto.getName();
-        userService.userSearch(user, name);
-        List<UserProfileDto> searchUserProfileDtoList = userService.searchUserByName(user, name);
-        System.out.println("/*\n" + name + "\n" + searchUserProfileDtoList + "\n*/");
+        List<UserProfileDto> searchUserProfileDtoList = userService.searchUserByName(auth, searchDto);
         return CommonApiResponse.of(searchUserProfileDtoList);
     }
 
     @ApiOperation(value = "리뷰 리스트 반환")
     @GetMapping("/review")
     public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {
-        User user = userService.findByAuth(auth);
-        System.out.println("ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ");
-
-        List<Review> reviewList = userService.getReviewListFromUser(user);
-        for (Review review : reviewList) {
-            System.out.println(review.getImage());
-        }
-
-        System.out.println("ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ");
-        return CommonApiResponse.of(userService.getReviewListFromUser(user));
+        List<Review> reviewList = userService.getReviewListFromUser(auth);
+        return CommonApiResponse.of(reviewList);
 
     }
 //    @GetMapping("/su")

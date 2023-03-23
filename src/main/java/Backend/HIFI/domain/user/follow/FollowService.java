@@ -96,4 +96,16 @@ public class FollowService {
         User following = userService.findByEmail(followingEmail);
         following(follower, following);
     }
+
+    public void requestUnFollow(FollowRequestDto followRequestDto) {
+        String followerEmail = followRequestDto.getFromEmail();
+        String followingEmail = followRequestDto.getToEmail();
+
+        User follower = userService.findByEmail(followerEmail);
+        User following = userService.findByEmail(followingEmail);
+
+        Long followId = getFollowIdByFollowerAndFollowing(follower, following);
+
+        followRepository.deleteById(followId);
+    }
 }
