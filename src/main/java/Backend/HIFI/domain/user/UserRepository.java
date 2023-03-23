@@ -1,10 +1,5 @@
 package Backend.HIFI.domain.user;
 
-<<<<<<< HEAD:src/main/java/Backend/HIFI/user/UserRepository.java
-import Backend.HIFI.review.Review;
-import Backend.HIFI.user.dto.UserDto;
-=======
->>>>>>> b4ad75e6891b9076c27da9230f96a93722813c3e:src/main/java/Backend/HIFI/domain/user/UserRepository.java
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

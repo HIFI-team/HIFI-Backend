@@ -49,9 +49,9 @@ public class ReviewService {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
     }
-    public List<Review> findReviews(){
-        return reviewRepository.findAllByDelStatus();
-    }
+//    public List<Review> findReviews(){
+////        return reviewRepository.findAllByDelStatus();
+//    }
     public List<Review> findReviewByUser(Long userId){
         User user=userService.findById(userId);
         return reviewRepository.findByUser(user);
@@ -72,7 +72,7 @@ public class ReviewService {
         //연관관계 끊어줌
 //        review.getStore().getReviews().remove(review);
 //        review.getUser().getReviewList().remove(review);
-        review.changeDeleteStatus();
+        review.updateIsDeleted();
     }
 
     /**

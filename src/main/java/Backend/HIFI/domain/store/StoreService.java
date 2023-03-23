@@ -45,7 +45,7 @@ public class StoreService {
     public void deleteStore(Long storeId){
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 스토어 입니다"));
-        store.changeDeleteStatus();
+        store.updateIsDeleted();
         store.updateReviews();
     }
 }

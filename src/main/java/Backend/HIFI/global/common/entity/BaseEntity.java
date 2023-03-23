@@ -10,15 +10,12 @@ import javax.persistence.*;
  * 생성한 사람, 업데이트한 사람 필드 자동으로 만들어주는 엔티티입니다
  * jpa의 audit(감시) 기능을 사용합니다 */
 @MappedSuperclass
-@EntityListeners({ AuditingEntityListener.class })
 @Getter
 public class BaseEntity {
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "Text default 'N'")
-    private DeleteStatus delStatus=DeleteStatus.N;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted;
 
-    public void changeDeleteStatus(){
-        if(this.delStatus ==DeleteStatus.Y){this.delStatus =DeleteStatus.N;}
-        else{this.delStatus=DeleteStatus.Y;}
+    public void updateIsDeleted() {
+        this.isDeleted = !this.isDeleted;
     }
 }

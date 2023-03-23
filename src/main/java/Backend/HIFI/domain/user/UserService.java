@@ -1,7 +1,6 @@
 package Backend.HIFI.domain.user;
 
 import Backend.HIFI.domain.review.Review;
-import Backend.HIFI.domain.user.dto.UserDto;
 import Backend.HIFI.domain.user.search.Search;
 import Backend.HIFI.domain.user.dto.UserProfileDto;
 import Backend.HIFI.domain.user.follow.Follow;
@@ -59,7 +58,7 @@ public class UserService {
 //        userRepository.deleteReviewByUserId(user.getId());
         userRepository.deleteFollowByUserId(user.getId());
 //        userRepository.delete(user);
-        user.changeDeleteStatus();
+        user.updateIsDeleted();
     }
 
     public void userSearch(User user, String searchName) {
