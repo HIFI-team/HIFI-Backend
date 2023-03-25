@@ -1,9 +1,6 @@
 package Backend.HIFI.global.common.entity;
 
-import Backend.HIFI.global.common.DeleteStatus;
 import lombok.Getter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
 
 /** 상속받으면 생성시간 업데이트시간
