@@ -1,6 +1,6 @@
 package Backend.HIFI.domain.user;
 
-import Backend.HIFI.user.follow.dto.FollowRequestDto;
+import Backend.HIFI.domain.user.dto.FollowRequestDto;
 import Backend.HIFI.global.common.redis.RedisService;
 import Backend.HIFI.global.common.response.CommonApiResponse;
 import Backend.HIFI.domain.user.dto.UserProfileDto;
@@ -8,13 +8,11 @@ import Backend.HIFI.domain.user.follow.FollowRepository;
 import Backend.HIFI.domain.user.search.SearchDto;
 import Backend.HIFI.domain.user.dto.UserDto;
 import Backend.HIFI.domain.user.follow.FollowService;
-import Backend.HIFI.domain.user.search.SearchDto;
 import Backend.HIFI.domain.review.Review;
 
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

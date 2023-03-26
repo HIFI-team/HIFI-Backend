@@ -2,7 +2,7 @@ package Backend.HIFI.domain.user.follow;
 
 import Backend.HIFI.domain.user.User;
 import Backend.HIFI.domain.user.UserService;
-import Backend.HIFI.user.follow.dto.FollowRequestDto;
+import Backend.HIFI.domain.user.dto.FollowRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
