@@ -12,5 +12,5 @@ import java.util.List;
 public interface ReviewRepositoryCustom  {
     List<Review> findByUser(User user);
     List<Review> findByStore(Store store);
-    List<Review> findAllByDelStatus();
+//    List<Review> findAllByDelStatus();
 }

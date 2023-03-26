@@ -1,6 +1,5 @@
 package Backend.HIFI.domain.store;
 
-import Backend.HIFI.global.common.DeleteStatus;
 import Backend.HIFI.global.common.entity.BaseEntity;
 import Backend.HIFI.domain.review.Review;
 import lombok.*;
@@ -32,8 +31,7 @@ public class Store extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StoreCategoryCode categoryCode;
 
-    @Column(columnDefinition = "Text default ''")
-    private String images;
+    private String img;
     private String description;
 
     //트리거로 계산
@@ -47,7 +45,7 @@ public class Store extends BaseEntity {
     //==비즈니스 매서드==//
     public void updateReviews(){
         for (Review review:reviews) {
-            if(review.getDelStatus()==DeleteStatus.N)review.changeDeleteStatus();
+            review.updateIsDeleted();
         }
     }
 

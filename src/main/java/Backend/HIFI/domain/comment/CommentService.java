@@ -51,6 +51,6 @@ public class CommentService {
     public void deleteComment(Long commentId){
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 댓글 입니다"));
-        comment.changeDeleteStatus();
+        comment.updateIsDeleted();
     }
 }
