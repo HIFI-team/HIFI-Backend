@@ -2,6 +2,7 @@ package Backend.HIFI.domain.user.follow;
 
 import Backend.HIFI.domain.user.User;
 import Backend.HIFI.domain.user.UserService;
+import Backend.HIFI.domain.user.dto.FollowRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 public class FollowService {
 
     private final FollowRepository followRepository;
+    private final UserService userService;
 
     public void following(User follower, User following) {
 
@@ -84,5 +86,26 @@ public class FollowService {
             followingEmailList.add(follow.getFollowing().getEmail());
         }
         return followingEmailList;
+    }
+
+    public void requestFollow(FollowRequestDto followRequestDto) {
+        String followerEmail = followRequestDto.getFromEmail();
+        String followingEmail = followRequestDto.getToEmail();
+
+        User follower = userService.findByEmail(followerEmail);
+        User following = userService.findByEmail(followingEmail);
+        following(follower, following);
+    }
+
+    public void requestUnFollow(FollowRequestDto followRequestDto) {
+        String followerEmail = followRequestDto.getFromEmail();
+        String followingEmail = followRequestDto.getToEmail();
+
+        User follower = userService.findByEmail(followerEmail);
+        User following = userService.findByEmail(followingEmail);
+
+        Long followId = getFollowIdByFollowerAndFollowing(follower, following);
+
+        followRepository.deleteById(followId);
     }
 }

@@ -7,6 +7,7 @@ import Backend.HIFI.domain.user.follow.Follow;
 import Backend.HIFI.domain.user.follow.FollowRepository;
 import Backend.HIFI.domain.user.follow.FollowService;
 
+import Backend.HIFI.domain.user.search.SearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,7 @@ public class UserService {
         user.updateIsDeleted();
     }
 
+    /** 유저 검색 리스트에 추가 */
     public void userSearch(User user, String searchName) {
         Search search = new Search();
         search.setName(searchName);
@@ -68,9 +70,17 @@ public class UserService {
         user.getSearchList().add(search);
     }
 
-    public void updateProfile(User user, UserProfileDto userProfileDto) {
+    public void updateProfile(UserProfileDto userProfileDto) {
+        // token 못받아와서 userProfileDto email 추가하여 이용
+//        User user = userService.findByAuth(auth);
+        User user = findByEmail(userProfileDto.getEmail());
         user.update(userProfileDto);
+
+
+        // throw exception 추가할 것
         userRepository.save(user);
+        System.out.println("***************\n"+userProfileDto);
+
     }
 
     public boolean isFollowed(User fromUser, User toUser) {
@@ -90,8 +100,14 @@ public class UserService {
     }
 
     // 유저 리뷰 리스트
-    public List<Review> getReviewListFromUser(User user) {
+    public List<Review> getReviewListFromUser(Authentication auth) {
+        User user = findByAuth(auth);
         List<Review> reviewList = user.getReviewList();
+
+        // 리뷰 테스트
+        for (Review review : reviewList) {
+            System.out.println(review.getImage());
+        }
 
         return reviewList;
     }
@@ -99,7 +115,8 @@ public class UserService {
     // UserProfileDto followed 추가
 
     /** 모든 유저 return */
-    public List<UserProfileDto> searchAllUser(User fromUser) {
+    public List<UserProfileDto> searchAllUser(Authentication auth) {
+        User fromUser = findByAuth(auth);
         List<User> userList = userRepository.findAll();
         List<UserProfileDto> userProfileDtoList = new ArrayList<>();
         for (User toUser : userList) {
@@ -113,7 +130,12 @@ public class UserService {
     }
 
     /** user.name 통한 유저 검색 */
-    public List<UserProfileDto> searchUserByName(User fromUser, String name) {
+    public List<UserProfileDto> searchUserByName(Authentication auth, SearchDto searchDto) {
+        User fromUser = findByAuth(auth);
+        String name = searchDto.getName();
+        // 유저 검색 리스트에 추가
+        userSearch(fromUser, name);
+
         List<User> userList = userRepository.findUserListByName(name)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 유저가 없습니다."));
         List<UserProfileDto> userProfileDtoList = new ArrayList<>();
@@ -123,6 +145,28 @@ public class UserService {
             userProfileDtoList.add(upd);
         }
         return userProfileDtoList;
+    }
+
+
+    public UserDto getMyProfilePage(Authentication auth) {
+        User user = findByAuth(auth);
+        UserDto userDto = new UserDto().of(user);
+        userDto.setFollower(followService.getFollower(user).size());
+        userDto.setFollowing(followService.getFollowing(user).size());
+
+        return userDto;
+    }
+
+    public UserDto getProfilePage(Authentication auth, String email) {
+        User toUser = findByEmail(email);
+        User fromUser = findByAuth(auth);
+
+        UserDto userDto = new UserDto().of(toUser);
+        if (!canWatchReview(fromUser, toUser)) {
+            userDto.setReviewList(null);
+        }
+
+        return userDto;
     }
 
 
