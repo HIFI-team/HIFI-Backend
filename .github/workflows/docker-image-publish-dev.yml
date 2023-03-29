@@ -47,7 +47,7 @@ jobs:
       - name: Make env file
         run: |
           touch ./.env
-          echo "$ENV_PROPERTIES_DEV" > ./.env
+          echo "$ENV_PROPERTIES_DEV_" > ./.env
         env:
           ENV_PROPERTIES_DEV: ${{ secrets.ENV_PROPERTIES_DEV_ }}
 
