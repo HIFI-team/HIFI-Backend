@@ -44,7 +44,7 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	implementation 'mysql:mysql-connector-java'
-	runtimeOnly 'com.mysql:mysql-connector-j'
+//	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	//log 남기는 용도 + 개발시에만 사용
