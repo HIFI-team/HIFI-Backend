@@ -11,7 +11,7 @@ import Backend.HIFI.domain.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
+//import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,7 @@ public class StoreController {
     private final StoreService storeService;
     private final UserService userService;
 
-    private final ModelMapper mapper;
+//    private final ModelMapper mapper;
 
     /**가게 등록*/
     @ApiOperation(value = "가게 등록 요청")
@@ -46,10 +46,11 @@ public class StoreController {
     public ResponseEntity<List<StoreRequestDto>> store(){
         //TODO: 마커에 필요한 정보만 전송할 것.
         List<Store> storeList = storeService.getStores();
-        List<StoreRequestDto> dto = storeList.stream()
-                .map(store -> mapper.map(store,StoreRequestDto.class))
-                .collect(Collectors.toList());
-        log.info("api = 지도 출력 요청 , req = {}", dto);
+        List<StoreRequestDto> dto = null;
+//                storeList.stream()
+//                .map(store -> mapper.map(store,StoreRequestDto.class))
+//                .collect(Collectors.toList());
+//        log.info("api = 지도 출력 요청 , req = {}", dto);
         return  ResponseEntity.ok(dto);
     }
 
@@ -67,26 +68,26 @@ public class StoreController {
     public ResponseEntity<Map<String ,Object>> getReview(@PathVariable Long id, Authentication authentication){
         Map<String,Object> result= new HashMap<>();
         Store store = storeService.getStore(id);
-        StoreRequestDto storeDto = mapper.map(store, StoreRequestDto.class);
-        result.put("store",storeDto);
-
-        List<Review> reviews = store.getReviews();
-        List<ReviewDto> reviewDtoList = reviews.stream()
-                                            .map(review -> mapper.map(review, ReviewDto.class))
-                                            .collect(Collectors.toList());
-        result.put("reviews",reviewDtoList);
-        log.info("api = review 호출 요청 , req = {}", reviewDtoList);
-
-        if(authentication!=null) {
-            User user = userService.findByAuth(authentication);
-            log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
-            //Todo: 빈 객체 보내는 방식 바꿔야 할지도?
-            /** 빈 리뷰 객체 */
-            StoreMapDto storeMapDto = mapper.map(store, StoreMapDto.class);
-            UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
-            ReviewDto dto = ReviewDto.builder().user(userMapDto).store(storeMapDto).build();
-            result.put("newReview", dto);
-        }
+//        StoreRequestDto storeDto = mapper.map(store, StoreRequestDto.class);
+//        result.put("store",storeDto);
+//
+//        List<Review> reviews = store.getReviews();
+//        List<ReviewDto> reviewDtoList = reviews.stream()
+//                                            .map(review -> mapper.map(review, ReviewDto.class))
+//                                            .collect(Collectors.toList());
+//        result.put("reviews",reviewDtoList);
+//        log.info("api = review 호출 요청 , req = {}", reviewDtoList);
+//
+//        if(authentication!=null) {
+//            User user = userService.findByAuth(authentication);
+//            log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
+//            //Todo: 빈 객체 보내는 방식 바꿔야 할지도?
+//            /** 빈 리뷰 객체 */
+//            StoreMapDto storeMapDto = mapper.map(store, StoreMapDto.class);
+//            UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
+//            ReviewDto dto = ReviewDto.builder().user(userMapDto).store(storeMapDto).build();
+//            result.put("newReview", dto);
+//        }
         return  ResponseEntity.ok(result);
     }
 

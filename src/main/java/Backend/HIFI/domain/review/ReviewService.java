@@ -7,7 +7,7 @@ import Backend.HIFI.domain.store.StoreService;
 import Backend.HIFI.domain.user.User;
 import Backend.HIFI.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+//import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +21,7 @@ public class ReviewService {
     private final UserService userService;
     private final StoreService storeService;
 
-    private final ModelMapper mapper;
+//    private final ModelMapper mapper;
 
     /**
      * 리뷰 등록
@@ -32,7 +32,7 @@ public class ReviewService {
         Store store= storeService.getStore(dto.getStore().getId());
 
         /**toEntity*/
-        Review review=mapper.map(dto,Review.class);
+        Review review= null;
 
         store.getReviews().add(review);
         user.getReviewList().add(review);

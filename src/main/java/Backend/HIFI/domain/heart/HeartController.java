@@ -4,7 +4,7 @@ import Backend.HIFI.domain.review.ReviewService;
 import Backend.HIFI.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
+//import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ public class HeartController {
     private final UserService userService;
     private final ReviewService reviewService;
 
-    private final ModelMapper mapper;
+//    private final ModelMapper mapper;
 
     @PostMapping("/heart")
     public ResponseEntity<String> hearts(@PathVariable Long review_id, Authentication authentication){
@@ -34,10 +34,10 @@ public class HeartController {
         heartService.unHeart(userService.findByAuth(authentication).getId(),review_id);
         return ResponseEntity.ok().body("좋아요취소성공");
     }
-    @GetMapping("/heartList")
-    public ResponseEntity<List<HeartDto>> listHeart(@PathVariable Long review_id){
-        List<Heart> hearts = heartService.findHeart(review_id);
-        List<HeartDto> dtos = hearts.stream().map(heart -> mapper.map(heart, HeartDto.class)).collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
+//    @GetMapping("/heartList")
+//    public ResponseEntity<List<HeartDto>> listHeart(@PathVariable Long review_id){
+//        List<Heart> hearts = heartService.findHeart(review_id);
+//        List<HeartDto> dtos = hearts.stream().map(heart -> mapper.map(heart, HeartDto.class)).collect(Collectors.toList());
+//        return ResponseEntity.ok(dtos);
+//    }
 }

@@ -10,7 +10,7 @@ import Backend.HIFI.domain.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
+//import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class ReviewController {
     private final ReviewService reviewService;
     private final UserService userService;
-    private final ModelMapper mapper;
+//    private final ModelMapper mapper;
 
     /** 리뷰 등록 */
     @ApiOperation("리뷰 등록 요청")
@@ -56,19 +56,19 @@ public class ReviewController {
 //        result.put("review",dto);
 
         List<Comment> comments = review.getComments();
-        List<CommentDto> commentDto = comments.stream()
-                .map(comment -> mapper.map(comment,CommentDto.class))
-                .collect(Collectors.toList());
-        result.put("comment",commentDto);
-
-        if(authentication!=null) {
-            User user = userService.findByAuth(authentication);
-            log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
-            UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
-            ReviewMapDto reviewMapDto = mapper.map(review, ReviewMapDto.class);
-            CommentDto buildComment = CommentDto.builder().user(userMapDto).review(reviewMapDto).build();
-            result.put("newComment", buildComment);
-        }
+//        List<CommentDto> commentDto = comments.stream()
+//                .map(comment -> mapper.map(comment,CommentDto.class))
+//                .collect(Collectors.toList());
+//        result.put("comment",commentDto);
+//
+//        if(authentication!=null) {
+//            User user = userService.findByAuth(authentication);
+//            log.info("api = user 찾기 , req = {}", userService.findByAuth(authentication));
+//            UserMapDto userMapDto = mapper.map(user, UserMapDto.class);
+//            ReviewMapDto reviewMapDto = mapper.map(review, ReviewMapDto.class);
+//            CommentDto buildComment = CommentDto.builder().user(userMapDto).review(reviewMapDto).build();
+//            result.put("newComment", buildComment);
+//        }
 
         // 코맨트 리스트 및 작성 폼
         return ResponseEntity.ok(result);

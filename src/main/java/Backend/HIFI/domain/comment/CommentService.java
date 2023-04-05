@@ -6,7 +6,7 @@ import Backend.HIFI.domain.review.ReviewService;
 import Backend.HIFI.domain.user.User;
 import Backend.HIFI.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+//import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +18,7 @@ public class CommentService {
     private final UserService userService;
     private final ReviewService reviewService;
 
-    private final ModelMapper mapper;
+//    private final ModelMapper mapper;
 
     /**코멘트 등록*/
     @Transactional
@@ -26,7 +26,7 @@ public class CommentService {
         User user = userService.findByEmail(dto.getUser().getEmail());
         Review review = reviewService.findReview(dto.getReview().getId());
 
-        Comment comment = mapper.map(dto,Comment.class);
+        Comment comment = null;
 
         //user.getComments().add(comment);
         review.getComments().add(comment);
