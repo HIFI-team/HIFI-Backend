@@ -25,7 +25,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
     private final FollowService followService;
-
+//    private UserService() {
+//
+//    }
 
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email)

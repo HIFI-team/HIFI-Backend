@@ -59,12 +59,12 @@ public class ReviewServiceTest {
                 .build();
         reviewRepository.save(review2);
 //        review2.changeDeleteStatus();
-        System.out.println(review2.getIsDeleted());
+//        System.out.println(review2.getIsDeleted());
 
-        List<Review> reviews = reviewRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
-        for (Review review:reviews) {
-            System.out.println(review.getContent()+review.getCreatedAt()+review.getIsDeleted());
-        }
+//        List<Review> reviews = reviewRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+//        for (Review review:reviews) {
+//            System.out.println(review.getContent()+review.getCreatedAt()+review.getIsDeleted());
+//        }
         //when
 
         //then

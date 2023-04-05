@@ -117,6 +117,7 @@ public class UserTest {
 
     @Test
     public void allUserSearch() throws Exception {
+
         User user1 = User.builder()
                 .email("a")
                 .build();

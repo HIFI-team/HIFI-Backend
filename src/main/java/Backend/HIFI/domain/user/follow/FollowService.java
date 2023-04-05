@@ -1,6 +1,7 @@
 package Backend.HIFI.domain.user.follow;
 
 import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.UserRepository;
 import Backend.HIFI.domain.user.UserService;
 import Backend.HIFI.domain.user.dto.FollowRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 public class FollowService {
 
     private final FollowRepository followRepository;
-//    private final UserService userService;
+    private final UserRepository userRepository;
 
     public void following(User follower, User following) {
 
@@ -89,23 +90,33 @@ public class FollowService {
     }
 
     public void requestFollow(FollowRequestDto followRequestDto) {
-//        String followerEmail = followRequestDto.getFromEmail();
-//        String followingEmail = followRequestDto.getToEmail();
-//
+        String followerEmail = followRequestDto.getFromEmail();
+        String followingEmail = followRequestDto.getToEmail();
+
 //        User follower = userService.findByEmail(followerEmail);
+        User follower = userRepository.findByEmail(followerEmail)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+
 //        User following = userService.findByEmail(followingEmail);
-//        following(follower, following);
+        User following = userRepository.findByEmail(followingEmail)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        following(follower, following);
     }
 
     public void requestUnFollow(FollowRequestDto followRequestDto) {
-//        String followerEmail = followRequestDto.getFromEmail();
-//        String followingEmail = followRequestDto.getToEmail();
+        String followerEmail = followRequestDto.getFromEmail();
+        String followingEmail = followRequestDto.getToEmail();
 //
 //        User follower = userService.findByEmail(followerEmail);
+        User follower = userRepository.findByEmail(followerEmail)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
 //        User following = userService.findByEmail(followingEmail);
-//
-//        Long followId = getFollowIdByFollowerAndFollowing(follower, following);
-//
-//        followRepository.deleteById(followId);
+
+        User following = userRepository.findByEmail(followingEmail)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+
+        Long followId = getFollowIdByFollowerAndFollowing(follower, following);
+
+        followRepository.deleteById(followId);
     }
 }
