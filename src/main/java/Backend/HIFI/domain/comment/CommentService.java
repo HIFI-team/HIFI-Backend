@@ -1,8 +1,8 @@
 package Backend.HIFI.domain.comment;
 
 import Backend.HIFI.domain.comment.dto.CommentDto;
-import Backend.HIFI.domain.review.Review;
-import Backend.HIFI.domain.review.ReviewService;
+import Backend.HIFI.domain.review.entity.Review;
+import Backend.HIFI.domain.review.service.ReviewServiceImpl;
 import Backend.HIFI.domain.user.User;
 import Backend.HIFI.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
-    private final ReviewService reviewService;
+    private final ReviewServiceImpl reviewService;
 
 //    private final ModelMapper mapper;
 
@@ -24,7 +24,7 @@ public class CommentService {
     @Transactional
     public CommentDto comment(CommentDto dto){
         User user = userService.findByEmail(dto.getUser().getEmail());
-        Review review = reviewService.findReview(dto.getReview().getId());
+        Review review = reviewService.getReview(dto.getReview().getId());
 
         Comment comment = null;
 

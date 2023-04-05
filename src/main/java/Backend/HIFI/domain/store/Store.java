@@ -1,7 +1,7 @@
 package Backend.HIFI.domain.store;
 
 import Backend.HIFI.global.common.entity.BaseEntity;
-import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.review.entity.Review;
 import lombok.*;
 
 import javax.persistence.*;

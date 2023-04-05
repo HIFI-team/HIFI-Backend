@@ -1,40 +1,37 @@
 package Backend.HIFI.domain.review;
 
-import Backend.HIFI.domain.auth.dto.UserMapDto;
 import Backend.HIFI.domain.comment.Comment;
-import Backend.HIFI.domain.comment.dto.CommentDto;
-import Backend.HIFI.domain.review.dto.ReviewDto;
-import Backend.HIFI.domain.review.dto.ReviewMapDto;
-import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.user.UserService;
+import Backend.HIFI.domain.review.dto.request.PostReviewDto;
+import Backend.HIFI.domain.review.dto.response.GetReviewDto;
+import Backend.HIFI.domain.review.entity.Review;
+import Backend.HIFI.domain.review.service.ReviewServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 //import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 @RequestMapping(value = "/review", produces = "application/json; charset=utf-8")
 @RequiredArgsConstructor
 public class ReviewController {
-    private final ReviewService reviewService;
-    private final UserService userService;
-//    private final ModelMapper mapper;
+    private final ReviewServiceImpl reviewService;
 
     /** 리뷰 등록 */
     @ApiOperation("리뷰 등록 요청")
     @PostMapping("/new")
-    public ResponseEntity<ReviewDto> create(@RequestBody ReviewDto dto){
-        return ResponseEntity.ok(reviewService.review(dto));
+    public ResponseEntity<GetReviewDto> postReview(@RequestBody PostReviewDto postReviewDto, @AuthenticationPrincipal String userId){
+        GetReviewDto getReviewDto = reviewService.postReview(postReviewDto, userId);
+        return ResponseEntity.ok(getReviewDto);
     }
 
     /**리뷰 삭제*/
@@ -51,7 +48,7 @@ public class ReviewController {
     public ResponseEntity<Map<String ,Object>> getComment(@PathVariable Long id, Authentication authentication){
         Map<String,Object> result= new HashMap<>();
 
-        Review review = reviewService.findReview(id);
+        Review review = reviewService.getReview(id);
 //        ReviewDto dto = mapper.map(review, ReviewDto.class);
 //        result.put("review",dto);
 

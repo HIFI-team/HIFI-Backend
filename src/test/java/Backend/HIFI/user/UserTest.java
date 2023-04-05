@@ -9,9 +9,8 @@ import Backend.HIFI.domain.user.UserRepository;
 import Backend.HIFI.domain.user.UserService;
 import Backend.HIFI.domain.user.follow.FollowRepository;
 import Backend.HIFI.domain.user.follow.FollowService;
-import Backend.HIFI.domain.user.dto.UserDto;
 import Backend.HIFI.domain.store.*;
-import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.review.repository.ReviewRepository;
 
 import org.junit.Test;

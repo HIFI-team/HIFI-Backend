@@ -1,4 +1,4 @@
-package Backend.HIFI.domain.review;
+package Backend.HIFI.domain.review.entity;
 
 import Backend.HIFI.domain.comment.Comment;
 import Backend.HIFI.global.common.entity.BaseTimeEntity;
@@ -14,8 +14,6 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Table
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class Review extends BaseTimeEntity {
     @Id
@@ -33,36 +31,31 @@ public class Review extends BaseTimeEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String content;
-    private String image;
+    private String imgSrc;
 
     @Column(columnDefinition = "int default 0")
     private int grade;
 
     @OneToMany(mappedBy = "review",cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments;
 
-//    @Column(columnDefinition = "int default 0")
-//    private int likes;
-//    @Column(columnDefinition = "int default 0")
-//    private int reports;
+    @Column(columnDefinition = "int default 0")
+    private int like;
+    @Column(columnDefinition = "int default 0")
+    private int disLike;
 
-
-    //==연관관계 매서드==//
-
-
-    //==비즈니스 로직==//
-    /**
-     * 리뷰 좋아요 및 신고 업데이트
-     * */
-//    public void increaseLikes(){
-//        this.likes+=1;
-//    }
-//    public void increaseReports(){
-//        this.reports+=1;
-//    }
-
+    @Builder
+    public Review(User user, Store store, String content, String imgSrc, int grade, List<Comment> comments, int like, int disLike) {
+        this.user = user;
+        this.store = store;
+        this.content = content;
+        this.imgSrc = imgSrc;
+        this.grade = grade;
+        this.comments = new ArrayList<>();
+        this.like = 0;
+        this.disLike = 0;
+    }
 
 }

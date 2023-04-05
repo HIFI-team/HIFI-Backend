@@ -1,6 +1,6 @@
 package Backend.HIFI.domain.user;
 
-import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.user.dto.UserDto;
 import Backend.HIFI.domain.user.search.Search;
 import Backend.HIFI.domain.user.dto.UserProfileDto;

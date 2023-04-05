@@ -8,7 +8,7 @@ import Backend.HIFI.domain.user.follow.FollowRepository;
 import Backend.HIFI.domain.user.search.SearchDto;
 import Backend.HIFI.domain.user.dto.UserDto;
 import Backend.HIFI.domain.user.follow.FollowService;
-import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.review.entity.Review;
 
 
 import io.swagger.annotations.ApiOperation;
