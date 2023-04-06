@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Table
 @NoArgsConstructor
 public class Review extends BaseTimeEntity {
@@ -23,7 +24,7 @@ public class Review extends BaseTimeEntity {
 
     @JsonIgnoreProperties({"reviewList"})
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @JsonIgnoreProperties({"reviews"})
@@ -38,7 +39,7 @@ public class Review extends BaseTimeEntity {
     @Column(columnDefinition = "int default 0")
     private int grade;
 
-    @OneToMany(mappedBy = "review",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @Column(columnDefinition = "int default 0")
@@ -58,4 +59,8 @@ public class Review extends BaseTimeEntity {
         this.disLike = 0;
     }
 
+    public void updateReview(String content, String imgSrc) {
+        this.content = content;
+        this.imgSrc = imgSrc;
+    }
 }

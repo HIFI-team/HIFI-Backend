@@ -1,6 +1,8 @@
 package Backend.HIFI.domain.review.service;
 
+import Backend.HIFI.domain.comment.dto.response.GetCommentDto;
 import Backend.HIFI.domain.review.dto.request.PostReviewDto;
+import Backend.HIFI.domain.review.dto.request.PutReviewDto;
 import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.review.dto.response.GetReviewDto;
 import Backend.HIFI.domain.review.repository.ReviewRepository;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,7 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     @Transactional
-    public GetReviewDto postReview(PostReviewDto postReviewDto, String userId) {
+    public GetReviewDto createReview(PostReviewDto postReviewDto, String userId) {
         User user = userService.findByEmail(userId);
         Store store = storeService.getStore(postReviewDto.getStoreId());
 
@@ -40,9 +43,6 @@ public class ReviewServiceImpl implements ReviewService {
                 .grade(postReviewDto.getGrade())
                 .build();
 
-//        store.getReviews().add(review);
-//        user.getReviewList().add(review);
-
         Review saveReview = reviewRepository.save(review);
 
         return new GetReviewDto(saveReview);
@@ -52,51 +52,57 @@ public class ReviewServiceImpl implements ReviewService {
      * 리뷰 조회
      */
     @Override
-    public Review getReview(Long reviewId) {
-        return reviewRepository.findById(reviewId)
+    public List<GetReviewDto> getReviews(Store store) {
+        List<Review> reviews = reviewRepository.findByStore(store);
+        List<GetReviewDto> getReviewDtos = new ArrayList<>();
+
+        for (Review review : reviews) {
+            GetReviewDto getReviewDto = new GetReviewDto(review);
+            getReviewDtos.add(getReviewDto);
+        }
+        return getReviewDtos;
+    }
+
+    /**
+     * 댓글 조회
+     */
+    @Override
+    public List<GetCommentDto> getComments(Long id) {
+        return null;
+    }
+
+    /**
+     * 리뷰 수정
+     */
+    @Override
+    @Transactional
+    public GetReviewDto updateReview(PutReviewDto putReviewDto, String userId) {
+        User user = userService.findByEmail(userId);
+
+        // TODO: Exception 생성 및 던짐
+        Review review = reviewRepository.findById(putReviewDto.getReviewId())
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
-    }
 
-    //    public List<Review> findReviews(){
-////        return reviewRepository.findAllByDelStatus();
-//    }
-    public List<Review> findReviewByUser(Long userId) {
-        User user = userService.findById(userId);
-        return reviewRepository.findByUser(user);
-    }
+        // TODO: 작성자 확인 로직 추가
 
-    public List<Review> findReviewByStore(Long storeId) {
-        Store store = storeService.getStore(storeId);
-        return reviewRepository.findByStore(store);
+        review.updateReview(putReviewDto.getContent(), putReviewDto.getImgSrc());
+        reviewRepository.save(review);
+        return new GetReviewDto(review);
     }
 
     /**
      * 리뷰 삭제
      */
+    @Override
     @Transactional
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(Long reviewId, String userId) {
+        User user = userService.findByEmail(userId);
 
+        // TODO: Exception 생성 및 던짐
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
-        //연관관계 끊어줌
-//        review.getStore().getReviews().remove(review);
-//        review.getUser().getReviewList().remove(review);
+
+        // TODO: 작성자 확인 로직 추가
         review.updateIsDeleted();
-    }
-
-    /**
-     * 리뷰 신고
-     */
-//    public ReviewRequestDto updateLikes(Long reviewId, Long userId) {
-//        Review review = reviewRepository.findById(reviewId)
-//                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
-//        review.increaseLikes();
-//        ReviewRequestDto dto= new ReviewRequestDto(review);
-//        return dto;
-//    }
-    public void updateReports(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
-        //review.increaseReports();
     }
 }
