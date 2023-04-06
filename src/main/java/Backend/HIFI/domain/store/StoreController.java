@@ -2,6 +2,8 @@ package Backend.HIFI.domain.store;
 
 import Backend.HIFI.domain.store.dto.StoreRequestDto;
 import Backend.HIFI.domain.store.dto.StoreResponseDto;
+import Backend.HIFI.domain.store.entity.Store;
+import Backend.HIFI.domain.store.service.StoreService;
 import Backend.HIFI.domain.user.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

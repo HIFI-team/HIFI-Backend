@@ -1,4 +1,4 @@
-package Backend.HIFI.domain.store;
+package Backend.HIFI.domain.store.entity;
 
 import Backend.HIFI.global.common.entity.BaseEntity;
 import Backend.HIFI.domain.review.entity.Review;

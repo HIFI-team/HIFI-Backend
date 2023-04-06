@@ -1,4 +1,4 @@
-package Backend.HIFI.domain.comment;
+package Backend.HIFI.domain.comment.entity;
 
 import Backend.HIFI.global.common.entity.BaseTimeEntity;
 import Backend.HIFI.domain.review.entity.Review;

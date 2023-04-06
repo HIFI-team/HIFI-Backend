@@ -1,6 +1,7 @@
 package Backend.HIFI.domain.comment;
 
 import Backend.HIFI.domain.comment.dto.CommentDto;
+import Backend.HIFI.domain.comment.service.CommentService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package Backend.HIFI.domain.store.dto;
 
-import Backend.HIFI.domain.store.Store;
+import Backend.HIFI.domain.store.entity.Store;
 import lombok.*;
 
 @Getter

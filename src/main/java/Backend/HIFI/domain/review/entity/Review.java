@@ -1,8 +1,8 @@
 package Backend.HIFI.domain.review.entity;
 
-import Backend.HIFI.domain.comment.Comment;
+import Backend.HIFI.domain.comment.entity.Comment;
 import Backend.HIFI.global.common.entity.BaseTimeEntity;
-import Backend.HIFI.domain.store.Store;
+import Backend.HIFI.domain.store.entity.Store;
 import Backend.HIFI.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

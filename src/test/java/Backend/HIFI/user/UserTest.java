@@ -4,12 +4,13 @@ package Backend.HIFI.user;
 
 
 
+import Backend.HIFI.domain.store.entity.Store;
+import Backend.HIFI.domain.store.repository.StoreRepository;
 import Backend.HIFI.domain.user.User;
 import Backend.HIFI.domain.user.UserRepository;
 import Backend.HIFI.domain.user.UserService;
 import Backend.HIFI.domain.user.follow.FollowRepository;
 import Backend.HIFI.domain.user.follow.FollowService;
-import Backend.HIFI.domain.store.*;
 import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.review.repository.ReviewRepository;
 

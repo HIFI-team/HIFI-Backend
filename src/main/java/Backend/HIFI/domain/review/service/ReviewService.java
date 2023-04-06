@@ -4,7 +4,7 @@ import Backend.HIFI.domain.comment.dto.response.GetCommentDto;
 import Backend.HIFI.domain.review.dto.request.PostReviewDto;
 import Backend.HIFI.domain.review.dto.request.PutReviewDto;
 import Backend.HIFI.domain.review.dto.response.GetReviewDto;
-import Backend.HIFI.domain.store.Store;
+import Backend.HIFI.domain.store.entity.Store;
 
 import java.util.List;
 

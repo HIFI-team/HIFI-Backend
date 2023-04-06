@@ -1,6 +1,8 @@
-package Backend.HIFI.domain.comment;
+package Backend.HIFI.domain.comment.service;
 
 import Backend.HIFI.domain.comment.dto.CommentDto;
+import Backend.HIFI.domain.comment.entity.Comment;
+import Backend.HIFI.domain.comment.repository.CommentRepository;
 import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.review.service.ReviewServiceImpl;
 import Backend.HIFI.domain.user.User;
@@ -24,12 +26,12 @@ public class CommentService {
     @Transactional
     public CommentDto comment(CommentDto dto){
         User user = userService.findByEmail(dto.getUser().getEmail());
-        Review review = reviewService.getReview(dto.getReview().getId());
+//        Review review = reviewService.getReview(dto.getReview().getId());
 
         Comment comment = null;
 
         //user.getComments().add(comment);
-        review.getComments().add(comment);
+//        review.getComments().add(comment);
         commentRepository.save(comment);
 
         return dto;
