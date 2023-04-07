@@ -1,8 +1,8 @@
-package Backend.HIFI.domain.user.service;
+package Backend.HIFI.domain.follow.service;
 
-import Backend.HIFI.domain.user.entity.Follow;
+import Backend.HIFI.domain.follow.entity.Follow;
 import Backend.HIFI.domain.user.entity.User;
-import Backend.HIFI.domain.user.repository.FollowRepository;
+import Backend.HIFI.domain.follow.repository.FollowRepository;
 import Backend.HIFI.domain.user.repository.UserRepository;
 import Backend.HIFI.domain.user.dto.FollowRequestDto;
 import lombok.RequiredArgsConstructor;

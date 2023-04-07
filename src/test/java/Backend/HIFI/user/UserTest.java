@@ -7,8 +7,8 @@
 //import Backend.HIFI.domain.user.entity.User;
 //import Backend.HIFI.domain.user.repository.UserRepository;
 //import Backend.HIFI.domain.user.service.UserService;
-//import Backend.HIFI.domain.user.repository.FollowRepository;
-//import Backend.HIFI.domain.user.service.FollowService;
+//import Backend.HIFI.domain.follow.repository.FollowRepository;
+//import Backend.HIFI.domain.follow.service.FollowService;
 //import Backend.HIFI.domain.user.dto.UserDto;
 //import Backend.HIFI.domain.store.*;
 //import Backend.HIFI.domain.review.Review;

@@ -6,17 +6,14 @@ import Backend.HIFI.domain.user.service.UserService;
 import Backend.HIFI.global.common.redis.RedisService;
 import Backend.HIFI.global.common.response.CommonApiResponse;
 import Backend.HIFI.domain.user.dto.UserProfileDto;
-import Backend.HIFI.domain.user.repository.FollowRepository;
-import Backend.HIFI.domain.user.dto.SearchDto;
-import Backend.HIFI.domain.user.service.FollowService;
-import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.follow.repository.FollowRepository;
+import Backend.HIFI.domain.follow.service.FollowService;
 
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -49,37 +46,6 @@ public class UserController {
         userProfileService.updateProfile(userProfileDto);
         return CommonApiResponse.of("프로필 업데이트 완료");
     }
-
-    @ApiOperation(value = "팔로우 요청")
-    @PostMapping("/follow")
-    public CommonApiResponse<String> followUser(@RequestBody FollowRequestDto followRequestDto) {
-        followService.requestFollow(followRequestDto);
-        return CommonApiResponse.of("팔로우 완료");
-    }
-
-    @ApiOperation(value = "언팔로우 요청")
-    @PostMapping("/unfollow")
-    public CommonApiResponse<String> unfollowUser(@RequestBody FollowRequestDto followRequestDto) {
-        followService.requestUnFollow(followRequestDto);
-        return CommonApiResponse.of("언팔로우 완료");
-    }
-
-
-//    @ApiOperation(value = "팔로우 리스트 요청")
-//    @PostMapping("/followList")
-//    public String followPage(@RequestBody String email, Authentication auth) {
-//        User user = userService.findByEmail(email);
-//
-//        // TODO 프로필 보이도록 코드 추가 해야함
-//        UserProfileDto userProfileDto = new UserProfileDto().toUserProfileDto(user);
-//
-//        // TODO 본인이 프로필 볼 때 + 비공개일때 고려해야 함
-//
-//        List<User> followerList = followService.getFollower(user);
-//        List<User> followingList = followService.getFollowing(user);
-//
-//        return "followerList = " + followerList + "\nfollowingList = " + followingList;
-//    }
 
 //
 //    @ApiOperation(value = "회원 탈퇴")

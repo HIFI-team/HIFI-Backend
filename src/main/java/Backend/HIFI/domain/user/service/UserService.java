@@ -1,21 +1,14 @@
 package Backend.HIFI.domain.user.service;
 
 import Backend.HIFI.domain.user.entity.User;
-import Backend.HIFI.domain.user.entity.UserProfile;
 import Backend.HIFI.domain.user.repository.UserRepository;
-import Backend.HIFI.domain.user.entity.Search;
-import Backend.HIFI.domain.user.dto.UserProfileDto;
-import Backend.HIFI.domain.user.entity.Follow;
-import Backend.HIFI.domain.user.repository.FollowRepository;
+import Backend.HIFI.domain.follow.entity.Follow;
+import Backend.HIFI.domain.follow.repository.FollowRepository;
 
-import Backend.HIFI.domain.user.dto.SearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
