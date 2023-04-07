@@ -1,4 +1,4 @@
-package Backend.HIFI.domain.user.search;
+package Backend.HIFI.domain.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

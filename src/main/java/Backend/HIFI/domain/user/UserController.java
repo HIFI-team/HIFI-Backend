@@ -1,13 +1,14 @@
 package Backend.HIFI.domain.user;
 
 import Backend.HIFI.domain.user.dto.FollowRequestDto;
+import Backend.HIFI.domain.user.service.UserProfileService;
+import Backend.HIFI.domain.user.service.UserService;
 import Backend.HIFI.global.common.redis.RedisService;
 import Backend.HIFI.global.common.response.CommonApiResponse;
 import Backend.HIFI.domain.user.dto.UserProfileDto;
-import Backend.HIFI.domain.user.follow.FollowRepository;
-import Backend.HIFI.domain.user.search.SearchDto;
-import Backend.HIFI.domain.user.dto.UserDto;
-import Backend.HIFI.domain.user.follow.FollowService;
+import Backend.HIFI.domain.user.repository.FollowRepository;
+import Backend.HIFI.domain.user.dto.SearchDto;
+import Backend.HIFI.domain.user.service.FollowService;
 import Backend.HIFI.domain.review.Review;
 
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserProfileService userProfileService;
     private final FollowService followService;
     private final FollowRepository followRepository;
     private final RedisService redisService;
@@ -30,20 +32,21 @@ public class UserController {
 
     @ApiOperation(value = "마이프로필 요청")
     @GetMapping("/profile")
-    public CommonApiResponse<UserDto> profilePage(Authentication auth) {
-        return CommonApiResponse.of(userService.getMyProfilePage(auth));
+    public CommonApiResponse<UserProfileDto> profilePage(Authentication auth) {
+        return CommonApiResponse.of(userProfileService.getMyProfilePage(auth));
     }
 
-    @ApiOperation(value = "프로필 요청")
-    @PostMapping("/profile")
-    public CommonApiResponse<UserDto> profilePage(@RequestBody String email, Authentication auth) {
-        return CommonApiResponse.of(userService.getProfilePage(auth, email));
-    }
+    // TODO Follow 분리 후 처리 필요
+//    @ApiOperation(value = "프로필 요청")
+//    @PostMapping("/profile")
+//    public CommonApiResponse<UserProfileDto> profilePage(@RequestBody String email, Authentication auth) {
+//        return CommonApiResponse.of(userProfileService.getProfilePage(auth, email));
+//    }
 
     @ApiOperation(value = "프로필 업데이트 요청")
     @PostMapping("/update")
     public CommonApiResponse<String> updateProfile(@RequestBody UserProfileDto userProfileDto) {
-        userService.updateProfile(userProfileDto);
+        userProfileService.updateProfile(userProfileDto);
         return CommonApiResponse.of("프로필 업데이트 완료");
     }
 
@@ -88,27 +91,30 @@ public class UserController {
 //        return user.getEmail() + " was deleted";
 //    }
 
-    @ApiOperation(value = "모든 유저 반환")
-    @GetMapping("/search")
-    public CommonApiResponse<List<UserProfileDto>> allUserSearch(Authentication auth) {
-        List<UserProfileDto> allUserList = userService.searchAllUser(auth);
-        return CommonApiResponse.of(allUserList);
-    }
+    // TODO Follow 분리후 처리 필요
+//    @ApiOperation(value = "모든 유저 반환")
+//    @GetMapping("/search")
+//    public CommonApiResponse<List<UserProfileDto>> allUserSearch(Authentication auth) {
+//        List<UserProfileDto> allUserProfileList = userProfileService.searchAllUserProfile(auth);
+//        return CommonApiResponse.of(allUserProfileList);
+//    }
 
-    @ApiOperation(value = "유저 검색")
-    @PostMapping("/search")
-    public CommonApiResponse<List<UserProfileDto>> setUserSearch(@RequestBody SearchDto searchDto, Authentication auth) {
-        List<UserProfileDto> searchUserProfileDtoList = userService.searchUserByName(auth, searchDto);
-        return CommonApiResponse.of(searchUserProfileDtoList);
-    }
+    // TODO Follow 분리 후 처리 필요
+//    @ApiOperation(value = "유저 검색")
+//    @PostMapping("/search")
+//    public CommonApiResponse<List<UserProfileDto>> setUserSearch(@RequestBody SearchDto searchDto, Authentication auth) {
+//        List<UserProfileDto> searchUserProfileDtoList = userProfileService.searchUserByName(auth, searchDto);
+//        return CommonApiResponse.of(searchUserProfileDtoList);
+//    }
 
-    @ApiOperation(value = "리뷰 리스트 반환")
-    @GetMapping("/review")
-    public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {
-        List<Review> reviewList = userService.getReviewListFromUser(auth);
-        return CommonApiResponse.of(reviewList);
+    // TODO Follow 분리 후 처리 필요
+//    @ApiOperation(value = "리뷰 리스트 반환")
+//    @GetMapping("/review")
+//    public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {
+//        List<Review> reviewList = userProfileService.getReviewListFromUser(auth);
+//        return CommonApiResponse.of(reviewList);
+//    }
 
-    }
 //    @GetMapping("/su")
 //    public CommonApiResponse<User> searchUserPage() {
 

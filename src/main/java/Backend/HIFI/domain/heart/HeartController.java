@@ -1,7 +1,7 @@
 package Backend.HIFI.domain.heart;
 
 import Backend.HIFI.domain.review.ReviewService;
-import Backend.HIFI.domain.user.UserService;
+import Backend.HIFI.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 //import org.modelmapper.ModelMapper;
@@ -9,9 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller

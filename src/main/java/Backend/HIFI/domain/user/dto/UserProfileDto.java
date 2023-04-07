@@ -1,6 +1,6 @@
 package Backend.HIFI.domain.user.dto;
 
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,15 +19,18 @@ public class UserProfileDto {
     private Boolean anonymous;
     private Boolean followed;
 
-    public UserProfileDto of(User user) {
+    private int follower;
+    private int following;
+
+    public UserProfileDto of(UserProfile userProfile) {
         // 비공개 유저 처리 해야함
         // 얼마나 비공개 할 것인지?
         return UserProfileDto.builder()
-                .email(user.getEmail())
-                .name(user.getName())
-                .description(user.getDescription())
-                .image(user.getImage())
-                .anonymous(user.getAnonymous())
+                .email(userProfile.getEmail())
+                .name(userProfile.getName())
+                .description(userProfile.getDescription())
+                .image(userProfile.getImage())
+                .anonymous(userProfile.getAnonymous())
                 .build();
     }
 }

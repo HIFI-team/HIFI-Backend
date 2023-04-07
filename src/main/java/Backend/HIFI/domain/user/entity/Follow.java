@@ -1,6 +1,6 @@
-package Backend.HIFI.domain.user.follow;
+package Backend.HIFI.domain.user.entity;
 
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

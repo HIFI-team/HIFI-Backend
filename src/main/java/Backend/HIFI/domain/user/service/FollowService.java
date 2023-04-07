@@ -1,8 +1,9 @@
-package Backend.HIFI.domain.user.follow;
+package Backend.HIFI.domain.user.service;
 
-import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.user.UserRepository;
-import Backend.HIFI.domain.user.UserService;
+import Backend.HIFI.domain.user.entity.Follow;
+import Backend.HIFI.domain.user.entity.User;
+import Backend.HIFI.domain.user.repository.FollowRepository;
+import Backend.HIFI.domain.user.repository.UserRepository;
 import Backend.HIFI.domain.user.dto.FollowRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

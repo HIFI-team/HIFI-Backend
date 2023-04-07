@@ -103,7 +103,7 @@ public class JwtTokenProvider {
     /** Jwt 토큰 생성
      * @param user 인증 요청하는 유저 정보
      */
-    public TokenResponseDto generateSocialToken(Backend.HIFI.domain.user.User user)
+    public TokenResponseDto generateSocialToken(Backend.HIFI.domain.user.entity.User user)
             throws HttpServerErrorException.InternalServerError {
         JwtDto jwtDto = new JwtDto(user);
         //권한 가져오기

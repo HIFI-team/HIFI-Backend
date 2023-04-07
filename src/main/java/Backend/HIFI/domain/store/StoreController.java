@@ -1,13 +1,8 @@
 package Backend.HIFI.domain.store;
 
-import Backend.HIFI.domain.auth.dto.UserMapDto;
-import Backend.HIFI.domain.review.Review;
-import Backend.HIFI.domain.review.dto.ReviewDto;
-import Backend.HIFI.domain.store.dto.StoreMapDto;
 import Backend.HIFI.domain.store.dto.StoreRequestDto;
 import Backend.HIFI.domain.store.dto.StoreResponseDto;
-import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.user.UserService;
+import Backend.HIFI.domain.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller

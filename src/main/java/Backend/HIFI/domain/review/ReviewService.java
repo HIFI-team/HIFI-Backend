@@ -4,8 +4,8 @@ import Backend.HIFI.domain.review.dto.ReviewDto;
 import Backend.HIFI.domain.review.repository.ReviewRepository;
 import Backend.HIFI.domain.store.Store;
 import Backend.HIFI.domain.store.StoreService;
-import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.user.UserService;
+import Backend.HIFI.domain.user.entity.User;
+import Backend.HIFI.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 //import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -52,14 +52,16 @@ public class ReviewService {
 //    public List<Review> findReviews(){
 ////        return reviewRepository.findAllByDelStatus();
 //    }
-    public List<Review> findReviewByUser(Long userId){
-        User user=userService.findById(userId);
-        return reviewRepository.findByUser(user);
-    }
-    public List<Review>findReviewByStore(Long storeId){
-        Store store=storeService.getStore(storeId);
-        return reviewRepository.findByStore(store);
-    }
+
+    // TODO
+//    public List<Review> findReviewByUser(Long userId){
+//        User user=userService.findById(userId);
+//        return reviewRepository.findByUser(user);
+//    }
+//    public List<Review>findReviewByStore(Long storeId){
+//        Store store=storeService.getStore(storeId);
+//        return reviewRepository.findByStore(store);
+//    }
 
     /**
      * 리뷰 삭제

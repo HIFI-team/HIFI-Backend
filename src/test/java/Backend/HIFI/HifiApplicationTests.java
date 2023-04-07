@@ -1,6 +1,6 @@
 package Backend.HIFI;
 
-import Backend.HIFI.domain.user.UserRepository;
+import Backend.HIFI.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

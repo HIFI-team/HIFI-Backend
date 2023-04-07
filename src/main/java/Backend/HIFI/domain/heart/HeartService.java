@@ -1,7 +1,7 @@
 package Backend.HIFI.domain.heart;
 
 import Backend.HIFI.domain.review.Review;
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

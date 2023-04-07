@@ -1,6 +1,6 @@
 package Backend.HIFI.domain.auth.dto;
 
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.user.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

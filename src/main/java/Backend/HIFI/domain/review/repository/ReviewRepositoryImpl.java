@@ -3,7 +3,7 @@
 //import Backend.HIFI.global.common.DeleteStatus;
 //import Backend.HIFI.domain.review.Review;
 //import Backend.HIFI.domain.store.Store;
-//import Backend.HIFI.domain.user.User;
+//import Backend.HIFI.domain.user.entity.User;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
 //import lombok.RequiredArgsConstructor;
 //

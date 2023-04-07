@@ -1,5 +1,6 @@
-package Backend.HIFI.domain.user;
+package Backend.HIFI.domain.user.repository;
 
+import Backend.HIFI.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

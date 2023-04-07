@@ -1,6 +1,6 @@
 package Backend.HIFI.domain.auth.jwt;
 
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.User;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

@@ -1,7 +1,7 @@
 package Backend.HIFI.domain.auth.security;
 
-import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.user.UserRepository;
+import Backend.HIFI.domain.user.entity.User;
+import Backend.HIFI.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

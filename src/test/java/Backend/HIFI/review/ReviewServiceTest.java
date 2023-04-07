@@ -6,18 +6,15 @@ import Backend.HIFI.domain.review.repository.ReviewRepository;
 import Backend.HIFI.domain.store.Store;
 import Backend.HIFI.domain.store.StoreRepository;
 import Backend.HIFI.domain.store.StoreService;
-import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.user.UserRepository;
+import Backend.HIFI.domain.user.entity.User;
+import Backend.HIFI.domain.user.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

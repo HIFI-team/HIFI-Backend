@@ -2,7 +2,7 @@ package Backend.HIFI.domain.review.repository;
 
 import Backend.HIFI.domain.review.Review;
 import Backend.HIFI.domain.store.Store;
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.User;
 
 import java.util.List;
 

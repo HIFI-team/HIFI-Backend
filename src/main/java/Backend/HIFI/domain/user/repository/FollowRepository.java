@@ -1,6 +1,7 @@
-package Backend.HIFI.domain.user.follow;
+package Backend.HIFI.domain.user.repository;
 
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.Follow;
+import Backend.HIFI.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
