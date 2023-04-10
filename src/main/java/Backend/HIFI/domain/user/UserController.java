@@ -1,6 +1,5 @@
 package Backend.HIFI.domain.user;
 
-import Backend.HIFI.domain.user.dto.FollowRequestDto;
 import Backend.HIFI.domain.user.service.UserProfileService;
 import Backend.HIFI.domain.user.service.UserService;
 import Backend.HIFI.global.common.redis.RedisService;

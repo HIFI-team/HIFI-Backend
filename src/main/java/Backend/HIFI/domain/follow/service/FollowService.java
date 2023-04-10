@@ -4,7 +4,7 @@ import Backend.HIFI.domain.follow.entity.Follow;
 import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.follow.repository.FollowRepository;
 import Backend.HIFI.domain.user.repository.UserRepository;
-import Backend.HIFI.domain.user.dto.FollowRequestDto;
+import Backend.HIFI.domain.follow.dto.FollowRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

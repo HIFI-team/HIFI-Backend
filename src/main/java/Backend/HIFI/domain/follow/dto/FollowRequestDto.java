@@ -1,4 +1,4 @@
-package Backend.HIFI.domain.user.dto;
+package Backend.HIFI.domain.follow.dto;
 
 import lombok.*;
 

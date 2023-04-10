@@ -21,7 +21,7 @@ public class Search {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile = new UserProfile();
 
 }

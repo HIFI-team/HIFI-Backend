@@ -1,7 +1,7 @@
 package Backend.HIFI.domain.follow;
 
 import Backend.HIFI.domain.follow.service.FollowService;
-import Backend.HIFI.domain.user.dto.FollowRequestDto;
+import Backend.HIFI.domain.follow.dto.FollowRequestDto;
 import Backend.HIFI.global.common.response.CommonApiResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
