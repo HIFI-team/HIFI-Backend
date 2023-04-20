@@ -21,6 +21,7 @@
 ## 📝 ERD
 ![image](https://user-images.githubusercontent.com/62806067/233277252-8b3bc913-9c2d-434d-ad9b-f593c07bb900.png)
 
+- 리팩토링 테스트 기간 : dev 브랜치 배포
 
 <br/>
 
