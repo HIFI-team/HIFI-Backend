@@ -1,7 +1,6 @@
-# 🍝 HIFI-Backend
----
+# 🍝 HongEat-Backend
 
-홍대 근처 맛집 한줄 리뷰 서비스 HIFI
+홍대 근처 맛집 한줄 리뷰 서비스 HongEat
 
 <br/>
 
@@ -14,13 +13,13 @@
 <br/>
 
 ## 🏛 Architecture Diagram
-<img width="1000" alt="hifiapp 다이어그램" src="https://user-images.githubusercontent.com/72291860/183354099-18137a55-9c37-4aa8-8726-c5de1fd4487c.png">
+![hongeat](https://user-images.githubusercontent.com/62806067/233274255-b76769e2-cd2a-4cdd-af97-1e0ece3b66a4.png)
+
 
 <br/>
 
 ## 📝 ERD
-
-![Untitled](https://user-images.githubusercontent.com/72291860/183356797-1f1d46dd-6159-4481-95e5-2fd22aee1795.png)
+![image](https://user-images.githubusercontent.com/62806067/233272835-b7407946-3ef3-44b4-abeb-07b1870b236f.png)
 
 
 <br/>
@@ -31,7 +30,7 @@
     <tr align="center">
         <td><B>DevOps/Backend<B></td>
         <td><B>Backend<B></td>
-        <td><B>Backend<B></td>
+        <td><B>DevOps/Backend<B></td>
     </tr>
     <tr align="center">
         <td><B>노경민<B></td>
