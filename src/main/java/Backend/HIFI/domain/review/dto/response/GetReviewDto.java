@@ -1,8 +1,6 @@
 package Backend.HIFI.domain.review.dto.response;
 
 import Backend.HIFI.domain.auth.dto.UserMapDto;
-import Backend.HIFI.domain.review.entity.Review;
-import Backend.HIFI.domain.store.dto.StoreMapDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,20 +9,25 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class GetReviewDto {
     private Long id;
-    private String content;
     private UserMapDto user;
-    private StoreMapDto store;
+    private Long storeId;
+    private String content;
+    private String imgUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private int grade;
+    private int like;
 
-    public GetReviewDto (Review review) {
-        this.id = review.getId();
-        this.content = review.getContent();
-//        this.user = review.getUser();
-//        this.store = review.getStore()
-        this.createdAt = review.getCreatedAt();
-        this.updatedAt = review.getUpdatedAt();
-        this.grade = review.getGrade();
+    @Builder
+    public GetReviewDto(Long id, UserMapDto user, Long storeId, String content, String imgUrl, LocalDateTime createdAt, LocalDateTime updatedAt, int grade, int like) {
+        this.id = id;
+//        this.user = user;
+        this.storeId = storeId;
+        this.content = content;
+        this.imgUrl = imgUrl;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.grade = grade;
+        this.like = like;
     }
 }

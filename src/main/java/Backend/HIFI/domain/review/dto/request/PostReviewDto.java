@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PostReviewDto {
-    @ApiModelProperty(value = "스토어 번호", example = "1")
-    long storeId;
     @ApiModelProperty(value = "리뷰 내용", example = "맛있었어요")
     String content;
     @ApiModelProperty(value = "이미지 주소", example = "")
