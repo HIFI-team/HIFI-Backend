@@ -1,7 +1,7 @@
 package Backend.HIFI.domain.user.dto;
 
 import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.review.entity.Review;
 import lombok.*;
 
 import java.util.ArrayList;

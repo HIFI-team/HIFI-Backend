@@ -1,7 +1,9 @@
-package Backend.HIFI.domain.store;
+package Backend.HIFI.domain.store.service;
 
+import Backend.HIFI.domain.store.repository.StoreRepository;
 import Backend.HIFI.domain.store.dto.StoreRequestDto;
 import Backend.HIFI.domain.store.dto.StoreResponseDto;
+import Backend.HIFI.domain.store.entity.Store;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

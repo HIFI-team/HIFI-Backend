@@ -1,5 +1,6 @@
-package Backend.HIFI.domain.store;
+package Backend.HIFI.domain.store.repository;
 
+import Backend.HIFI.domain.store.entity.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

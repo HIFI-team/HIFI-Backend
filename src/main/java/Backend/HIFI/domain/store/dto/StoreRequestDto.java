@@ -1,7 +1,7 @@
 package Backend.HIFI.domain.store.dto;
 
-import Backend.HIFI.domain.store.Store;
-import Backend.HIFI.domain.store.StoreCategoryCode;
+import Backend.HIFI.domain.store.entity.Store;
+import Backend.HIFI.domain.store.entity.StoreCategoryCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

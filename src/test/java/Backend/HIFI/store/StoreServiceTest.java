@@ -1,9 +1,9 @@
 package Backend.HIFI.store;
 
-import Backend.HIFI.domain.store.Store;
-import Backend.HIFI.domain.store.StoreCategoryCode;
-import Backend.HIFI.domain.store.StoreRepository;
-import Backend.HIFI.domain.store.StoreService;
+import Backend.HIFI.domain.store.entity.Store;
+import Backend.HIFI.domain.store.entity.StoreCategoryCode;
+import Backend.HIFI.domain.store.repository.StoreRepository;
+import Backend.HIFI.domain.store.service.StoreService;
 import Backend.HIFI.domain.store.dto.StoreRequestDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
