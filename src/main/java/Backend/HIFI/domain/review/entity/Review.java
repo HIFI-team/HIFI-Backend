@@ -33,7 +33,7 @@ public class Review extends BaseTimeEntity {
     private int grade;
 
     @Column(columnDefinition = "int default 0")
-    private int like;
+    private int likes;
 
     @Builder
     public Review(User user, Store store, String content, String imgSrc, int grade) {
@@ -42,7 +42,7 @@ public class Review extends BaseTimeEntity {
         this.content = content;
         this.imgSrc = imgSrc;
         this.grade = grade;
-        this.like = 0;
+        this.likes = 0;
     }
 
     public void updateReview(String content, String imgSrc) {

@@ -109,7 +109,7 @@ public class UserService {
 
         // 리뷰 테스트
         for (Review review : reviewList) {
-            System.out.println(review.getImage());
+//            System.out.println(review.getImage());
         }
 
         return reviewList;

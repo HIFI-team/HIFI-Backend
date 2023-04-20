@@ -50,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .content(saveReview.getContent())
                 .imgUrl(saveReview.getImgSrc())
                 .grade(saveReview.getGrade())
-                .like(saveReview.getLike())
+                .like(saveReview.getLikes())
                 .createdAt(saveReview.getCreatedAt())
                 .updatedAt(saveReview.getUpdatedAt())
                 .build();
@@ -74,7 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
                     .content(review.getContent())
                     .imgUrl(review.getImgSrc())
                     .grade(review.getGrade())
-                    .like(review.getLike())
+                    .like(review.getLikes())
                     .createdAt(review.getCreatedAt())
                     .updatedAt(review.getUpdatedAt())
 
@@ -109,7 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .content(saveReview.getContent())
                 .imgUrl(saveReview.getImgSrc())
                 .grade(saveReview.getGrade())
-                .like(saveReview.getLike())
+                .like(saveReview.getLikes())
                 .createdAt(saveReview.getCreatedAt())
                 .updatedAt(saveReview.getUpdatedAt())
                 .build();
