@@ -1,6 +1,5 @@
 package Backend.HIFI.domain.review;
 
-import Backend.HIFI.domain.comment.dto.response.GetCommentDto;
 import Backend.HIFI.domain.review.dto.request.PostReviewDto;
 import Backend.HIFI.domain.review.dto.request.PutReviewDto;
 import Backend.HIFI.domain.review.dto.response.GetReviewDto;
@@ -18,43 +17,51 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/review")
+@RequestMapping(value = "stores/{storeId}/reviews")
 @RequiredArgsConstructor
 @Api(tags = "리뷰")
 public class ReviewController {
     private final ReviewServiceImpl reviewService;
 
-    /** 리뷰 등록 */
-    @PostMapping("/new")
+    /**
+     * 리뷰 조회
+     */
+    @GetMapping("/")
+    @Operation(summary = "리뷰 조회 요청", description = "리뷰 조회 요청 API 입니다.")
+    public ResponseEntity<List<GetReviewDto>> getReviews(@PathVariable("storeId") Long storeId) {
+        List<GetReviewDto> reviews = reviewService.getReviews(storeId);
+        return ResponseEntity.ok(reviews);
+    }
+
+
+    /**
+     * 리뷰 등록
+     */
+    @PostMapping("/")
     @Operation(summary = "리뷰 등록 요청", description = "리뷰 등록 요청 API 입니다.")
-    public ResponseEntity<GetReviewDto> postReview(@RequestBody PostReviewDto postReviewDto, @AuthenticationPrincipal String userId){
-        GetReviewDto getReviewDto = reviewService.createReview(postReviewDto, userId);
+    public ResponseEntity<GetReviewDto> postReview(@PathVariable("storeId") Long storeId, @RequestBody PostReviewDto postReviewDto, @AuthenticationPrincipal String userId) {
+        GetReviewDto getReviewDto = reviewService.createReview(storeId, postReviewDto, userId);
         return ResponseEntity.ok(getReviewDto);
     }
 
-    /** 리뷰 수정 */
-    @PostMapping("/update")
+    /**
+     * 리뷰 수정
+     */
+    @PostMapping("/{id}")
     @Operation(summary = "리뷰 수정 요청", description = "리뷰 수정 요청 API 입니다.")
-    public ResponseEntity<GetReviewDto> updateReview(@RequestBody PutReviewDto putReviewDto, @AuthenticationPrincipal String userId){
-        GetReviewDto getReviewDto = reviewService.updateReview(putReviewDto,userId);
+    public ResponseEntity<GetReviewDto> updateReview(@PathVariable("storeId") Long storeId,@PathVariable("id") Long id, @RequestBody PutReviewDto putReviewDto, @AuthenticationPrincipal String userId) {
+        GetReviewDto getReviewDto = reviewService.updateReview(storeId, id, putReviewDto, userId);
         return ResponseEntity.ok(getReviewDto);
     }
 
 
-    /**리뷰 삭제*/
-    @DeleteMapping("/delete/{id}")
+    /**
+     * 리뷰 삭제
+     */
+    @DeleteMapping("/{id}")
     @Operation(summary = "리뷰 삭제 요청", description = "리뷰 삭제 요청 API 입니다.")
-    public ResponseEntity deleteReview(@PathVariable Long id, @AuthenticationPrincipal String userId){
-        reviewService.deleteReview(id, userId);
+    public ResponseEntity deleteReview(@PathVariable("storeId") Long storeId, @PathVariable Long id, @AuthenticationPrincipal String userId) {
+        reviewService.deleteReview(storeId, id, userId);
         return ResponseEntity.ok("success");
-    }
-
-    /**리뷰 댓글 요청*/
-    @GetMapping("/{id}")
-    @Operation(summary = "리뷰 댓글 보기 요청", description = "리뷰 댓글 보기 요청 API 입니다.")
-    public ResponseEntity<List<GetCommentDto>> getComments(@PathVariable Long id){
-        List<GetCommentDto> getCommentDtos = reviewService.getComments(id);
-
-        return ResponseEntity.ok(getCommentDtos);
     }
 }
