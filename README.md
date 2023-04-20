@@ -19,7 +19,7 @@
 <br/>
 
 ## 📝 ERD
-![image](https://user-images.githubusercontent.com/62806067/233272835-b7407946-3ef3-44b4-abeb-07b1870b236f.png)
+![image](https://user-images.githubusercontent.com/62806067/233277252-8b3bc913-9c2d-434d-ad9b-f593c07bb900.png)
 
 
 <br/>
