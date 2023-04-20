@@ -1,15 +1,14 @@
 package Backend.HIFI.domain.review.service;
 
-import Backend.HIFI.domain.comment.dto.response.GetCommentDto;
 import Backend.HIFI.domain.review.dto.request.PostReviewDto;
 import Backend.HIFI.domain.review.dto.request.PutReviewDto;
 import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.review.dto.response.GetReviewDto;
 import Backend.HIFI.domain.review.repository.ReviewRepository;
 import Backend.HIFI.domain.store.entity.Store;
-import Backend.HIFI.domain.store.service.StoreService;
+import Backend.HIFI.domain.store.repository.StoreRepository;
 import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.user.UserService;
+import Backend.HIFI.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,17 +21,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
-    private final UserService userService;
-    private final StoreService storeService;
-
+    private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
     /**
      * 리뷰 등록
      */
     @Override
     @Transactional
-    public GetReviewDto createReview(PostReviewDto postReviewDto, String userId) {
-        User user = userService.findByEmail(userId);
-        Store store = storeService.getStore(postReviewDto.getStoreId());
+    public GetReviewDto createReview(Long storeId, PostReviewDto postReviewDto, String userId) {
+        User user = userRepository.findByEmail(userId).orElseThrow();
+        Store store = storeRepository.findById(storeId).orElseThrow();
 
         /**toEntity*/
         Review review = Review.builder()
@@ -45,49 +43,76 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review saveReview = reviewRepository.save(review);
 
-        return new GetReviewDto(saveReview);
+        return GetReviewDto.builder()
+                .id(saveReview.getId())
+//                .user()
+                .storeId(saveReview.getStore().getId())
+                .content(saveReview.getContent())
+                .imgUrl(saveReview.getImgSrc())
+                .grade(saveReview.getGrade())
+                .like(saveReview.getLike())
+                .createdAt(saveReview.getCreatedAt())
+                .updatedAt(saveReview.getUpdatedAt())
+                .build();
+
     }
 
     /**
      * 리뷰 조회
      */
     @Override
-    public List<GetReviewDto> getReviews(Store store) {
+    public List<GetReviewDto> getReviews(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow();
         List<Review> reviews = reviewRepository.findByStore(store);
         List<GetReviewDto> getReviewDtos = new ArrayList<>();
 
         for (Review review : reviews) {
-            GetReviewDto getReviewDto = new GetReviewDto(review);
+            GetReviewDto getReviewDto = GetReviewDto.builder()
+                    .id(review.getId())
+//                .user()
+                    .storeId(review.getStore().getId())
+                    .content(review.getContent())
+                    .imgUrl(review.getImgSrc())
+                    .grade(review.getGrade())
+                    .like(review.getLike())
+                    .createdAt(review.getCreatedAt())
+                    .updatedAt(review.getUpdatedAt())
+
+                    .build();
             getReviewDtos.add(getReviewDto);
         }
         return getReviewDtos;
     }
 
-    /**
-     * 댓글 조회
-     */
-    @Override
-    public List<GetCommentDto> getComments(Long id) {
-        return null;
-    }
 
     /**
      * 리뷰 수정
      */
     @Override
     @Transactional
-    public GetReviewDto updateReview(PutReviewDto putReviewDto, String userId) {
-        User user = userService.findByEmail(userId);
+    public GetReviewDto updateReview(Long storeId, Long id, PutReviewDto putReviewDto, String userId) {
+        User user = userRepository.findByEmail(userId).orElseThrow();
 
         // TODO: Exception 생성 및 던짐
-        Review review = reviewRepository.findById(putReviewDto.getReviewId())
+        Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
 
         // TODO: 작성자 확인 로직 추가
 
         review.updateReview(putReviewDto.getContent(), putReviewDto.getImgSrc());
-        reviewRepository.save(review);
-        return new GetReviewDto(review);
+        Review saveReview = reviewRepository.save(review);
+
+        return GetReviewDto.builder()
+                .id(saveReview.getId())
+//                .user()
+                .storeId(saveReview.getStore().getId())
+                .content(saveReview.getContent())
+                .imgUrl(saveReview.getImgSrc())
+                .grade(saveReview.getGrade())
+                .like(saveReview.getLike())
+                .createdAt(saveReview.getCreatedAt())
+                .updatedAt(saveReview.getUpdatedAt())
+                .build();
     }
 
     /**
@@ -95,11 +120,11 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     @Transactional
-    public void deleteReview(Long reviewId, String userId) {
-        User user = userService.findByEmail(userId);
+    public void deleteReview(Long storeId, Long id, String userId) {
+        User user = userRepository.findByEmail(userId).orElseThrow();
 
         // TODO: Exception 생성 및 던짐
-        Review review = reviewRepository.findById(reviewId)
+        Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
 
         // TODO: 작성자 확인 로직 추가
