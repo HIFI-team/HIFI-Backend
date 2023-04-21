@@ -6,7 +6,7 @@ import javax.persistence.*;
 /** 상속받으면 sofe delete 수행됩니다 .*/
 @MappedSuperclass
 @Getter
-public class BaseEntity {
+public class BaseEntity extends BaseTimeEntity {
     @Column(columnDefinition = "boolean default false")
     private boolean isDeleted;
 

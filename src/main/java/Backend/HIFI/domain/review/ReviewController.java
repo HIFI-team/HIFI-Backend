@@ -3,7 +3,7 @@ package Backend.HIFI.domain.review;
 import Backend.HIFI.domain.review.dto.request.PostReviewDto;
 import Backend.HIFI.domain.review.dto.request.PutReviewDto;
 import Backend.HIFI.domain.review.dto.response.GetReviewDto;
-import Backend.HIFI.domain.review.service.ReviewServiceImpl;
+import Backend.HIFI.domain.review.service.ReviewService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Api(tags = "리뷰")
 public class ReviewController {
-    private final ReviewServiceImpl reviewService;
+    private final ReviewService reviewService;
 
     /**
      * 리뷰 조회

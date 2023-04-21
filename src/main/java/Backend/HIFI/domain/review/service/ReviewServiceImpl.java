@@ -23,6 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
+
     /**
      * 리뷰 등록
      */
@@ -43,18 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review saveReview = reviewRepository.save(review);
 
-        return GetReviewDto.builder()
-                .id(saveReview.getId())
-//                .user()
-                .storeId(saveReview.getStore().getId())
-                .content(saveReview.getContent())
-                .imgUrl(saveReview.getImgSrc())
-                .grade(saveReview.getGrade())
-                .like(saveReview.getLikes())
-                .createdAt(saveReview.getCreatedAt())
-                .updatedAt(saveReview.getUpdatedAt())
-                .build();
-
+        return GetReviewDto.toEntity(saveReview);
     }
 
     /**
@@ -67,18 +57,7 @@ public class ReviewServiceImpl implements ReviewService {
         List<GetReviewDto> getReviewDtos = new ArrayList<>();
 
         for (Review review : reviews) {
-            GetReviewDto getReviewDto = GetReviewDto.builder()
-                    .id(review.getId())
-//                .user()
-                    .storeId(review.getStore().getId())
-                    .content(review.getContent())
-                    .imgUrl(review.getImgSrc())
-                    .grade(review.getGrade())
-                    .like(review.getLikes())
-                    .createdAt(review.getCreatedAt())
-                    .updatedAt(review.getUpdatedAt())
-
-                    .build();
+            GetReviewDto getReviewDto = GetReviewDto.toEntity(review);
             getReviewDtos.add(getReviewDto);
         }
         return getReviewDtos;
@@ -102,17 +81,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.updateReview(putReviewDto.getContent(), putReviewDto.getImgSrc());
         Review saveReview = reviewRepository.save(review);
 
-        return GetReviewDto.builder()
-                .id(saveReview.getId())
-//                .user()
-                .storeId(saveReview.getStore().getId())
-                .content(saveReview.getContent())
-                .imgUrl(saveReview.getImgSrc())
-                .grade(saveReview.getGrade())
-                .like(saveReview.getLikes())
-                .createdAt(saveReview.getCreatedAt())
-                .updatedAt(saveReview.getUpdatedAt())
-                .build();
+        return GetReviewDto.toEntity(saveReview);
     }
 
     /**

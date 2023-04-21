@@ -1,52 +1,46 @@
 package Backend.HIFI.domain.store.entity;
 
 import Backend.HIFI.global.common.entity.BaseEntity;
-import Backend.HIFI.domain.review.entity.Review;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table
-@Getter @Setter
-@Builder
-@AllArgsConstructor
+@Table(name = "stores")
+@Getter
 @NoArgsConstructor
 public class Store extends BaseEntity {
     @Id
-    @Column(name="store_id")
+    @Column(name = "store_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String address_name;
+    private String address;
 
     @Column(nullable = false)
     private String name;
-    @Column(unique = true)
-    private String uid;
 
     @Enumerated(EnumType.STRING)
-    private StoreCategoryCode categoryCode;
+    private Category category;
 
-    private String img;
     private String description;
 
-    //트리거로 계산
     @Column(columnDefinition = "float default 0.0")
     private float grade;
 
-    @OneToMany(mappedBy = "store",cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<Review> reviews = new ArrayList<>();
+    private float latitude;
 
-    //==비즈니스 매서드==//
-    public void updateReviews(){
-        for (Review review:reviews) {
-            review.updateIsDeleted();
-        }
+    private float longitude;
+
+    @Builder
+    public Store(String address, String name, Category category, String description, float grade, float latitude, float longitude) {
+        this.address = address;
+        this.name = name;
+        this.category = category;
+        this.description = description;
+        this.grade = grade;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
-
 }

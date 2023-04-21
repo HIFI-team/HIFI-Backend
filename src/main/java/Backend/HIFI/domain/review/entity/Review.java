@@ -1,6 +1,6 @@
 package Backend.HIFI.domain.review.entity;
 
-import Backend.HIFI.global.common.entity.BaseTimeEntity;
+import Backend.HIFI.global.common.entity.BaseEntity;
 import Backend.HIFI.domain.store.entity.Store;
 import Backend.HIFI.domain.user.User;
 import lombok.*;
@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "reviews")
 @NoArgsConstructor
-public class Review extends BaseTimeEntity {
+public class Review extends BaseEntity {
     @Id
     @Column(name = "review_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -28,11 +28,14 @@ public class Comment extends BaseTimeEntity {
     @Column(nullable = true)
     private String content;
 
+    @Column(columnDefinition = "int default 0")
+    private int likes;
+
     @Builder
-    public Comment(Long id, User user, Review review, String content) {
-        this.id = id;
+    public Comment(User user, Review review, String content) {
         this.user = user;
         this.review = review;
         this.content = content;
+        this.likes = 0;
     }
 }
