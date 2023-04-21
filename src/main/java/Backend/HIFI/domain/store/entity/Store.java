@@ -22,7 +22,7 @@ public class Store extends BaseEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private CategoryCode categoryCode;
+    private Category category;
 
     private String description;
 
@@ -34,10 +34,10 @@ public class Store extends BaseEntity {
     private float longitude;
 
     @Builder
-    public Store(String address, String name, CategoryCode categoryCode, String description, float grade, float latitude, float longitude) {
+    public Store(String address, String name, Category category, String description, float grade, float latitude, float longitude) {
         this.address = address;
         this.name = name;
-        this.categoryCode = categoryCode;
+        this.category = category;
         this.description = description;
         this.grade = grade;
         this.latitude = latitude;

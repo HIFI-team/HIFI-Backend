@@ -1,7 +1,5 @@
 package Backend.HIFI.global.error;
 
-import Backend.HIFI.global.error.ErrorCode;
-import Backend.HIFI.global.error.ErrorResponse;
 import Backend.HIFI.global.error.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,17 +9,22 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 
-/** 전역 예외 처리를 하기 위한 핸들러 입니다
- * @author gengminy (220812) */
+/**
+ * 전역 예외 처리를 하기 위한 핸들러 입니다
+ *
+ * @author gengminy (220812)
+ */
 @Slf4j
 @RestControllerAdvice
 public class ExceptionAdvice {
     /**
-     *  HIFI 비즈니스 로직 익셉션 처리하는 핸들러
+     * HongEat 비즈니스 로직 익셉션 처리하는 핸들러
      */
     @ExceptionHandler
     protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
@@ -32,9 +35,9 @@ public class ExceptionAdvice {
     }
 
     /**
-     *  javax.validation.Valid or @Validated 으로 binding error 발생시 발생한다.
-     *  HttpMessageConverter 에서 등록한 HttpMessageConverter binding 못할경우 발생
-     *  주로 @RequestBody, @RequestPart 어노테이션에서 발생
+     * javax.validation.Valid or @Validated 으로 binding error 발생시 발생한다.
+     * HttpMessageConverter 에서 등록한 HttpMessageConverter binding 못할경우 발생
+     * 주로 @RequestBody, @RequestPart 어노테이션에서 발생
      */
     @ExceptionHandler
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -42,18 +45,6 @@ public class ExceptionAdvice {
         final ErrorResponse response = ErrorResponse.of(ErrorCode.DUPLICATE_RESOURCE, e.getBindingResult());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-
-
-//    /**
-//     * enum type 일치하지 않아 binding 못할 경우 발생
-//     * 주로 @RequestParam enum으로 binding 못했을 경우 발생
-//     */
-//    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-//    protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-//        log.error("handleMethodArgumentTypeMismatchException", e);
-//        final ErrorResponse response = ErrorResponse.of(();
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//    }
 
     /**
      * 지원하지 않은 HTTP method 호출 할 경우 발생
@@ -83,6 +74,19 @@ public class ExceptionAdvice {
         log.error("handleBadCredentialsException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.LOGIN_FAILED);
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
+     * Enum 값이 유효하지 않을 때
+     * */
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException constraintViolationException) {
+
+        constraintViolationException.getConstraintViolations().stream().peek(o -> log.error(o.getMessage()));
+
+        final ErrorResponse response = ErrorResponse.of(ErrorCode._BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler

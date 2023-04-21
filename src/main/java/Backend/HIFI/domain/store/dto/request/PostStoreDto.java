@@ -1,6 +1,7 @@
 package Backend.HIFI.domain.store.dto.request;
 
-import Backend.HIFI.domain.store.entity.CategoryCode;
+import Backend.HIFI.domain.store.entity.Category;
+import Backend.HIFI.global.common.valid.EnumValid;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,8 @@ public class PostStoreDto {
     @ApiModelProperty(value = "가게 이름", example = "하이디라오")
     private String name;
     @ApiModelProperty(value = "가게 종류", example = "음식점")
-    //TODO: 변환 필요
-    private CategoryCode categoryCode;
+    @EnumValid
+    private Category category;
     @ApiModelProperty(value = "가게 설명", example = "일식집")
     private String description;
 
