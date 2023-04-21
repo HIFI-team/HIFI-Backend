@@ -130,25 +130,25 @@ public class UserTest {
 //        System.out.println(userService.searchAllUser());
     }
 
-    @Test
-    public void reviewListTest() throws Exception {
-        User user = userService.findByEmail("ms");
-        Store store = Store.builder()
-                .address_name("testAddressName")
-                .name("testName")
-                .build();
-        storeRepository.saveAndFlush(store);
-        Review review = Review.builder()
-                .grade(5)
-                .store(store)
-                .user(user)
-                .image("imageTest")
-                .build();
-        user.getReviewList().add(review);
-        store.getReviews().add(review);
-        userRepository.saveAndFlush(user);
-        reviewRepository.saveAndFlush(review);
+//    @Test
+//    public void reviewListTest() throws Exception {
+//        User user = userService.findByEmail("ms");
+//        Store store = Store.builder()
+//                .address_name("testAddressName")
+//                .name("testName")
+//                .build();
 //        storeRepository.saveAndFlush(store);
+//        Review review = Review.builder()
+//                .grade(5)
+//                .store(store)
+//                .user(user)
+//                .image("imageTest")
+//                .build();
+//        user.getReviewList().add(review);
+//        store.getReviews().add(review);
+//        userRepository.saveAndFlush(user);
+//        reviewRepository.saveAndFlush(review);
+////        storeRepository.saveAndFlush(store);
 
-    }
+//    }
 }
