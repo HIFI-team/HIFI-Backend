@@ -2,7 +2,7 @@ package Backend.HIFI.domain.store;
 
 import Backend.HIFI.domain.store.dto.request.PostStoreDto;
 import Backend.HIFI.domain.store.dto.response.GetStoreDto;
-import Backend.HIFI.domain.store.service.StoreServiceImpl;
+import Backend.HIFI.domain.store.service.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +18,11 @@ import java.util.List;
 @RequestMapping(value = "/stores")
 @RequiredArgsConstructor
 public class StoreController {
-    private final StoreServiceImpl storeService;
+    private final StoreService storeService;
 
     /**
      * 가게 등록
      */
-
     @PostMapping("/")
     @Operation(summary = "가게 등록 요청", description = "가게 등록 요청 API 입니다.")
     public ResponseEntity<GetStoreDto> createStore(@RequestBody PostStoreDto postStoreDto, @AuthenticationPrincipal String userId) {
