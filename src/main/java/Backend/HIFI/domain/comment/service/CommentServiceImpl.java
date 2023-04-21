@@ -39,12 +39,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment save = commentRepository.save(comment);
 
-        return GetCommentDto.builder()
-                .id(save.getId())
-//                .user()
-                .content(save.getContent())
-                .createdAt(save.getCreatedAt())
-                .build();
+        return GetCommentDto.toEntity(save);
     }
 
     @Override
@@ -53,16 +48,10 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> allByReview = commentRepository.findAllByReview(review);
 
         List<GetCommentDto> getCommentDtos = new ArrayList<>();
-        for(Comment comment : allByReview){
-            GetCommentDto getCommentDto = GetCommentDto.builder()
-                    .id(comment.getId())
-//                    .user()
-                    .content(comment.getContent())
-                    .createdAt(comment.getCreatedAt())
-                    .build();
+        for (Comment comment : allByReview) {
+            GetCommentDto getCommentDto = GetCommentDto.toEntity(comment);
             getCommentDtos.add(getCommentDto);
         }
-
         return getCommentDtos;
     }
 
