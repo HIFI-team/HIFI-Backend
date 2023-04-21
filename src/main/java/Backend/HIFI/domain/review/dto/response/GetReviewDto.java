@@ -1,6 +1,7 @@
 package Backend.HIFI.domain.review.dto.response;
 
 import Backend.HIFI.domain.auth.dto.UserMapDto;
+import Backend.HIFI.domain.review.entity.Review;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -29,5 +30,19 @@ public class GetReviewDto {
         this.updatedAt = updatedAt;
         this.grade = grade;
         this.like = like;
+    }
+
+    public static GetReviewDto toEntity(Review review){
+        return GetReviewDto.builder()
+                .id(review.getId())
+//                .user()
+                .storeId(review.getStore().getId())
+                .content(review.getContent())
+                .imgUrl(review.getImgSrc())
+                .grade(review.getGrade())
+                .like(review.getLikes())
+                .createdAt(review.getCreatedAt())
+                .updatedAt(review.getUpdatedAt())
+                .build();
     }
 }
