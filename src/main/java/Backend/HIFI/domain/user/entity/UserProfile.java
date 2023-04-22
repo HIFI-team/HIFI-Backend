@@ -20,11 +20,11 @@ public class UserProfile {
     @Column(name = "user_profile_id")
     private Long id;
 
-    @JoinColumn(name="user_name")
-    private String name;
+    @JoinColumn(name = "user_id")
+    private Long userId;
 
-    @JoinColumn(name = "user_email")
-    private String email;
+    @Column(name="user_profile_name")
+    private String name;
 
     @Column(name="user_profile_image")
     private String image;
@@ -36,9 +36,9 @@ public class UserProfile {
     @Builder.Default
     private Boolean anonymous = false;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<Search> searchList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    @Builder.Default
+//    private List<Search> searchList = new ArrayList<>();
 
     public void update(UserProfileDto userProfileDto) {
         this.name = userProfileDto.getName();

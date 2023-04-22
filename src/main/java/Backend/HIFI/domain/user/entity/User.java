@@ -31,9 +31,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name="user_password")
     private String password;
 
-    @Column(name="user_name")
-    private String name;
-
     @Column //OAuth Provider
     private String provider;
 
@@ -53,11 +50,7 @@ public class User extends BaseEntity implements UserDetails {
         return authorities;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    // TODO 위의 setName과 헷갈릴 수 있음
+    // Auth 처리용. 헷갈리지 말 것
     @Override
     public String getUsername() {
         return email;
