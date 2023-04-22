@@ -21,19 +21,20 @@ public class FollowService {
     private final UserRepository userRepository;
 
     public void following(User follower, User following) {
-
+        Long followerId = follower.getId();
+        Long followingId = following.getId();
         // 팔로우 하고 있는지 아닌지 검증 필요
         followRepository.save(
                 Follow.builder()
-                        .follower(follower)
-                        .following(following)
+                        .followerId(followerId)
+                        .followingId(followingId)
                         .build()
         );
     }
 
     public Long getFollowIdByFollowerAndFollowing(User follower, User following) {
+        // TODO ID로 변경할 지 고려
         Follow follow = followRepository.findFollowByFollowerAndFollowing(follower, following);
-
         if (follow != null) return follow.getId();
         return -1L;
     }
@@ -54,7 +55,10 @@ public class FollowService {
                 .orElseThrow(() -> new IllegalArgumentException("팔로워가 없습니다."));
         List<User> followerList = new ArrayList<>();
         for (Follow follow : followList) {
-            followerList.add(follow.getFollower());
+            Long followerId = follow.getFollowerId();
+            User follower = userRepository.findById(followerId)
+                    .orElseThrow(() -> new IllegalArgumentException("유저 ID가 잘못되었습니다."));
+            followerList.add(follower);
         }
         return followerList;
     }
@@ -64,31 +68,35 @@ public class FollowService {
                 .orElseThrow(() -> new IllegalArgumentException("팔로잉이 없습니다."));
         List<User> followingList = new ArrayList<>();
         for (Follow follow : followList) {
-            followingList.add(follow.getFollowing());
+            Long followerId = follow.getFollowerId();
+            User following = userRepository.findById(followerId)
+                    .orElseThrow(() -> new IllegalArgumentException("유저 ID가 잘못되었습니다."));
+            followingList.add(following);
         }
         return followingList;
     }
 
     // TODO
     //  임시, 함수 분해하던지 안쓰던지
-    public List<String> getFollowerEmail(User user) {
-        List<Follow> followList = followRepository.findFollowByFollowing(user)
-                .orElseThrow(() -> new IllegalArgumentException("팔로어가 없습니다."));
-        List<String> followerEmailList = new ArrayList<>();
-        for (Follow follow : followList) {
-            followerEmailList.add(follow.getFollower().getEmail());
-        }
-        return followerEmailList;
-    }
-    public List<String> getFollowingEmail(User user) {
-        List<Follow> followList = followRepository.findFollowByFollower(user)
-                .orElseThrow(() -> new IllegalArgumentException("팔로잉이 없습니다."));
-        List<String> followingEmailList = new ArrayList<>();
-        for (Follow follow : followList) {
-            followingEmailList.add(follow.getFollowing().getEmail());
-        }
-        return followingEmailList;
-    }
+    // 0422 필요 없을듯
+//    public List<String> getFollowerEmail(User user) {
+//        List<Follow> followList = followRepository.findFollowByFollowing(user)
+//                .orElseThrow(() -> new IllegalArgumentException("팔로어가 없습니다."));
+//        List<String> followerEmailList = new ArrayList<>();
+//        for (Follow follow : followList) {
+//            followerEmailList.add(follow.getFollower().getEmail());
+//        }
+//        return followerEmailList;
+//    }
+//    public List<String> getFollowingEmail(User user) {
+//        List<Follow> followList = followRepository.findFollowByFollower(user)
+//                .orElseThrow(() -> new IllegalArgumentException("팔로잉이 없습니다."));
+//        List<String> followingEmailList = new ArrayList<>();
+//        for (Follow follow : followList) {
+//            followingEmailList.add(follow.getFollowing().getEmail());
+//        }
+//        return followingEmailList;
+//    }
 
     public void requestFollow(FollowRequestDto followRequestDto) {
         String followerEmail = followRequestDto.getFromEmail();

@@ -10,24 +10,22 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Table(uniqueConstraints = {
-        @UniqueConstraint(name = "FOLLOW_UQ", columnNames = {"FOLLOWER", "FOLLOWING"})})
+        @UniqueConstraint(name = "FOLLOW_UQ", columnNames = {"FOLLOWER_ID", "FOLLOWING_ID"})})
 @Getter
 public class Follow {
 
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "FOLLOWER")
-    private User follower;
+    @JoinColumn(nullable = false, name = "FOLLOWER_ID")
+    private Long followerId;
 
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "FOLLOWING")
-    private User following;
+    @JoinColumn(nullable = false, name = "FOLLOWING_ID")
+    private Long followingId;
 
     @Builder
-    public Follow(User follower, User following) {
-        this.follower = follower;
-        this.following = following;
+    public Follow(Long followerId, Long followingId) {
+        this.followerId = followerId;
+        this.followingId = followingId;
     }
 }
