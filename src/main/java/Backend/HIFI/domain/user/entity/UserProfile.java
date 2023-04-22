@@ -36,9 +36,10 @@ public class UserProfile {
     @Builder.Default
     private Boolean anonymous = false;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    @Builder.Default
-//    private List<Search> searchList = new ArrayList<>();
+    // TODO 어떻게 변경할 건 지 고려 필요
+    @OneToMany(mappedBy = "userProfile", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Search> searchList = new ArrayList<>();
 
     public void update(UserProfileDto userProfileDto) {
         this.name = userProfileDto.getName();

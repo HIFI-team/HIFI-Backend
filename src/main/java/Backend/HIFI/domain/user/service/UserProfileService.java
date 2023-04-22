@@ -1,13 +1,15 @@
 package Backend.HIFI.domain.user.service;
 
+import Backend.HIFI.domain.follow.entity.Follow;
+import Backend.HIFI.domain.follow.repository.FollowRepository;
 import Backend.HIFI.domain.follow.service.FollowService;
+import Backend.HIFI.domain.review.Review;
 import Backend.HIFI.domain.user.dto.SearchDto;
 import Backend.HIFI.domain.user.dto.UserProfileDto;
 import Backend.HIFI.domain.user.entity.Search;
 import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.user.entity.UserProfile;
 import Backend.HIFI.domain.user.repository.UserProfileRepository;
-import Backend.HIFI.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -20,15 +22,20 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class UserProfileService {
-
     private final UserProfileRepository userProfileRepository;
+
     private final UserService userService;
+    private final FollowRepository followRepository;
     private final FollowService followService;
 
 
+    public UserProfile toUserProfile(User user) {
+        return findUserProfileById(user.getId());
+    }
+
     public UserProfile findUserProfileByEmail(String email) {
-        UserProfile userProfile = userProfileRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        User user = userService.findUserByEmail(email);
+        UserProfile userProfile = toUserProfile(user);
         return userProfile;
     }
 
@@ -39,9 +46,10 @@ public class UserProfileService {
     }
 
     public UserProfile findUserProfileByAuth(Authentication authentication) {
-        System.out.println("^&^&^&^\n" + authentication.getName());
-        UserProfile userProfile = userProfileRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
+        User user = userService.findUserByAuth(authentication);
+        UserProfile userProfile = toUserProfile(user);
+//        UserProfile userProfile = userProfileRepository.findByEmail(authentication.getName())
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
         System.out.println(userProfile);
         return userProfile;
     }
@@ -66,22 +74,36 @@ public class UserProfileService {
 
 
         // TODO 0407 getFollower 로직 변경 필요
-        UserProfileDto.setFollower(followService.getFollower(user).size());
-        UserProfileDto.setFollowing(followService.getFollowing(user).size());
+        userProfileDto.setFollower(followService.getFollower(userProfile).size());
+        userProfileDto.setFollowing(followService.getFollowing(userProfile).size());
 
         return userProfileDto;
     }
 
-    // TODO Follow 분리 후 처리 필요
+    public boolean isFollowed(UserProfile fromUser, UserProfile toUser) {
+        Follow follow = followRepository.findFollowByFollowerAndFollowing(fromUser, toUser);
+        return follow != null;
+    }
+
+    /** 맞팔 확인 */
+    public boolean isFollowForFollowed(UserProfile user1, UserProfile user2) {
+        return isFollowed(user1, user2) && isFollowed(user2, user1);
+    }
+
+    public boolean canWatchReview(UserProfile fromUser, UserProfile toUser) {
+        return isFollowForFollowed(fromUser, toUser) || !toUser.getAnonymous();
+    }
+
     public UserProfileDto getProfilePage(Authentication auth, String email) {
         UserProfile toUserProfile = findUserProfileByEmail(email);
         UserProfile fromUserProfile = findUserProfileByAuth(auth);
 
         UserProfileDto userProfileDto = new UserProfileDto().of(toUserProfile);
 
-        if (!userService.canWatchReview(fromUserProfile, toUserProfile)) {
-            UserProfileDto.setReviewList(null);
-        }
+        // TODO Review 로직 변경 필요
+//        if (!canWatchReview(fromUserProfile, toUserProfile)) {
+//            UserProfileDto.setReviewList(null);
+//        }
 
         return userProfileDto;
     }
@@ -96,17 +118,16 @@ public class UserProfileService {
     }
 
 
-    // TODO Follow 변경 필요
     /** 모든 유저 return */
     public List<UserProfileDto> searchAllUserProfile(Authentication auth) {
         UserProfile fromUserProfile = findUserProfileByAuth(auth);
-        List<UserProfile> userList = userRepository.findAll();
+        List<UserProfile> userList = userProfileRepository.findAll();
         List<UserProfileDto> userProfileDtoList = new ArrayList<>();
         for (UserProfile toUserProfile : userList) {
             if (fromUserProfile == toUserProfile)
                 continue;
             UserProfileDto upd = new UserProfileDto().of(toUserProfile);
-            upd.setFollowed(userService.isFollowed(fromUserProfile, toUserProfile));
+            upd.setFollowed(isFollowed(fromUserProfile, toUserProfile));
             userProfileDtoList.add(upd);
         }
         return userProfileDtoList;
@@ -115,17 +136,17 @@ public class UserProfileService {
     // TODO Follow 변경 필요
     /** user.name 통한 유저 검색 */
     public List<UserProfileDto> searchUserByName(Authentication auth, SearchDto searchDto) {
-        User fromUser = findByAuth(auth);
+        UserProfile fromUser = findUserProfileByAuth(auth);
         String name = searchDto.getName();
         // 유저 검색 리스트에 추가
         userSearch(fromUser, name);
 
-        List<User> userList = userRepository.findUserListByName(name)
+        List<UserProfile> userProfileList = userProfileRepository.findUserProfileListByName(name)
                 .orElseThrow(() -> new IllegalArgumentException("일치하는 유저가 없습니다."));
         List<UserProfileDto> userProfileDtoList = new ArrayList<>();
-        for (User toUser : userList) {
+        for (UserProfile toUser : userProfileList) {
             UserProfileDto upd = new UserProfileDto().of(toUser);
-            upd.setFollowed(userService.isFollowed(fromUser, toUser));
+            upd.setFollowed(isFollowed(fromUser, toUser));
             userProfileDtoList.add(upd);
         }
         return userProfileDtoList;
@@ -134,9 +155,11 @@ public class UserProfileService {
 
 
 
-    // 유저 리뷰 리스트
-    // TODO 0407 리뷰리스트 삭제 -> 변경 필요
-//    public List<Review> getReviewListFromUser(Authentication auth) {
+    public List<Review> getReviewListFromUser(Authentication auth) {
+
+        // TODO 고칠 것
+        List<Review> reviewList = null;
+
 //        User user = findByAuth(auth);
 //        List<Review> reviewList = user.getReviewList();
 //
@@ -144,9 +167,9 @@ public class UserProfileService {
 //        for (Review review : reviewList) {
 //            System.out.println(review.getImage());
 //        }
-//
-//        return reviewList;
-//    }
+
+        return reviewList;
+    }
 
     // UserProfileDto followed 추가 <- 왜? 안해도 될듯
 }

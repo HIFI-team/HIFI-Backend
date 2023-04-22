@@ -1,6 +1,7 @@
 package Backend.HIFI.domain.user.service;
 
 import Backend.HIFI.domain.user.entity.User;
+import Backend.HIFI.domain.user.entity.UserProfile;
 import Backend.HIFI.domain.user.repository.UserRepository;
 import Backend.HIFI.domain.follow.entity.Follow;
 import Backend.HIFI.domain.follow.repository.FollowRepository;
@@ -53,25 +54,5 @@ public class UserService {
 //        userRepository.delete(user);
         user.updateIsDeleted();
     }
-
-
-    public boolean isFollowed(User fromUser, User toUser) {
-        Follow follow = followRepository.findFollowByFollowerAndFollowing(fromUser, toUser);
-        return follow != null;
-    }
-
-    /** 맞팔 확인 */
-    public boolean isFollowForFollowed(User user1, User user2) {
-//        Follow follow1 = followRepository.findFollowByFollowerAndFollowing(user1, user2);
-//        Follow follow2 = followRepository.findFollowByFollowerAndFollowing(user2, user1);
-
-        return isFollowed(user1, user2) && isFollowed(user2, user1);
-    }
-
-    // TODO 처리 필요
-//    public boolean canWatchReview(User fromUser, User toUser) {
-//
-//        return isFollowForFollowed(fromUser, toUser) || !toUser.getAnonymous();
-//    }
 
 }

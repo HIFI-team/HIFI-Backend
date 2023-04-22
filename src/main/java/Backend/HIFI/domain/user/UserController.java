@@ -1,5 +1,8 @@
 package Backend.HIFI.domain.user;
 
+import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.user.dto.SearchDto;
+import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.user.service.UserProfileService;
 import Backend.HIFI.domain.user.service.UserService;
 import Backend.HIFI.global.common.redis.RedisService;
@@ -13,6 +16,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -32,7 +37,6 @@ public class UserController {
         return CommonApiResponse.of(userProfileService.getMyProfilePage(auth));
     }
 
-    // TODO Follow 분리 후 처리 필요
     @ApiOperation(value = "프로필 요청")
     @PostMapping("/profile")
     public CommonApiResponse<UserProfileDto> profilePage(@RequestBody String email, Authentication auth) {
@@ -50,7 +54,7 @@ public class UserController {
     @ApiOperation(value = "회원 탈퇴")
     @GetMapping("/delete")
     public String deletePage(Authentication auth) {
-        User user = userService.findByAuth(auth);
+        User user = userService.findUserByAuth(auth);
         userService.deleteUser(user);
 
         return user.getEmail() + " was deleted";
