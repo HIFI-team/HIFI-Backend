@@ -93,7 +93,7 @@ public class AuthServiceImpl implements AuthService{
 
             User newUser = User.builder()
                     .email(email)
-                    .name(name)
+//                    .name(name)
                     .role(UserRole.ROLE_USER)
                     .provider(provider)
                     .authenticationCode(kakaoUserDto.getAuthenticationCode())

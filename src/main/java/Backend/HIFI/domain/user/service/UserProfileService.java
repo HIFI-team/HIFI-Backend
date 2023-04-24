@@ -3,7 +3,7 @@ package Backend.HIFI.domain.user.service;
 import Backend.HIFI.domain.follow.entity.Follow;
 import Backend.HIFI.domain.follow.repository.FollowRepository;
 import Backend.HIFI.domain.follow.service.FollowService;
-import Backend.HIFI.domain.review.Review;
+import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.user.dto.SearchDto;
 import Backend.HIFI.domain.user.dto.UserProfileDto;
 import Backend.HIFI.domain.user.entity.Search;

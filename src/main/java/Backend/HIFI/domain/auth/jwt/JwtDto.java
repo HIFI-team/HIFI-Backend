@@ -18,7 +18,7 @@ public class JwtDto {
     public JwtDto(User user) {
 //        this.id = user.getId();
         this.email = user.getEmail();
-        this.name = user.getName();
+//        this.name = user.getName();
         this.authorities = user.getAuthorities().toString();
     }
 }

@@ -1,13 +1,12 @@
 package Backend.HIFI.domain.user;
 
-import Backend.HIFI.domain.review.Review;
 import Backend.HIFI.domain.user.dto.SearchDto;
+import Backend.HIFI.domain.user.dto.UserProfileDto;
 import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.user.service.UserProfileService;
 import Backend.HIFI.domain.user.service.UserService;
 import Backend.HIFI.global.common.redis.RedisService;
 import Backend.HIFI.global.common.response.CommonApiResponse;
-import Backend.HIFI.domain.user.dto.UserProfileDto;
 import Backend.HIFI.domain.follow.repository.FollowRepository;
 import Backend.HIFI.domain.follow.service.FollowService;
 
@@ -77,12 +76,12 @@ public class UserController {
     }
 
     // TODO Follow 분리 후 처리 필요
-    @ApiOperation(value = "리뷰 리스트 반환")
-    @GetMapping("/review")
-    public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {
-        List<Review> reviewList = userProfileService.getReviewListFromUser(auth);
-        return CommonApiResponse.of(reviewList);
-    }
+//    @ApiOperation(value = "리뷰 리스트 반환")
+//    @GetMapping("/review")
+//    public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {
+//        List<Review> reviewList = userProfileService.getReviewListFromUser(auth);
+//        return CommonApiResponse.of(reviewList);
+//    }
 
 //    @GetMapping("/su")
 //    public CommonApiResponse<User> searchUserPage() {

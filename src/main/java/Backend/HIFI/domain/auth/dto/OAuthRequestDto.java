@@ -19,7 +19,7 @@ public class OAuthRequestDto {
                 .email(email)
                 .role(UserRole.ROLE_USER)
                 .provider(provider)
-                .name(name)
+//                .name(name)
                 .build();
     }
 }

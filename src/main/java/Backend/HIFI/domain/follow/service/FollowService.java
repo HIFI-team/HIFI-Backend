@@ -21,6 +21,7 @@ public class FollowService {
 
     private final FollowRepository followRepository;
     private final UserProfileRepository userProfileRepository;
+    private final UserRepository userRepository;
 
     public void following(UserProfile follower, UserProfile following) {
         Long followerId = follower.getId();
@@ -105,12 +106,14 @@ public class FollowService {
         String followingEmail = followRequestDto.getToEmail();
 
 //        User follower = userService.findByEmail(followerEmail);
-        UserProfile follower = userProfileRepository.findByEmail(followerEmail)
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        UserProfile follower = null;
+//                userProfileRepository.findByEmail(followerEmail)
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
 
 //        User following = userService.findByEmail(followingEmail);
-        UserProfile following = userProfileRepository.findByEmail(followingEmail)
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        UserProfile following = null;
+//                userProfileRepository.findByEmail(followingEmail)
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
         following(follower, following);
     }
 
@@ -119,12 +122,14 @@ public class FollowService {
         String followingEmail = followRequestDto.getToEmail();
 //
 //        User follower = userService.findByEmail(followerEmail);
-        UserProfile follower = userProfileRepository.findByEmail(followerEmail)
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        UserProfile follower = null;
+//                userProfileRepository.findByEmail(followerEmail)
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
 //        User following = userService.findByEmail(followingEmail);
 
-        UserProfile following = userProfileRepository.findByEmail(followingEmail)
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        UserProfile following = null;
+//                userProfileRepository.findByEmail(followingEmail)
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
 
         Long followId = getFollowIdByFollowerAndFollowing(follower, following);
 
