@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserProfileDto {
 
-    private String email;
     private String name;
     private String description;
     private String image;
@@ -26,7 +25,6 @@ public class UserProfileDto {
         // 비공개 유저 처리 해야함
         // 얼마나 비공개 할 것인지?
         return UserProfileDto.builder()
-//                .email(userProfile.getEmail())
                 .name(userProfile.getName())
                 .description(userProfile.getDescription())
                 .image(userProfile.getImage())

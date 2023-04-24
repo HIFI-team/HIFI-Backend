@@ -24,8 +24,8 @@ public class FollowService {
     private final UserRepository userRepository;
 
     public void following(UserProfile follower, UserProfile following) {
-        Long followerId = follower.getId();
-        Long followingId = following.getId();
+        Long followerId = follower.getUserId();
+        Long followingId = following.getUserId();
         // 팔로우 하고 있는지 아닌지 검증 필요
         followRepository.save(
                 Follow.builder()
@@ -37,7 +37,9 @@ public class FollowService {
 
     public Long getFollowIdByFollowerAndFollowing(UserProfile follower, UserProfile following) {
         // TODO ID로 변경할 지 고려
-        Follow follow = followRepository.findFollowByFollowerAndFollowing(follower, following);
+        Long followerId = follower.getUserId();
+        Long followingId = following.getUserId();
+        Follow follow = followRepository.findFollowByFollowerIdAndFollowingId(followerId, followingId);
         if (follow != null) return follow.getId();
         return -1L;
     }
@@ -53,10 +55,14 @@ public class FollowService {
 //        Query query =
 //    }
 
+    // TODO Repository 이용으로 변경 할 것
     public List<UserProfile> getFollower(UserProfile user) {
-        List<Follow> followList = followRepository.findFollowByFollowing(user)
+        Long followingId = user.getUserId();
+        List<Follow> followList = followRepository.findFollowByFollowingId(followingId)
                 .orElseThrow(() -> new IllegalArgumentException("팔로워가 없습니다."));
-        List<UserProfile> followerList = new ArrayList<>();
+
+        List<UserProfile> followerList = new ArrayList<UserProfile>();
+
         for (Follow follow : followList) {
             Long followerId = follow.getFollowerId();
             UserProfile follower = userProfileRepository.findById(followerId)
@@ -67,12 +73,13 @@ public class FollowService {
     }
 
     public List<UserProfile> getFollowing(UserProfile user) {
-        List<Follow> followList = followRepository.findFollowByFollower(user)
+        Long followerId = user.getUserId();
+        List<Follow> followList = followRepository.findFollowByFollowerId(followerId)
                 .orElseThrow(() -> new IllegalArgumentException("팔로잉이 없습니다."));
         List<UserProfile> followingList = new ArrayList<>();
         for (Follow follow : followList) {
-            Long followerId = follow.getFollowerId();
-            UserProfile following = userProfileRepository.findById(followerId)
+            Long followingId = follow.getFollowingId();
+            UserProfile following = userProfileRepository.findById(followingId)
                     .orElseThrow(() -> new IllegalArgumentException("유저 ID가 잘못되었습니다."));
             followingList.add(following);
         }
@@ -102,34 +109,27 @@ public class FollowService {
 //    }
 
     public void requestFollow(FollowRequestDto followRequestDto) {
-        String followerEmail = followRequestDto.getFromEmail();
-        String followingEmail = followRequestDto.getToEmail();
+        Long followerId = followRequestDto.getFollwerId();
+        Long followingId = followRequestDto.getFollowingId();
 
-//        User follower = userService.findByEmail(followerEmail);
-        UserProfile follower = null;
-//                userProfileRepository.findByEmail(followerEmail)
-//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        UserProfile follower = userProfileRepository.findById(followerId)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
 
-//        User following = userService.findByEmail(followingEmail);
-        UserProfile following = null;
-//                userProfileRepository.findByEmail(followingEmail)
-//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        UserProfile following = userProfileRepository.findById(followingId)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+
         following(follower, following);
     }
 
     public void requestUnFollow(FollowRequestDto followRequestDto) {
-        String followerEmail = followRequestDto.getFromEmail();
-        String followingEmail = followRequestDto.getToEmail();
-//
-//        User follower = userService.findByEmail(followerEmail);
-        UserProfile follower = null;
-//                userProfileRepository.findByEmail(followerEmail)
-//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
-//        User following = userService.findByEmail(followingEmail);
+        Long followerId = followRequestDto.getFollwerId();
+        Long followingId = followRequestDto.getFollowingId();
 
-        UserProfile following = null;
-//                userProfileRepository.findByEmail(followingEmail)
-//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+        UserProfile follower = userProfileRepository.findById(followerId)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
+
+        UserProfile following = userProfileRepository.findById(followingId)
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
 
         Long followId = getFollowIdByFollowerAndFollowing(follower, following);
 

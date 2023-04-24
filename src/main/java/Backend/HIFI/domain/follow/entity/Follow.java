@@ -1,6 +1,5 @@
 package Backend.HIFI.domain.follow.entity;
 
-import Backend.HIFI.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,10 +16,10 @@ public class Follow {
     @Id @GeneratedValue
     private Long id;
 
-    @JoinColumn(nullable = false, name = "FOLLOWER_ID")
+    @Column(nullable = false, name = "FOLLOWER_ID")
     private Long followerId;
 
-    @JoinColumn(nullable = false, name = "FOLLOWING_ID")
+    @Column(nullable = false, name = "FOLLOWING_ID")
     private Long followingId;
 
     @Builder

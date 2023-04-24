@@ -55,16 +55,15 @@ public class UserProfileService {
     }
 
 
-    public void updateProfile(UserProfileDto userProfileDto) {
-        // token 못받아와서 userProfileDto email 추가하여 이용
-//        User userProfile = userService.findByAuth(auth);
-        UserProfile userProfile = findUserProfileByEmail(userProfileDto.getEmail());
+    public void updateProfile(Authentication authentication, UserProfileDto userProfileDto) {
+
+        User user = userService.findUserByAuth(authentication);
+        UserProfile userProfile = toUserProfile(user);
         userProfile.update(userProfileDto);
 
-
         // throw exception 추가할 것
+        // TODO Save면 되나?;
         userProfileRepository.save(userProfile);
-        System.out.println("***************\n"+userProfileDto);
 
     }
 
@@ -81,7 +80,9 @@ public class UserProfileService {
     }
 
     public boolean isFollowed(UserProfile fromUser, UserProfile toUser) {
-        Follow follow = followRepository.findFollowByFollowerAndFollowing(fromUser, toUser);
+        Long followerId = fromUser.getUserId();
+        Long followingId = toUser.getUserId();
+        Follow follow = followRepository.findFollowByFollowerIdAndFollowingId(followerId, followingId);
         return follow != null;
     }
 

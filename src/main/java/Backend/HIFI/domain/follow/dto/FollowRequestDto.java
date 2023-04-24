@@ -9,13 +9,13 @@ import lombok.*;
 @AllArgsConstructor
 public class FollowRequestDto {
 
-    private String fromEmail;
-    private String toEmail;
+    private Long follwerId;
+    private Long followingId;
 
-    public FollowRequestDto of(String fromEmail, String toEmail) {
+    public FollowRequestDto of(Long follwerId, Long followingId) {
         return FollowRequestDto.builder()
-                .fromEmail(fromEmail)
-                .toEmail(toEmail)
+                .follwerId(follwerId)
+                .followingId(followingId)
                 .build();
     }
 }

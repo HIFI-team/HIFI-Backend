@@ -44,8 +44,8 @@ public class UserController {
 
     @ApiOperation(value = "프로필 업데이트 요청")
     @PostMapping("/update")
-    public CommonApiResponse<String> updateProfile(@RequestBody UserProfileDto userProfileDto) {
-        userProfileService.updateProfile(userProfileDto);
+    public CommonApiResponse<String> updateProfile(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
+        userProfileService.updateProfile(auth, userProfileDto);
         return CommonApiResponse.of("프로필 업데이트 완료");
     }
 
@@ -75,7 +75,7 @@ public class UserController {
         return CommonApiResponse.of(searchUserProfileDtoList);
     }
 
-    // TODO Follow 분리 후 처리 필요
+    // TODO review Repository 사용할 것
 //    @ApiOperation(value = "리뷰 리스트 반환")
 //    @GetMapping("/review")
 //    public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {

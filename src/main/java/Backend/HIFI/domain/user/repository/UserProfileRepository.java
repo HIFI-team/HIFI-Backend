@@ -15,6 +15,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Long> 
     // @email 삭제
 //    Optional<UserProfile> findByEmail(String email);
 
+
     Optional<UserProfile> findById(Long id);
 
 //    boolean existsByEmail(String email);
