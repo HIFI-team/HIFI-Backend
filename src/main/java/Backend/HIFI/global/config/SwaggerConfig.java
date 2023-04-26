@@ -20,9 +20,9 @@ public class SwaggerConfig {
 
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder()
-                .title("HIFI Api Docs")
+                .title("HongEat Api Docs")
                 .version("0.0.1")
-                .description("HIFI Api 문서입니다")
+                .description("HongEat Api 문서입니다")
                 .build();
     }
 
@@ -71,3 +71,4 @@ public class SwaggerConfig {
     }
 }
 //swagger: http://localhost:8080/swagger-ui/index.html
+//swagger: http://hongeat.site/swagger-ui/index.html#/

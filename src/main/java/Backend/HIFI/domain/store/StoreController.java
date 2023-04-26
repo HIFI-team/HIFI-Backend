@@ -3,6 +3,7 @@ package Backend.HIFI.domain.store;
 import Backend.HIFI.domain.store.dto.request.PostStoreDto;
 import Backend.HIFI.domain.store.dto.response.GetStoreDto;
 import Backend.HIFI.domain.store.service.StoreService;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/stores")
 @RequiredArgsConstructor
+@Api(tags = "가게")
 public class StoreController {
     private final StoreService storeService;
 

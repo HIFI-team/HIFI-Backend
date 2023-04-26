@@ -3,6 +3,7 @@ package Backend.HIFI.domain.comment;
 import Backend.HIFI.domain.comment.dto.request.PostCommentDto;
 import Backend.HIFI.domain.comment.dto.response.GetCommentDto;
 import Backend.HIFI.domain.comment.service.CommentService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "reviews/{reviewId}/comments")
 @RequiredArgsConstructor
+@Api(tags = "댓글")
 public class CommentController {
     private final CommentService commentService;
 
@@ -30,7 +32,7 @@ public class CommentController {
     }
 
     /**
-     * 코멘트 조회
+     * 코멘트 조회4
      */
     @ApiOperation("코멘트 조회 요청")
     @GetMapping("/")
