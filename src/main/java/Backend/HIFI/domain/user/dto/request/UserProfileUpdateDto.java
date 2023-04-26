@@ -1,4 +1,4 @@
-package Backend.HIFI.domain.user.dto;
+package Backend.HIFI.domain.user.dto.request;
 
 import lombok.*;
 
@@ -13,4 +13,8 @@ public class UserProfileUpdateDto {
     private String description;
     private String image;
     private Boolean anonymous;
+
+//    public UserProfileUpdateDto of(UserProfileUpdateDto userProfileUpdateDto) {
+//
+//    }
 }

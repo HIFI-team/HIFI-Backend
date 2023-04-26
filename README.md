@@ -19,7 +19,7 @@
 <br/>
 
 ## 📝 ERD
-<img width="1609" alt="image" src="https://user-images.githubusercontent.com/62806067/233552647-b6235af5-f4a5-411d-be99-ccafb6ffd86d.png">
+<img width="1609" alt="image" src="https://user-images.githubusercontent.com/76719828/234468674-c2f36751-5824-4a67-badd-cd01fe8f0e6f.png">
 
 
 <br/>
@@ -28,14 +28,14 @@
 
 <table>
     <tr align="center">
-        <td><B>DevOps/Backend<B></td>
-        <td><B>Backend<B></td>
-        <td><B>DevOps/Backend<B></td>
+        <td><B>DevOps/Backend</B></td>
+        <td><B>Backend</B></td>
+        <td><B>DevOps/Backend</B></td>
     </tr>
     <tr align="center">
-        <td><B>노경민<B></td>
-        <td><B>김민석<B></td>
-        <td><B>전수민<B></td>
+        <td><B>노경민</B></td>
+        <td><B>김민석</B></td>
+        <td><B>전수민</B></td>
     </tr>
     <tr align="center">
         <td>

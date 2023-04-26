@@ -1,6 +1,5 @@
 package Backend.HIFI.domain.user.dto;
 
-import Backend.HIFI.domain.user.User;
 import Backend.HIFI.domain.review.entity.Review;
 import lombok.*;
 
@@ -26,15 +25,15 @@ public class UserDto {
     @Builder.Default
     private List<Review> reviewList = new ArrayList<>();
 
-    public UserDto of(User user) {
-        return UserDto.builder()
-                .email(user.getEmail())
-                .name(user.getName())
-                .description(user.getDescription())
-                .image(user.getImage())
-                .anonymous(user.getAnonymous())
-                .reviewList(user.getReviewList())
-                .build();
-    }
+//    public UserDto of(User user) {
+//        return UserDto.builder()
+//                .email(user.getEmail())
+//                .name(user.getName())
+//                .description(user.getDescription())
+//                .image(user.getImage())
+//                .anonymous(user.getAnonymous())
+//                .reviewList(user.getReviewList())
+//                .build();
+//    }
 
 }

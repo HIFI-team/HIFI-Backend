@@ -6,8 +6,8 @@ import Backend.HIFI.domain.comment.entity.Comment;
 import Backend.HIFI.domain.comment.repository.CommentRepository;
 import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.review.repository.ReviewRepository;
-import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.user.UserRepository;
+import Backend.HIFI.domain.user.entity.User;
+import Backend.HIFI.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,8 +28,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public GetCommentDto createComment(Long reviewId, PostCommentDto postCommentDto, String userId) {
-        User user = userRepository.findByEmail(userId).orElseThrow();
-        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        User user = userRepository.findByEmail(userId).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 사용자 입니다"));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
 
         Comment comment = Comment.builder()
                 .user(user)
@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<GetCommentDto> getComments(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
         List<Comment> allByReview = commentRepository.findAllByReview(review);
 
         List<GetCommentDto> getCommentDtos = new ArrayList<>();
@@ -58,9 +58,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void deleteComment(Long reviewId, Long id, String userId) {
-        User user = userRepository.findByEmail(userId).orElseThrow();
-        Comment comment = commentRepository.findById(id).orElseThrow();
-        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        User user = userRepository.findByEmail(userId).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 사용자 입니다"));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 댓글 입니다"));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 리뷰 입니다"));
 
         //TODO: 추후 커스텀 , 옳지않은 접근으로 날려줘야한다.
         if (user != comment.getUser())

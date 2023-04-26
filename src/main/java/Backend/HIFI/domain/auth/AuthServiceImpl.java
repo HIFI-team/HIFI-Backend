@@ -10,8 +10,8 @@ import Backend.HIFI.domain.auth.oauth.kakao.KakaoUserDto;
 import Backend.HIFI.global.error.exception.BadRequestException;
 import Backend.HIFI.global.error.ErrorCode;
 import Backend.HIFI.global.error.exception.NotFoundException;
-import Backend.HIFI.domain.user.User;
-import Backend.HIFI.domain.user.UserRepository;
+import Backend.HIFI.domain.user.entity.User;
+import Backend.HIFI.domain.user.repository.UserRepository;
 import Backend.HIFI.domain.user.UserRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,7 +93,7 @@ public class AuthServiceImpl implements AuthService{
 
             User newUser = User.builder()
                     .email(email)
-                    .name(name)
+//                    .name(name)
                     .role(UserRole.ROLE_USER)
                     .provider(provider)
                     .authenticationCode(kakaoUserDto.getAuthenticationCode())

@@ -1,6 +1,6 @@
 package Backend.HIFI.domain.auth.dto;
 
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.user.UserRole;
 
 import javax.validation.Valid;
@@ -19,7 +19,7 @@ public class OAuthRequestDto {
                 .email(email)
                 .role(UserRole.ROLE_USER)
                 .provider(provider)
-                .name(name)
+//                .name(name)
                 .build();
     }
 }

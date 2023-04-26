@@ -1,5 +1,6 @@
-package Backend.HIFI.domain.user;
+package Backend.HIFI.domain.user.repository;
 
+import Backend.HIFI.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,14 +21,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmailAndProvider(String email, String provider);
 
     @Modifying
-    @Query("delete from Review rv where rv.user.id = :userId")
-    void deleteReviewByUserId(@Param("userId") Long UserId);
-
-    @Modifying
-    @Query("delete from Follow f where f.following.id = :userId or f.follower.id = :userId")
+    @Query("delete from Follow f where f.followerId = :userId or f.followingId = :userId")
     void deleteFollowByUserId(@Param("userId") Long userId);
 
-    @Query("select u from User u where u.name like %:userName%")
-    Optional<List<User>> findUserListByName(@Param("userName") String userName);
+    // profile 분리로 인해 필요 X
+//    @Modifying
+//    @Query("delete from Review rv where rv.user.id = :userId")
+//    void deleteReviewByUserId(@Param("userId") Long UserId);
+//
+//
+//    @Query("select u from User u where u.name like %:userName%")
+//    Optional<List<User>> findUserListByName(@Param("userName") String userName);
 
 }

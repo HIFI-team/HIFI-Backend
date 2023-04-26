@@ -4,7 +4,7 @@ import Backend.HIFI.domain.auth.AuthService;
 import Backend.HIFI.domain.auth.dto.TokenResponseDto;
 import Backend.HIFI.domain.auth.jwt.JwtTokenProvider;
 import Backend.HIFI.global.common.response.CommonApiResponse;
-import Backend.HIFI.domain.user.UserRepository;
+import Backend.HIFI.domain.user.repository.UserRepository;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

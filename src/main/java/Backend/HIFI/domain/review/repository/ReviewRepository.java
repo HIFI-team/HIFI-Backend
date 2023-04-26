@@ -2,7 +2,8 @@ package Backend.HIFI.domain.review.repository;
 
 import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.store.entity.Store;
-import Backend.HIFI.domain.user.User;
+
+import Backend.HIFI.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

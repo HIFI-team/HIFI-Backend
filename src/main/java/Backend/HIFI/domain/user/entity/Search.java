@@ -1,6 +1,6 @@
-package Backend.HIFI.domain.user.search;
+package Backend.HIFI.domain.user.entity;
 
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class Search {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user = new User();
+    @JoinColumn(name = "user_profile_id")
+    private UserProfile userProfile = new UserProfile();
 
 }

@@ -2,7 +2,7 @@ package Backend.HIFI.domain.comment.entity;
 
 import Backend.HIFI.global.common.entity.BaseTimeEntity;
 import Backend.HIFI.domain.review.entity.Review;
-import Backend.HIFI.domain.user.User;
+import Backend.HIFI.domain.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
