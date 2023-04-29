@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -38,7 +39,7 @@ public class ReviewController {
      */
     @PostMapping("/")
     @Operation(summary = "리뷰 등록 요청", description = "리뷰 등록 요청 API 입니다.")
-    public ResponseEntity<GetReviewDto> postReview(@PathVariable("storeId") Long storeId, @RequestBody PostReviewDto postReviewDto, @AuthenticationPrincipal String userId) {
+    public ResponseEntity<GetReviewDto> postReview(@PathVariable("storeId") Long storeId, @RequestBody @Valid PostReviewDto postReviewDto, @AuthenticationPrincipal String userId) {
         GetReviewDto getReviewDto = reviewService.createReview(storeId, postReviewDto, userId);
         return ResponseEntity.ok(getReviewDto);
     }
@@ -48,7 +49,7 @@ public class ReviewController {
      */
     @PostMapping("/{id}")
     @Operation(summary = "리뷰 수정 요청", description = "리뷰 수정 요청 API 입니다.")
-    public ResponseEntity<GetReviewDto> updateReview(@PathVariable("storeId") Long storeId,@PathVariable("id") Long id, @RequestBody PutReviewDto putReviewDto, @AuthenticationPrincipal String userId) {
+    public ResponseEntity<GetReviewDto> updateReview(@PathVariable("storeId") Long storeId,@PathVariable("id") Long id, @RequestBody @Valid PutReviewDto putReviewDto, @AuthenticationPrincipal String userId) {
         GetReviewDto getReviewDto = reviewService.updateReview(storeId, id, putReviewDto, userId);
         return ResponseEntity.ok(getReviewDto);
     }
