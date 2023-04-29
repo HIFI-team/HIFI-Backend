@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -28,7 +29,7 @@ public class StoreController {
      */
     @PostMapping("/")
     @Operation(summary = "가게 등록 요청", description = "가게 등록 요청 API 입니다.")
-    public ResponseEntity<GetStoreDto> createStore(@RequestBody PostStoreDto postStoreDto, @AuthenticationPrincipal String userId) {
+    public ResponseEntity<GetStoreDto> createStore(@RequestBody @Valid PostStoreDto postStoreDto, @AuthenticationPrincipal String userId) {
         GetStoreDto getStoreDto = storeService.createStore(postStoreDto, userId);
         return ResponseEntity.ok(getStoreDto);
     }
