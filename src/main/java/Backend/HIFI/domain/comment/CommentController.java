@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class CommentController {
      */
     @ApiOperation("코멘트 등록 요청")
     @PostMapping("/")
-    public ResponseEntity<GetCommentDto> postComment(@PathVariable("reviewId") Long reviewId, @RequestBody PostCommentDto postCommentDto, @AuthenticationPrincipal String userId) {
+    public ResponseEntity<GetCommentDto> postComment(@PathVariable("reviewId") Long reviewId, @RequestBody @Valid PostCommentDto postCommentDto, @AuthenticationPrincipal String userId) {
         return ResponseEntity.ok(commentService.createComment(reviewId, postCommentDto, userId));
     }
 
