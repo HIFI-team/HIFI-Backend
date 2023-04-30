@@ -4,6 +4,8 @@ import Backend.HIFI.domain.auth.dto.TokenRequestDto;
 import Backend.HIFI.domain.auth.dto.TokenResponseDto;
 import Backend.HIFI.domain.auth.dto.UserRequestDto;
 import Backend.HIFI.domain.auth.dto.UserResponseDto;
+import Backend.HIFI.domain.user.entity.UserProfile;
+import Backend.HIFI.domain.user.repository.UserProfileRepository;
 import Backend.HIFI.global.common.response.CommonApiResponse;
 import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.user.service.UserService;

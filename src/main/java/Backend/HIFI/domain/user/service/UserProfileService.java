@@ -30,7 +30,7 @@ public class UserProfileService {
 
 
     public UserProfile toUserProfile(User user) {
-        return findUserProfileById(user.getId());
+        return findUserProfileByUserId(user.getId());
     }
 
     public UserProfile findUserProfileByEmail(String email) {
@@ -39,8 +39,9 @@ public class UserProfileService {
         return userProfile;
     }
 
-    public UserProfile findUserProfileById(Long id) {
-        UserProfile userProfile = userProfileRepository.findById(id)
+    public UserProfile findUserProfileByUserId(Long userId) {
+        System.out.println("*****" + userId);
+        UserProfile userProfile = userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
         return userProfile;
     }
