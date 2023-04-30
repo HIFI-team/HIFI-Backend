@@ -3,6 +3,8 @@ package Backend.HIFI.domain.user;
 import Backend.HIFI.domain.user.dto.SearchDto;
 import Backend.HIFI.domain.user.dto.UserProfileDto;
 import Backend.HIFI.domain.user.entity.User;
+import Backend.HIFI.domain.user.entity.UserProfile;
+import Backend.HIFI.domain.user.repository.UserProfileRepository;
 import Backend.HIFI.domain.user.service.UserProfileService;
 import Backend.HIFI.domain.user.service.UserService;
 import Backend.HIFI.global.common.redis.RedisService;
@@ -28,11 +30,17 @@ public class UserController {
     private final FollowService followService;
     private final FollowRepository followRepository;
     private final RedisService redisService;
-
+    private final UserProfileRepository userProfileRepository;
 
     @ApiOperation(value = "마이프로필 요청")
     @GetMapping("/profile")
     public CommonApiResponse<UserProfileDto> profilePage(Authentication auth) {
+        List<UserProfile> list = userProfileRepository.findAll();
+        System.out.println("!!!!!!!!!!!!!!!!");
+        for (UserProfile userProfile : list) {
+            System.out.println(userProfile.getUserId());
+        }
+        System.out.println("????????????????");
         return CommonApiResponse.of(userProfileService.getMyProfilePage(auth));
     }
 
