@@ -4,6 +4,7 @@ import Backend.HIFI.domain.follow.entity.Follow;
 import Backend.HIFI.domain.follow.repository.FollowRepository;
 import Backend.HIFI.domain.follow.service.FollowService;
 import Backend.HIFI.domain.review.entity.Review;
+import Backend.HIFI.domain.review.repository.ReviewRepository;
 import Backend.HIFI.domain.user.dto.SearchDto;
 import Backend.HIFI.domain.user.dto.UserProfileDto;
 import Backend.HIFI.domain.user.entity.Search;
@@ -27,6 +28,7 @@ public class UserProfileService {
     private final UserService userService;
     private final FollowRepository followRepository;
     private final FollowService followService;
+    private final ReviewRepository reviewRepository;
 
 
     public UserProfile toUserProfile(User user) {
@@ -158,20 +160,10 @@ public class UserProfileService {
 
 
     public List<Review> getReviewListFromUser(Authentication auth) {
-
-        // TODO 고칠 것
-        List<Review> reviewList = null;
-
-//        User user = findByAuth(auth);
-//        List<Review> reviewList = user.getReviewList();
-//
-//        // 리뷰 테스트
-//        for (Review review : reviewList) {
-//            System.out.println(review.getImage());
-//        }
+        User user = userService.findUserByAuth(auth);
+        List<Review> reviewList = reviewRepository.findByUser(user);
 
         return reviewList;
     }
-
     // UserProfileDto followed 추가 <- 왜? 안해도 될듯
 }
