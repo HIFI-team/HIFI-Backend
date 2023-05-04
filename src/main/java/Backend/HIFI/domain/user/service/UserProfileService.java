@@ -159,11 +159,24 @@ public class UserProfileService {
 
 
 
-    public List<Review> getReviewListFromUser(Authentication auth) {
+    public List<Review> getMyReviewList(Authentication auth) {
         User user = userService.findUserByAuth(auth);
         List<Review> reviewList = reviewRepository.findByUser(user);
 
         return reviewList;
     }
     // UserProfileDto followed 추가 <- 왜? 안해도 될듯
+
+    public List<Review> getOtherReviewList(Authentication auth, UserProfileDto userProfileDto) {
+        UserProfile fromUser = toUserProfile(userService.findUserByAuth(auth));
+        UserProfile toUser = userProfileDto.toUserProfile();
+        List<Review> reviewList = null;
+        if (canWatchReview(fromUser, toUser)) {
+            // User 얻는 과정 바꾸면 좋을 것 같음
+            User user = userService.findUserById(toUser.getUserId());
+            reviewList = reviewRepository.findByUser(user);
+        }
+
+        return reviewList;
+    }
 }

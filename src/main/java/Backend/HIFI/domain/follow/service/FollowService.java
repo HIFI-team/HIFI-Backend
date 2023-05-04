@@ -1,6 +1,7 @@
 package Backend.HIFI.domain.follow.service;
 
 import Backend.HIFI.domain.follow.entity.Follow;
+import Backend.HIFI.domain.user.dto.UserProfileDto;
 import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.follow.repository.FollowRepository;
 import Backend.HIFI.domain.user.entity.UserProfile;

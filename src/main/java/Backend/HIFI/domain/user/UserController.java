@@ -29,7 +29,7 @@ public class UserController {
     private final UserProfileService userProfileService;
 
     @GetMapping("/profile")
-    @Operation(summary = "마이프로필 조회 요청", description = "마이프로필 조회 요청 API 입니다.")
+    @Operation(summary = "본인 프로필 조회 요청", description = "본인 프로필 조회 요청 API 입니다.")
     public CommonApiResponse<UserProfileDto> profilePage(Authentication auth) {
         return CommonApiResponse.of(userProfileService.getMyProfilePage(auth));
     }
@@ -40,16 +40,14 @@ public class UserController {
         return CommonApiResponse.of(userProfileService.getProfilePage(auth, email));
     }
 
-    // TODO @PutMapping 변경 필요
-    @PostMapping("/update")
+    @PutMapping("/profile")
     @Operation(summary = "프로필 업데이트 요청", description = "프로필 업데이트 요청 API 입니다.")
     public CommonApiResponse<String> updateProfile(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
         userProfileService.updateProfile(auth, userProfileDto);
         return CommonApiResponse.of("프로필 업데이트 완료");
     }
 
-    // TODO @DeleteMapping 변경 필요
-    @GetMapping("/delete")
+    @DeleteMapping("/profile")
     @Operation(summary = "유저 탈퇴 요청", description = "유저 탈퇴 요청 API 입니다.")
     public String deletePage(Authentication auth) {
         User user = userService.findUserByAuth(auth);
@@ -73,11 +71,20 @@ public class UserController {
     }
 
     @GetMapping("/review")
-    @Operation(summary = "본인 리뷰 반환 요청", description = "본인의 리뷰 조회 요청 API 입니다.")
-    public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {
-        List<Review> reviewList = userProfileService.getReviewListFromUser(auth);
+    @Operation(summary = "본인 리뷰 조회 요청", description = "본인의 리뷰 조회 요청 API 입니다.")
+    public CommonApiResponse<List<Review>> getMyReviewList(Authentication auth) {
+        List<Review> reviewList = userProfileService.getMyReviewList(auth);
         return CommonApiResponse.of(reviewList);
     }
+
+    @PostMapping("/review")
+    @Operation(summary = "타인 리뷰 조회 요청", description = "타인의 리뷰 조회 요청 API 입니다.")
+    public CommonApiResponse<List<Review>> getOtherReviewList(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
+        List<Review> reviewList = userProfileService.getOtherReviewList(auth, userProfileDto);
+        return CommonApiResponse.of(reviewList);
+    }
+
+
 
 //    @GetMapping("/su")
 //    public CommonApiResponse<User> searchUserPage() {
