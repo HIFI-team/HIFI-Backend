@@ -84,15 +84,5 @@ public class UserController {
         return ResponseEntity.ok(reviewList);
     }
 
-
-
-//    @GetMapping("/su")
-//    public ResponseEntity<User> searchUserPage() {
-
-//    }
-
-//    @GetMapping("/ss")
-//    public String searchStorePage() { return "ss"; }
-
 }
 
