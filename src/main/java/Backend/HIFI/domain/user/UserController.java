@@ -50,11 +50,11 @@ public class UserController {
 
     @DeleteMapping("/profile")
     @Operation(summary = "유저 탈퇴 요청", description = "유저 탈퇴 요청 API 입니다.")
-    public String deletePage(Authentication auth) {
+    public ResponseEntity<?> deletePage(Authentication auth) {
         User user = userService.findUserByAuth(auth);
         userService.deleteUser(user);
 
-        return user.getEmail() + " was deleted";
+        return ResponseEntity.ok("success");
     }
 
     @GetMapping("/search")
