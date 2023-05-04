@@ -4,13 +4,10 @@ import Backend.HIFI.domain.auth.dto.TokenRequestDto;
 import Backend.HIFI.domain.auth.dto.TokenResponseDto;
 import Backend.HIFI.domain.auth.dto.UserRequestDto;
 import Backend.HIFI.domain.auth.dto.UserResponseDto;
-import Backend.HIFI.domain.user.entity.UserProfile;
-import Backend.HIFI.domain.user.repository.UserProfileRepository;
 import Backend.HIFI.global.common.response.CommonApiResponse;
 import Backend.HIFI.domain.user.entity.User;
-import Backend.HIFI.domain.user.service.UserService;
+import Backend.HIFI.domain.user.service.UserServiceImpl;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @Api(tags = "인증")
 public class AuthController {
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final AuthService authService;
 
     /** 로그인 요청 */
