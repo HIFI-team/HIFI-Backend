@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -50,9 +51,9 @@ public class FollowController {
 
     @PostMapping("/followList")
     @Operation(summary = "팔로우 리스트 요청", description = "유저의 팔로워/팔로잉 리스트 요청 API 입니다.")
-    public ResponseEntity<?> followPage(@RequestBody String email, Authentication auth) {
-        User fromUser = userService.findUserByAuth(auth);
-        User toUser = userService.findUserByEmail(email);
+    public ResponseEntity<?> followPage(@RequestBody String email, @AuthenticationPrincipal String userId) {
+        User fromUser = userService.findByEmail(userId);
+        User toUser = userService.findByEmail(email);
         UserProfile fromUserProfile = userProfileService.toUserProfile(fromUser);
         UserProfile toUserProfile = userProfileService.toUserProfile(toUser);
         UserProfileDto toUserProfileDto = new UserProfileDto().of(toUserProfile);

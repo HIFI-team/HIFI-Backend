@@ -17,23 +17,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
-    public User findUserByEmail(String email) {
+    public User findByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 Email 입니다"));
         return user;
     }
 
-    public User findUserById(Long id) {
+    public User findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
-        return user;
-    }
-
-    public User findUserByAuth(Authentication authentication) {
-        System.out.println("^&^&^&^\n"+authentication.getName());
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
-        System.out.println(user);
         return user;
     }
 

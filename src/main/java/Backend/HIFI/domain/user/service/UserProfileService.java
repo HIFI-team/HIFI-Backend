@@ -12,7 +12,6 @@ import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.user.entity.UserProfile;
 import Backend.HIFI.domain.user.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,31 +35,19 @@ public class UserProfileService {
     }
 
     public UserProfile findUserProfileByEmail(String email) {
-        User user = userService.findUserByEmail(email);
+        User user = userService.findByEmail(email);
         UserProfile userProfile = toUserProfile(user);
         return userProfile;
     }
 
     public UserProfile findUserProfileByUserId(Long userId) {
-        System.out.println("*****" + userId);
         UserProfile userProfile = userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
         return userProfile;
     }
 
-    public UserProfile findUserProfileByAuth(Authentication authentication) {
-        User user = userService.findUserByAuth(authentication);
-        UserProfile userProfile = toUserProfile(user);
-//        UserProfile userProfile = userProfileRepository.findByEmail(authentication.getName())
-//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다"));
-        System.out.println(userProfile);
-        return userProfile;
-    }
-
-
-    public void updateProfile(Authentication authentication, UserProfileDto userProfileDto) {
-
-        User user = userService.findUserByAuth(authentication);
+    public void updateProfile(String userId, UserProfileDto userProfileDto) {
+        User user = userService.findByEmail(userId);
         UserProfile userProfile = toUserProfile(user);
         userProfile.update(userProfileDto);
 
@@ -70,8 +57,8 @@ public class UserProfileService {
 
     }
 
-    public UserProfileDto getMyProfilePage(Authentication auth) {
-        UserProfile userProfile = findUserProfileByAuth(auth);
+    public UserProfileDto getMyProfilePage( String userId) {
+        UserProfile userProfile = findUserProfileByEmail(userId);
         UserProfileDto userProfileDto = new UserProfileDto().of(userProfile);
 
 
@@ -98,9 +85,9 @@ public class UserProfileService {
         return isFollowForFollowed(fromUser, toUser) || !toUser.getAnonymous();
     }
 
-    public UserProfileDto getProfilePage(Authentication auth, String email) {
+    public UserProfileDto getProfilePage( String userId, String email) {
         UserProfile toUserProfile = findUserProfileByEmail(email);
-        UserProfile fromUserProfile = findUserProfileByAuth(auth);
+        UserProfile fromUserProfile = findUserProfileByEmail(userId);
 
         UserProfileDto userProfileDto = new UserProfileDto().of(toUserProfile);
 
@@ -123,8 +110,8 @@ public class UserProfileService {
 
 
     /** 모든 유저 return */
-    public List<UserProfileDto> searchAllUserProfile(Authentication auth) {
-        UserProfile fromUserProfile = findUserProfileByAuth(auth);
+    public List<UserProfileDto> searchAllUserProfile( String userId) {
+        UserProfile fromUserProfile = findUserProfileByEmail(userId);
         List<UserProfile> userList = userProfileRepository.findAll();
         List<UserProfileDto> userProfileDtoList = new ArrayList<>();
         for (UserProfile toUserProfile : userList) {
@@ -139,8 +126,8 @@ public class UserProfileService {
 
     // TODO Follow 변경 필요
     /** user.name 통한 유저 검색 */
-    public List<UserProfileDto> searchUserByName(Authentication auth, SearchDto searchDto) {
-        UserProfile fromUser = findUserProfileByAuth(auth);
+    public List<UserProfileDto> searchUserByName( String userId, SearchDto searchDto) {
+        UserProfile fromUser = findUserProfileByEmail(userId);
         String name = searchDto.getName();
         // 유저 검색 리스트에 추가
         userSearch(fromUser, name);
@@ -159,21 +146,21 @@ public class UserProfileService {
 
 
 
-    public List<Review> getMyReviewList(Authentication auth) {
-        User user = userService.findUserByAuth(auth);
+    public List<Review> getMyReviewList( String userId) {
+        User user = userService.findByEmail(userId);
         List<Review> reviewList = reviewRepository.findByUser(user);
 
         return reviewList;
     }
     // UserProfileDto followed 추가 <- 왜? 안해도 될듯
 
-    public List<Review> getOtherReviewList(Authentication auth, UserProfileDto userProfileDto) {
-        UserProfile fromUser = toUserProfile(userService.findUserByAuth(auth));
+    public List<Review> getOtherReviewList( String userId, UserProfileDto userProfileDto) {
+        UserProfile fromUser = toUserProfile(userService.findByEmail(userId));
         UserProfile toUser = userProfileDto.toUserProfile();
         List<Review> reviewList = null;
         if (canWatchReview(fromUser, toUser)) {
             // User 얻는 과정 바꾸면 좋을 것 같음
-            User user = userService.findUserById(toUser.getUserId());
+            User user = userService.findById(toUser.getUserId());
             reviewList = reviewRepository.findByUser(user);
         }
 
