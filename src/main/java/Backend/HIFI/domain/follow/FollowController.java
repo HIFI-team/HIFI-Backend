@@ -9,22 +9,19 @@ import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.user.entity.UserProfile;
 import Backend.HIFI.domain.user.service.UserProfileService;
 import Backend.HIFI.domain.user.service.UserService;
-import Backend.HIFI.global.common.response.CommonApiResponse;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@Slf4j
+@RestController
 @RequestMapping("/follow")
 @RequiredArgsConstructor
 @Api(tags = "팔로우")
@@ -38,22 +35,22 @@ public class FollowController {
 
     @PostMapping("/following")
     @Operation(summary = "팔로우 요청", description = "팔로우 요청 API 입니다.")
-    public CommonApiResponse<String> followUser(@RequestBody FollowRequestDto followRequestDto) {
+    public ResponseEntity<String> followUser(@RequestBody FollowRequestDto followRequestDto) {
         followService.requestFollow(followRequestDto);
-        return CommonApiResponse.of("팔로우 완료");
+        return ResponseEntity.ok("팔로우 완료");
     }
 
     // TODO @DeleteMapping 변경
     @DeleteMapping("/following")
     @Operation(summary = "언팔로우 요청", description = "언팔로우 요청 API 입니다.")
-    public CommonApiResponse<String> unfollowUser(@RequestBody FollowRequestDto followRequestDto) {
+    public ResponseEntity<String> unfollowUser(@RequestBody FollowRequestDto followRequestDto) {
         followService.requestUnFollow(followRequestDto);
-        return CommonApiResponse.of("언팔로우 완료");
+        return ResponseEntity.ok("언팔로우 완료");
     }
 
     @PostMapping("/followList")
     @Operation(summary = "팔로우 리스트 요청", description = "유저의 팔로워/팔로잉 리스트 요청 API 입니다.")
-    public CommonApiResponse<?> followPage(@RequestBody String email, Authentication auth) {
+    public ResponseEntity<?> followPage(@RequestBody String email, Authentication auth) {
         User fromUser = userService.findUserByAuth(auth);
         User toUser = userService.findUserByEmail(email);
         UserProfile fromUserProfile = userProfileService.toUserProfile(fromUser);
@@ -71,6 +68,6 @@ public class FollowController {
         toUserProfileDto.setFollowingList(followingList);
         toUserProfileDto.setReviewList(reviewList);
 
-        return CommonApiResponse.of(toUserProfileDto);
+        return ResponseEntity.ok(toUserProfileDto);
     }
 }
