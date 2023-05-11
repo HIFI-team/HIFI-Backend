@@ -24,7 +24,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name="user_id")
     private Long id;
 
-    @Column(name="user_email", nullable = false)
+    @Column(unique = true, name="user_email", nullable = false)
     private String email;
 
     //OAuth 사용시 null 이 들어올 수 있음
