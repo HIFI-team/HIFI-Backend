@@ -16,11 +16,11 @@ public class GetStoreDto {
     private String category;
     private String description;
     private float grade;
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
 
     @Builder
-    public GetStoreDto(Long id, String address, String name, Category category, String description, float grade, float latitude, float longitude) {
+    public GetStoreDto(Long id, String address, String name, Category category, String description, float grade, double latitude, double longitude) {
         this.id = id;
         this.address = address;
         this.name = name;

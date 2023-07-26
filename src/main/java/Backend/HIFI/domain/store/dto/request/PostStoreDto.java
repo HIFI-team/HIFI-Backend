@@ -22,5 +22,8 @@ public class PostStoreDto {
     private Category category;
     @ApiModelProperty(value = "가게 설명", example = "일식집")
     private String description;
-
+    @ApiModelProperty(value = "가게 위도", example = "35.7")
+    private double latitude;
+    @ApiModelProperty(value = "가게 경도", example = "138.5")
+    private double longitude;
 }

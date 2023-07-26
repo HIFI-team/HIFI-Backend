@@ -2,6 +2,7 @@ package Backend.HIFI.domain.store.service;
 
 import Backend.HIFI.domain.store.dto.request.PostStoreDto;
 import Backend.HIFI.domain.store.dto.response.GetStoreDto;
+import Backend.HIFI.domain.store.entity.Category;
 import Backend.HIFI.domain.store.repository.StoreRepository;
 import Backend.HIFI.domain.store.entity.Store;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,13 @@ public class StoreServiceImpl implements StoreService {
      */
     @Transactional
     public GetStoreDto createStore(PostStoreDto postStoreDto, String userId) {
-
         Store store = Store.builder()
                 .name(postStoreDto.getName())
                 .address(postStoreDto.getAddress())
+                .category(postStoreDto.getCategory())
                 .description(postStoreDto.getDescription())
+                .latitude(postStoreDto.getLatitude())
+                .longitude(postStoreDto.getLongitude())
                 .build();
         Store saveStore = storeRepository.save(store);
 
@@ -46,6 +49,16 @@ public class StoreServiceImpl implements StoreService {
     public List<GetStoreDto> getStores() {
         List<GetStoreDto> getStoreDtos = new ArrayList<>();
         for (Store store : storeRepository.findAll()) {
+            GetStoreDto getStoreDto = GetStoreDto.toDto(store);
+            getStoreDtos.add(getStoreDto);
+        }
+        return getStoreDtos;
+    }
+
+    @Override
+    public List<GetStoreDto> getStoresByType(Category category) {
+        List<GetStoreDto> getStoreDtos = new ArrayList<>();
+        for (Store store : storeRepository.findAllByCategory(category)) {
             GetStoreDto getStoreDto = GetStoreDto.toDto(store);
             getStoreDtos.add(getStoreDto);
         }

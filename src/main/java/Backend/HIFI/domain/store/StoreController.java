@@ -2,6 +2,7 @@ package Backend.HIFI.domain.store;
 
 import Backend.HIFI.domain.store.dto.request.PostStoreDto;
 import Backend.HIFI.domain.store.dto.response.GetStoreDto;
+import Backend.HIFI.domain.store.entity.Category;
 import Backend.HIFI.domain.store.service.StoreService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,12 +46,23 @@ public class StoreController {
     }
 
     /**
-     * 가게 리스트 조회
+     * 가게 리스트 전체 조회
      */
     @GetMapping("/")
     @Operation(summary = "가게 리스트 조회 요청", description = "가게 리스트 조회 요청 API 입니다.")
     public ResponseEntity<List<GetStoreDto>> getStores() {
         List<GetStoreDto> getStoreDtos = storeService.getStores();
+        return ResponseEntity.ok(getStoreDtos);
+    }
+
+    /**
+     * 가게 리스트 종류별 조회
+     */
+    @GetMapping("/category/{category}")
+    @Operation(summary = "카테고리별 가게 리스트 조회 요청", description = "카테고리별 가게 리스트 조회 요청 API 입니다.")
+    public ResponseEntity<List<GetStoreDto>> getStoresByType(
+            @PathVariable("category") Category category) {
+        List<GetStoreDto> getStoreDtos = storeService.getStoresByType(category);
         return ResponseEntity.ok(getStoreDtos);
     }
 

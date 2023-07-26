@@ -29,12 +29,12 @@ public class Store extends BaseEntity {
     @Column(columnDefinition = "float default 0.0")
     private float grade;
 
-    private float latitude;
+    private double latitude;
 
-    private float longitude;
+    private double longitude;
 
     @Builder
-    public Store(String address, String name, Category category, String description, float grade, float latitude, float longitude) {
+    public Store(String address, String name, Category category, String description, float grade, double latitude, double longitude) {
         this.address = address;
         this.name = name;
         this.category = category;

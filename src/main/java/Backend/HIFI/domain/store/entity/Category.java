@@ -1,6 +1,7 @@
 package Backend.HIFI.domain.store.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,13 +17,22 @@ public enum Category {
 
     private String viewName;
 
+    @JsonValue
+    public String getViewName() {
+        return viewName;
+    }
+
     @JsonCreator
-    public static Category fromDto(String viewName) {
+    public static Category ofView(String viewName) {
         for (Category category : Category.values()) {
             if (category.getViewName().equals(viewName)) {
                 return category;
             }
         }
         return null;
+    }
+
+    public static Category[] getValues(){
+        return Category.values();
     }
 }
