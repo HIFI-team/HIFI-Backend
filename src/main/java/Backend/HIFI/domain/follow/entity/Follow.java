@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 public class Follow {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, name = "FOLLOWER_ID")

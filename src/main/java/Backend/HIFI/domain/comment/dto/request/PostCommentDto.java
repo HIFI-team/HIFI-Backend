@@ -14,6 +14,6 @@ public class PostCommentDto {
     private String Content;
 
     public PostCommentDto(String content) {
-        this.Content = content;
+        this.content = content;
     }
 }

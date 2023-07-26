@@ -1,95 +1,88 @@
 package Backend.HIFI.domain.user;
 
+import Backend.HIFI.domain.review.entity.Review;
 import Backend.HIFI.domain.user.dto.SearchDto;
 import Backend.HIFI.domain.user.dto.UserProfileDto;
 import Backend.HIFI.domain.user.entity.User;
 import Backend.HIFI.domain.user.service.UserProfileService;
 import Backend.HIFI.domain.user.service.UserService;
-import Backend.HIFI.global.common.redis.RedisService;
-import Backend.HIFI.global.common.response.CommonApiResponse;
-import Backend.HIFI.domain.follow.repository.FollowRepository;
-import Backend.HIFI.domain.follow.service.FollowService;
 
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Api(tags = "유저")
 public class UserController {
 
     private final UserService userService;
     private final UserProfileService userProfileService;
-    private final FollowService followService;
-    private final FollowRepository followRepository;
-    private final RedisService redisService;
 
-
-    @ApiOperation(value = "마이프로필 요청")
     @GetMapping("/profile")
-    public CommonApiResponse<UserProfileDto> profilePage(Authentication auth) {
-        return CommonApiResponse.of(userProfileService.getMyProfilePage(auth));
+    @Operation(summary = "본인 프로필 조회 요청", description = "본인 프로필 조회 요청 API 입니다.")
+    public ResponseEntity<UserProfileDto> profilePage(@AuthenticationPrincipal String userId) {
+        return ResponseEntity.ok(userProfileService.getMyProfilePage(userId));
     }
 
-    @ApiOperation(value = "프로필 요청")
     @PostMapping("/profile")
-    public CommonApiResponse<UserProfileDto> profilePage(@RequestBody String email, Authentication auth) {
-        return CommonApiResponse.of(userProfileService.getProfilePage(auth, email));
+    @Operation(summary = "타인 프로필 조회 요청", description = "타인의 프로필 조회 요청 API 입니다.")
+    public ResponseEntity<UserProfileDto> profilePage(@RequestBody String email, @AuthenticationPrincipal String userId) {
+        return ResponseEntity.ok(userProfileService.getProfilePage(userId, email));
     }
 
-    @ApiOperation(value = "프로필 업데이트 요청")
-    @PostMapping("/update")
-    public CommonApiResponse<String> updateProfile(@RequestBody UserProfileDto userProfileDto, Authentication auth) {
-        userProfileService.updateProfile(auth, userProfileDto);
-        return CommonApiResponse.of("프로필 업데이트 완료");
+    @PutMapping("/profile")
+    @Operation(summary = "프로필 업데이트 요청", description = "프로필 업데이트 요청 API 입니다.")
+    public ResponseEntity<String> updateProfile(@RequestBody UserProfileDto userProfileDto, @AuthenticationPrincipal String userId) {
+        userProfileService.updateProfile(userId, userProfileDto);
+        return ResponseEntity.ok("프로필 업데이트 완료");
     }
 
-//
-    @ApiOperation(value = "회원 탈퇴")
-    @GetMapping("/delete")
-    public String deletePage(Authentication auth) {
-        User user = userService.findUserByAuth(auth);
+    @DeleteMapping("/profile")
+    @Operation(summary = "유저 탈퇴 요청", description = "유저 탈퇴 요청 API 입니다.")
+    public ResponseEntity<?> deletePage(@AuthenticationPrincipal String userId) {
+        User user = userService.findByEmail(userId);
         userService.deleteUser(user);
 
-        return user.getEmail() + " was deleted";
+        return ResponseEntity.ok("success");
     }
 
-    // TODO Follow 분리후 처리 필요
-    @ApiOperation(value = "모든 유저 반환")
     @GetMapping("/search")
-    public CommonApiResponse<List<UserProfileDto>> allUserSearch(Authentication auth) {
-        List<UserProfileDto> allUserProfileList = userProfileService.searchAllUserProfile(auth);
-        return CommonApiResponse.of(allUserProfileList);
+    @Operation(summary = "모든 유저 조회 요청", description = "검색에 사용되는 모든 유저 조회 요청 API 입니다.")
+    public ResponseEntity<List<UserProfileDto>> allUserSearch(@AuthenticationPrincipal String userId) {
+        List<UserProfileDto> allUserProfileList = userProfileService.searchAllUserProfile(userId);
+        return ResponseEntity.ok(allUserProfileList);
     }
 
-    // TODO Follow 분리 후 처리 필요
-    @ApiOperation(value = "유저 검색")
     @PostMapping("/search")
-    public CommonApiResponse<List<UserProfileDto>> setUserSearch(@RequestBody SearchDto searchDto, Authentication auth) {
-        List<UserProfileDto> searchUserProfileDtoList = userProfileService.searchUserByName(auth, searchDto);
-        return CommonApiResponse.of(searchUserProfileDtoList);
+    @Operation(summary = "특정 유저 조회 요청", description = "검색 조건에 부합하는 특정 유저 조회 요청 API 입니다.")
+    public ResponseEntity<List<UserProfileDto>> setUserSearch(@RequestBody SearchDto searchDto, @AuthenticationPrincipal String userId) {
+        List<UserProfileDto> searchUserProfileDtoList = userProfileService.searchUserByName(userId, searchDto);
+        return ResponseEntity.ok(searchUserProfileDtoList);
     }
 
-    // TODO review Repository 사용할 것
-//    @ApiOperation(value = "리뷰 리스트 반환")
-//    @GetMapping("/review")
-//    public CommonApiResponse<List<Review>> getReviewList(Authentication auth) {
-//        List<Review> reviewList = userProfileService.getReviewListFromUser(auth);
-//        return CommonApiResponse.of(reviewList);
-//    }
+    @GetMapping("/review")
+    @Operation(summary = "본인 리뷰 조회 요청", description = "본인의 리뷰 조회 요청 API 입니다.")
+    public ResponseEntity<List<Review>> getMyReviewList(@AuthenticationPrincipal String userId) {
+        List<Review> reviewList = userProfileService.getMyReviewList(userId);
+        return ResponseEntity.ok(reviewList);
+    }
 
-//    @GetMapping("/su")
-//    public CommonApiResponse<User> searchUserPage() {
-
-//    }
-
-//    @GetMapping("/ss")
-//    public String searchStorePage() { return "ss"; }
+    @PostMapping("/review")
+    @Operation(summary = "타인 리뷰 조회 요청", description = "타인의 리뷰 조회 요청 API 입니다.")
+    public ResponseEntity<List<Review>> getOtherReviewList(@RequestBody UserProfileDto userProfileDto, @AuthenticationPrincipal String userId) {
+        List<Review> reviewList = userProfileService.getOtherReviewList(userId, userProfileDto);
+        return ResponseEntity.ok(reviewList);
+    }
 
 }
 

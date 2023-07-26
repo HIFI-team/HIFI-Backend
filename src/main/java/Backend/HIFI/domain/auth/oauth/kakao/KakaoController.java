@@ -5,7 +5,9 @@ import Backend.HIFI.domain.auth.dto.TokenResponseDto;
 import Backend.HIFI.domain.auth.jwt.JwtTokenProvider;
 import Backend.HIFI.global.common.response.CommonApiResponse;
 import Backend.HIFI.domain.user.repository.UserRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/auth/login")
 @RequiredArgsConstructor
+@Api(tags = "카카오")
 public class KakaoController {
 
     private final KakaoService kakaoService;
@@ -24,7 +27,7 @@ public class KakaoController {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @ApiOperation(value = "카카오 코드를 포함한 로그인 요청")
+    @Operation(summary = "카카오 로그인", description = "카카오 코드를 포함한 로그인 요청 API 입니다.")
     @PostMapping(value = "/kakao", produces = "application/json; charset=utf-8")
     @ResponseBody
     public CommonApiResponse<TokenResponseDto> postKakaoLoginWithCode(

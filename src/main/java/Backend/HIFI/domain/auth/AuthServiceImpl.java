@@ -7,6 +7,8 @@ import Backend.HIFI.domain.auth.dto.UserResponseDto;
 import Backend.HIFI.domain.auth.jwt.JwtDto;
 import Backend.HIFI.domain.auth.jwt.JwtTokenProvider;
 import Backend.HIFI.domain.auth.oauth.kakao.KakaoUserDto;
+import Backend.HIFI.domain.user.entity.UserProfile;
+import Backend.HIFI.domain.user.repository.UserProfileRepository;
 import Backend.HIFI.global.error.exception.BadRequestException;
 import Backend.HIFI.global.error.ErrorCode;
 import Backend.HIFI.global.error.exception.NotFoundException;
@@ -38,6 +40,7 @@ public class AuthServiceImpl implements AuthService{
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final UserProfileRepository userProfileRepository;
 
     @Override
     @Transactional
@@ -47,7 +50,14 @@ public class AuthServiceImpl implements AuthService{
         }
 
         User user = userRequestDto.toUser(passwordEncoder);
-        return UserResponseDto.of(userRepository.save(user));
+        User response = userRepository.save(user);
+        System.out.println(response.getId());
+        userProfileRepository.save(
+                UserProfile.builder()
+                        .userId(response.getId())
+                        .build()
+        );
+        return UserResponseDto.of(response);
     }
     @Override
     @Transactional

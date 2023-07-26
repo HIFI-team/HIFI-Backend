@@ -86,3 +86,8 @@ jobs:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
+
+      #workflow_dispatch
+      - run: gh api /repos/HongEat-Team/HongEat-Deploy/dispatches -f event_type='backend_event'
+        env:
+          GITHUB_TOKEN: ${{ secrets.DISPATCH_KEY }}
