@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-@Api(tags = "유저")
+@Api(tags = "사용자")
 public class UserController {
 
     private final UserService userService;

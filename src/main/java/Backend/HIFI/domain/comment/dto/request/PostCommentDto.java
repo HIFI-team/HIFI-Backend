@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class PostCommentDto {
     @ApiModelProperty(value = "댓글 내용", example = "여기 맛집 맞아용~!!")
     @NotNull
-    private String Content;
+    private String content;
 
     public PostCommentDto(String content) {
         this.content = content;

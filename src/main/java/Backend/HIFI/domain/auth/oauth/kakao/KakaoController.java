@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/auth/login")
 @RequiredArgsConstructor
-@Api(tags = "카카오")
+@Api(tags = "카카오_로그인")
 public class KakaoController {
 
     private final KakaoService kakaoService;
