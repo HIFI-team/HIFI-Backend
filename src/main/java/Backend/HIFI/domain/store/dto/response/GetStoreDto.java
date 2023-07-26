@@ -27,12 +27,12 @@ public class GetStoreDto {
     @ApiModelProperty(notes = "가게 평점", example = "5", required = true)
     private float grade;
     @ApiModelProperty(notes = "가게 위도", example = "138.")
-    private float latitude;
+    private double latitude;
     @ApiModelProperty(notes = "가게 경도", example = "133.")
-    private float longitude;
+    private double longitude;
 
     @Builder
-    public GetStoreDto(Long id, String address, String name, Category category, String description, float grade, float latitude, float longitude) {
+    public GetStoreDto(Long id, String address, String name, Category category, String description, float grade, double latitude, double longitude) {
         this.id = id;
         this.address = address;
         this.name = name;

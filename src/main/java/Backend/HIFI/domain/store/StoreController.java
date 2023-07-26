@@ -2,6 +2,7 @@ package Backend.HIFI.domain.store;
 
 import Backend.HIFI.domain.store.dto.request.PostStoreDto;
 import Backend.HIFI.domain.store.dto.response.GetStoreDto;
+import Backend.HIFI.domain.store.entity.Category;
 import Backend.HIFI.domain.store.service.StoreService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -28,7 +30,7 @@ public class StoreController {
      */
     @PostMapping("/")
     @Operation(summary = "가게 등록 요청", description = "가게 등록 요청 API 입니다.")
-    public ResponseEntity<GetStoreDto> createStore(@RequestBody PostStoreDto postStoreDto, @AuthenticationPrincipal String userId) {
+    public ResponseEntity<GetStoreDto> createStore(@RequestBody @Valid PostStoreDto postStoreDto, @AuthenticationPrincipal String userId) {
         GetStoreDto getStoreDto = storeService.createStore(postStoreDto, userId);
         return ResponseEntity.ok(getStoreDto);
     }
@@ -44,12 +46,23 @@ public class StoreController {
     }
 
     /**
-     * 가게 리스트 조회
+     * 가게 리스트 전체 조회
      */
     @GetMapping("/")
     @Operation(summary = "가게 리스트 조회 요청", description = "가게 리스트 조회 요청 API 입니다.")
     public ResponseEntity<List<GetStoreDto>> getStores() {
         List<GetStoreDto> getStoreDtos = storeService.getStores();
+        return ResponseEntity.ok(getStoreDtos);
+    }
+
+    /**
+     * 가게 리스트 종류별 조회
+     */
+    @GetMapping("/category/{category}")
+    @Operation(summary = "카테고리별 가게 리스트 조회 요청", description = "카테고리별 가게 리스트 조회 요청 API 입니다.")
+    public ResponseEntity<List<GetStoreDto>> getStoresByType(
+            @PathVariable("category") Category category) {
+        List<GetStoreDto> getStoreDtos = storeService.getStoresByType(category);
         return ResponseEntity.ok(getStoreDtos);
     }
 
