@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping(value = "reviews/{reviewId}/comments")
 @RequiredArgsConstructor
 @Api(tags = "댓글")
