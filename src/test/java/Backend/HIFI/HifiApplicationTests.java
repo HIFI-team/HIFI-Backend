@@ -11,9 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 class HifiApplicationTests {
 
-	@Autowired
-    UserRepository userRepository;
-
 	@Test
 	void contextLoads() {
 	}
