@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /** Redis 설정입니다
  * @author gengminy (220812) */
 @Configuration
+@EnableRedisRepositories(basePackages = {"Backend.HIFI.domain.auth"})
 public class RedisConfig {
     @Value("${REDIS_HOST}")
     private String host;
